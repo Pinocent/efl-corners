@@ -102,6 +102,8 @@ tr.fx.has-call td.match{box-shadow:inset 3px 0 0 var(--accent)}
 .lean{color:var(--muted)}
 .res{font-family:var(--display);font-size:17px;font-weight:600}
 tr.detail td{background:var(--ground);text-align:left;white-space:normal;padding:14px}
+/* keep the detail panel inside the visible part of a sideways-scrolling table */
+tr.detail td > div{position:sticky;left:14px;max-width:min(1120px, calc(100vw - 64px))}
 
 /* calls list */
 .calllist{display:flex;flex-direction:column}
@@ -172,10 +174,23 @@ dl.terms dd{margin:0;color:var(--muted);max-width:70ch}
 .warns{display:flex;flex-direction:column;gap:8px;background:var(--warn-soft);border-radius:8px;padding:10px 12px}
 .warns .w{font-size:13px}
 .warns .w b{font-weight:600}
-.ou{width:auto;min-width:100%;font-size:12.5px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.ou th,.ou td{padding:4px 8px}
-.ou td.strong{font-weight:700;color:var(--accent)}
-.oubox{display:flex;flex-direction:column;gap:4px}
+.sides{display:flex;flex-direction:column;gap:6px;max-width:640px}
+.sides .scroll{overflow-x:auto}
+table.bf{width:100%;border-collapse:separate;border-spacing:0 3px;font-size:13px}
+table.bf th{background:none;border:0;padding:0 8px 4px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+table.bf th.team{font-family:var(--display);font-size:16px;letter-spacing:.01em;text-transform:none;color:var(--ink);padding-bottom:0}
+table.bf th.team small{display:block;font-family:var(--body);font-size:11.5px;font-weight:400;color:var(--muted)}
+table.bf td{border:0;padding:5px 10px;white-space:nowrap}
+table.bf td.line{text-align:center;font-family:var(--display);font-size:16px;font-weight:600;width:64px;background:var(--sunk);border-radius:6px}
+table.bf td.ov{width:30%;font-weight:600}
+table.bf td.ov.h{text-align:right;border-radius:6px 0 0 6px}
+table.bf td.ov.a{text-align:left;border-radius:0 6px 6px 0}
+table.bf td.ov .o{font-weight:400;color:var(--muted);font-size:11.5px;margin:0 6px}
+table.bf td.ov.hot{color:var(--accent)}
+table.bf td.ov.a.hot{color:var(--blue)}
+table.bf td.un{width:12%;color:var(--muted);font-size:12px}
+table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
+.sides .key{font-size:11.5px;color:var(--muted)}
 /* phone: one card per match instead of the wide table */
 .cards{display:flex;flex-direction:column;gap:10px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
@@ -587,14 +602,29 @@ function renderCards(){
 }
 
 // per-side corners: over/under each line
-function sideTable(name, mu, l2){
-  const pmf = nb(mu, NB);
-  const rowsH = [1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5].map(l => {
-    const over = pmf.slice(Math.floor(l)+1).reduce((a,b)=>a+b,0), under = 1 - over;
-    const cell = p => `<td class="${p>=.6?'strong':''}">${pc(p)}</td><td class="muted">${fair(p)}</td>`;
-    return `<tr><td class="l">${l}</td>${cell(over)}${l2?"":cell(under)}</tr>`; }).join("");
-  return `<div class="oubox"><div class="eyebrow">${esc(name)} corners · expected ${f1(mu)}</div>
-    <div class="tablebox"><table class="ou"><thead><tr><th class="l">Line</th><th>Over</th><th>Fair</th>${l2?"":"<th>Under</th><th>Fair</th>"}</tr></thead><tbody>${rowsH}</tbody></table></div></div>`;
+// both sides' corners in one mirrored chart: home left, line in the middle,
+// away right. The bar behind each Over grows from the centre.
+function sidesChart(x, l2){
+  const ph = nb(+x.eh, NB), pa = nb(+x.ea, NB);
+  const over = (pmf, l) => pmf.slice(Math.floor(l) + 1).reduce((a,b)=>a+b,0);
+  const ov = (p, side) => {
+    const col = side === "h" ? "var(--accent-soft)" : "var(--blue-soft)";
+    const dir = side === "h" ? "to left" : "to right";
+    const txt = side === "h" ? `<span class="o">${fair(p)}</span>${pc(p)}` : `${pc(p)}<span class="o">${fair(p)}</span>`;
+    return `<td class="ov ${side} ${p >= .6 ? "hot" : ""}" style="background:linear-gradient(${dir}, ${col} ${p*100}%, transparent ${p*100}%)">${txt}</td>`;
+  };
+  const un = (p, side) => l2 ? "" : `<td class="un ${side}">${pc(1 - p)}</td>`;
+  const body = [0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5].map(l => {
+    const h = over(ph, l), a = over(pa, l);
+    return `<tr>${un(h,"h")}${ov(h,"h")}<td class="line">${l}</td>${ov(a,"a")}${un(a,"a")}</tr>`;
+  }).join("");
+  const span = l2 ? 1 : 2;
+  return `<div class="sides"><div class="eyebrow">Corners for each side</div><div class="scroll"><table class="bf">
+    <thead><tr><th class="team" colspan="${span}" style="text-align:right">${esc(x.home)}<small>expected ${f1(x.eh)}</small></th><th></th>
+      <th class="team" colspan="${span}" style="text-align:left">${esc(x.away)}<small>expected ${f1(x.ea)}</small></th></tr>
+    <tr>${l2?"":'<th style="text-align:right">Under</th>'}<th style="text-align:right">Over</th><th style="text-align:center">Line</th><th style="text-align:left">Over</th>${l2?"":'<th style="text-align:left">Under</th>'}</tr></thead>
+    <tbody>${body}</tbody></table></div>
+    <div class="key">Chance of going over each line, with fair odds in grey. 60% or more in colour.${l2?" League 2 markets offer Over lines only.":" Under is the rest."}</div></div>`;
 }
 
 function rung(label, p, cls=""){
@@ -607,7 +637,7 @@ function ladders(x){
   const tot = LINES.map(l => rung(`Over ${l}`, o(l))).join("");
   const und = LINES.map(l => rung(`Under ${l}`, 1 - o(l), "u")).join("");
   const warns = flagsOf(x).length ? `<div class="warns">${flagsOf(x).map(f => `<div class="w"><span class="chip warn">${esc(f.kind)}</span> <b>${esc(f.team)}:</b> ${esc(f.text)}</div>`).join("")}</div>` : "";
-  const sides = `<div class="ladders">${sideTable(x.home, +x.eh, l2)}${sideTable(x.away, +x.ea, l2)}</div>${l2?'<p class="small muted">League 2 markets offer Over lines only.</p>':""}`;
+  const sides = sidesChart(x, l2);
   const act = x.hc != null ? `<div class="callout">Result: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>. The model expected ${f1(x.eh)}–${f1(x.ea)} corners and xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
   return `<div style="display:flex;flex-direction:column;gap:14px">${warns}${act}${sides}<div class="ladders">
     <div class="ladder">${rhead("Total corners")}${tot}</div>
