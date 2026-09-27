@@ -17,14 +17,14 @@ from datetime import date
 TOTAL_LINES = (7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5)
 
 # how sure the model must be before a prediction becomes a call
-CALL = {"total": 0.58, "hcap": 0.62, "both4": 0.60, "btts": 0.60, "o25": 0.60}
+CALL = {"total": 0.58, "hcap": 0.60, "both4": 0.60, "btts": 0.60, "o25": 0.60}
 
 FIELDS = (["model", "made", "round", "date", "time", "league", "home", "away",
            "eh", "ea", "et", "main_line"] +
           [f"o{str(l).replace('.', '')}" for l in TOTAL_LINES] +
           ["home4", "away4", "both4", "hcap_line", "hcap_p", "home_more",
            "lh", "la", "p_home", "p_draw", "p_away", "btts", "o25", "cs_home",
-           "cs_away", "sample", "odds"])
+           "cs_away", "sample"])
 
 
 def _k(line):
@@ -45,7 +45,7 @@ def to_row(fx, pred, made, model="v3"):
            "lh": g["lh"], "la": g["la"], "p_home": g["home"], "p_draw": g["draw"],
            "p_away": g["away"], "btts": g["btts"], "o25": g["o25"],
            "cs_home": g["cs_home"], "cs_away": g["cs_away"],
-           "sample": pred.get("sample", ""), "odds": int(bool(pred.get("odds")))}
+           "sample": pred.get("sample", "")}
     for l in TOTAL_LINES:
         row[_k(l)] = c["totals"][l]
     return row
@@ -98,27 +98,25 @@ def calls_for(p):
     elif q is not None and lg != "League 2" and 1 - q >= CALL["total"]:
         out.append(("Corners total", f"Under {l}", 1 - q, lambda hc, ac, hg, ag, l=l: hc + ac < l))
 
-    # handicap: the biggest start the favourite can give and still be a call
+    # handicap: only the favourite giving 2.5 or 1.5 corners. The underdog's
+    # +1.5 / +2.5 clears the bar in almost every match, so calling it would
+    # just list every game.
     if lg != "League 2" and f(p.get("eh")) is not None:
         eh, ea = f(p["eh"]), f(p["ea"])
-        hl, hp = f(p.get("hcap_line")), f(p.get("hcap_p"))
         from .markets import corner_markets
         from .model import PARAMS
         cm = corner_markets(eh, ea, PARAMS["nb_size"], lg)
-        best = None
-        for h, q in cm["hcap"].items():
-            if q >= CALL["hcap"] and h < 0 and (best is None or h < best[0]):
-                best = (h, q, "home")
-            if 1 - q >= CALL["hcap"] and h > 0 and (best is None or -h < best[0]):
-                best = (-h, 1 - q, "away")
-        if best:
-            h, q, side = best
-            team = p["home"] if side == "home" else p["away"]
-            if side == "home":
-                chk = lambda hc, ac, hg, ag, h=h: hc + h > ac
-            else:
-                chk = lambda hc, ac, hg, ag, h=h: ac + h > hc
-            out.append(("Corner handicap", f"{team} {h:+g}", q, chk))
+        home_fav = eh >= ea
+        team = p["home"] if home_fav else p["away"]
+        for h in (-2.5, -1.5):
+            q = cm["hcap"][h] if home_fav else 1 - cm["hcap"][-h]
+            if q >= CALL["hcap"]:
+                if home_fav:
+                    chk = lambda hc, ac, hg, ag, h=h: hc + h > ac
+                else:
+                    chk = lambda hc, ac, hg, ag, h=h: ac + h > hc
+                out.append(("Corner handicap", f"{team} {h:+g}", q, chk))
+                break
 
     b4 = f(p.get("both4"))
     if b4 is not None and b4 >= CALL["both4"]:

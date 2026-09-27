@@ -14,6 +14,7 @@ teams to score and clean sheet numbers.
 import math
 
 MAX_CORNERS = 30
+HCAP_LINES = (-2.5, -1.5, 1.5, 2.5)
 MAX_GOALS = 10
 
 
@@ -81,12 +82,14 @@ def corner_markets(eh, ea, r, league):
     out["level"] = diff.get(0, 0.0)
 
     if league != "League 2":
+        # only the lines around two corners: -2.5, -1.5, +1.5, +2.5
         hcap = {}
-        for h in (-4.5, -3.5, -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, 3.5, 4.5):
+        for h in HCAP_LINES:
             # home covers the handicap h when home + h > away
             hcap[h] = sum(p for d, p in diff.items() if d + h > 0)
         out["hcap"] = hcap
-        out["hcap_main"] = min(hcap, key=lambda l: abs(hcap[l] - 0.5))
+        # the favourite (more corners expected) giving 1.5
+        out["hcap_main"] = -1.5 if eh >= ea else 1.5
     return out
 
 

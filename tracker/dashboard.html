@@ -268,19 +268,19 @@ dl.terms dd{margin:0;color:var(--muted);max-width:70ch}
         <dt>Call</dt><dd id="defCall"></dd>
         <dt>Landed / missed</dt><dd>Whether a call came off once the result was in. Calls freeze at kick-off and are never changed afterwards.</dd>
         <dt>Chance</dt><dd>How likely the model thinks something is. 60% means it should happen about 6 times in 10.</dd>
-        <dt>Fair odds</dt><dd>1 ÷ chance. A bookmaker price above fair may be value. Below fair, you're paying their margin.</dd>
-        <dt>Corner handicap</dt><dd>A head start in corners. "Stockport −1.5" means Stockport need to win the corner count by 2 or more. "Peterborough +1.5" means Peterborough can lose it by 1 and still win the bet.</dd>
+        <dt>Fair odds</dt><dd>The chance written as decimal odds (1 ÷ chance). 60% is 1.67. A price higher than this would be good value if the model is right.</dd>
+        <dt>Corner handicap</dt><dd>A head start in corners. Only the lines around two corners are shown. "Stockport −1.5" means Stockport need to win the corner count by 2 or more; −2.5 means by 3 or more. "Peterborough +1.5" means Peterborough can lose it by 1 and still win the bet.</dd>
         <dt>Line</dt><dd id="defLine"></dd>
-        <dt>xG</dt><dd>Expected goals. The model blends each side's shot quality, goals and the bookmakers' prices.</dd>
+        <dt>xG</dt><dd>Expected goals, from the quality of chances created. The model blends each side's xG with the goals they actually scored.</dd>
         <dt>Warning</dt><dd>Something in a side's recent matches the model can't fully account for: a red card, a freak corner count (1 in 33 or rarer), a 4+ goal margin, or a sharp three-match trend that could mean a change of manager, system or injuries. Warnings don't change the numbers; they tell you when to trust them less.</dd>
         <dt>Clean sheet</dt><dd>The side concedes no goals.</dd>
         <dt>BTTS</dt><dd>Both teams score.</dd>
         <dt>Gameweek</dt><dd>Matches played within a few days of each other, with no club playing twice. Worked out from the dates, so Thursday–Monday and Tuesday–Wednesday rounds both group correctly.</dd>
       </dl>
       <div class="notes">
-        <p><b>Where the model is strongest.</b> Across the last two seasons it was right about which side wins more corners in about 76% of confident cases. Corner totals are much harder to call; it only slightly beats using the league average. That's why most calls are handicaps.</p>
-        <p><b>How corners are predicted.</b> Team ratings for corners won and conceded, and for shots, each with a home and away adjustment. Recent matches count more. Bookmakers' match odds adjust how corners split between the sides.</p>
-        <p><b>How goals are predicted.</b> xG and goals blended with the goals implied by the bookmakers' prices, on a score grid that corrects for the extra 0–0 and 1–1 draws a simpler model misses.</p>
+        <p><b>Where the model is strongest.</b> Telling which side will dominate the corner count. Replayed over the last two seasons, favourite −1.5 calls landed about 7 times in 10. Corner totals are much harder; the model only slightly beats using the league average. Handicap calls are only made on the favourite: the other side's +1.5 or +2.5 clears the bar in almost every match, so calling it would list every game.</p>
+        <p><b>How corners are predicted.</b> Team ratings for corners won and conceded, and for shots, each with a home and away adjustment. Recent matches count more. Match statistics only: no bookmaker prices go in.</p>
+        <p><b>How goals are predicted.</b> The same rating method applied to xG and goals, on a score grid that corrects for the extra 0–0 and 1–1 draws a simpler model misses.</p>
         <p><b>League 2</b> markets only offer Over lines, so League 2 shows no Under or handicap calls.</p>
       </div>
     </details>
@@ -319,6 +319,13 @@ function diffDist(eh, ea, r){
   const a=nb(eh,r), b=nb(ea,r), d={};
   a.forEach((x,i)=>b.forEach((y,j)=>{ d[i-j]=(d[i-j]||0)+x*y }));
   return d;
+}
+
+// favourite (more corners expected) giving 1.5 and 2.5 corners
+function favHcap(x){
+  const d = diffDist(+x.eh, +x.ea, NB), homeFav = +x.eh >= +x.ea;
+  const by = n => Object.entries(d).reduce((s,[k,p]) => s + ((homeFav ? +k : -k) >= n ? p : 0), 0);
+  return {team: homeFav ? x.home : x.away, other: homeFav ? x.away : x.home, p15: by(2), p25: by(3)};
 }
 
 // ---- turn a stored call into words a person would use
@@ -364,8 +371,8 @@ $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
   `<span class="fresh">${esc(k)} results in to ${new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")
   + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "");
 const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
-$("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.hcap)} for a corner handicap, ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
-$("#defLine").textContent = `The total-corners line bookmakers usually lead with: ${lines}. Corner total calls are made against this line.`;
+$("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.hcap)} for the favourite at −1.5 or −2.5 corners, ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
+$("#defLine").textContent = `The league's typical corner total this season, rounded to the nearest .5: ${lines}. It's roughly where bookmakers set their main line. Corner total calls are made against it.`;
 
 function renderTabs(){
   const shown = rounds.filter(r => v3.some(x => x.round === r.id)).slice(-10);
@@ -417,7 +424,7 @@ function renderLede(){
     predCard = `<div class="fig">${side} of ${dec.length} right</div>
       <div class="what">Picked the side that won more corners in ${side} of ${dec.length} matches (level counts left out). Corner totals were off by ${f1(mae)} on average. ${played.length} of ${xs.length} matches played${lg}.</div>`;
   } else {
-    predCard = `<div class="fig">${xs.length} matches</div><div class="what">Every match${lg} has a prediction${xs.some(x=>+x.odds)?"":". Bookmaker odds aren't out yet, so these rely on team ratings alone and will sharpen once prices appear, usually 2 days before kick-off"}.</div>`;
+    predCard = `<div class="fig">${xs.length} matches</div><div class="what">Every match${lg} has a prediction. They refresh each morning as new results come in, and freeze on match day.</div>`;
   }
   $("#lede").innerHTML = `<div class="sechead"><div class="eyebrow">Gameweek ${r.n ?? ""} · ${esc(r.kind || "")} · ${r.status === "completed" ? "results in" : r.status === "in play" ? "in play" : "upcoming"}</div>
     <h2>${esc((r.label||"").replace(/^(Weekend|Midweek) · /,""))}</h2></div>
@@ -434,7 +441,7 @@ function renderCalls(){
   const calls = allCalls(rows()).sort((a,b) => b.p - a.p);
   $("#callsIntro").textContent = r.status === "completed"
     ? "What the model recommended before kick-off, and whether each one came off."
-    : "The model's recommended picks: predictions confident enough to act on. Compare the fair odds with your bookmaker's price before betting.";
+    : "The model's recommended picks: predictions confident enough to act on.";
   if (!calls.length){
     $("#calls").innerHTML = `<div class="callrow"><span class="empty" style="grid-column:1/-1">No calls this gameweek. Nothing reached the confidence bar, which is common for corner totals. See the predictions below for the closest cases.</span></div>`;
     return;
@@ -457,10 +464,10 @@ function renderHighlights(){
   const e = `<p class="empty">No matches for this filter.</p>`;
   const gaps = [...xs].sort((a,b)=>Math.abs(b.eh-b.ea)-Math.abs(a.eh-a.ea)).slice(0,5).map(x => {
     const homeFav = x.eh >= x.ea, fav = homeFav ? x.home : x.away, dog = homeFav ? x.away : x.home;
-    const pm = homeFav ? x.home_more : 1 - x.home_more;
-    const ok = x.hc == null || x.hc === x.ac ? null : (x.hc > x.ac) === homeFav;
+    const fh = favHcap(x), margin = x.hc == null ? null : (homeFav ? x.hc - x.ac : x.ac - x.hc);
+    const hcText = x.league === "League 2" ? "" : ` · −1.5 ${pc(fh.p15)}, −2.5 ${pc(fh.p25)}`;
     return li(`<b>${esc(fav)}</b> v ${esc(dog)}${callBadge(x,"Corner handicap")}`, `+${f1(Math.abs(x.eh-x.ea))}`,
-      `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))} · ${pc(pm)} chance ${esc(fav)} win more corners${actual(ok, x.hc!=null?`${x.hc}–${x.ac}`:"")}`);
+      `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))}${hcText}${actual(margin==null?null:margin>=2, x.hc!=null?`${x.hc}–${x.ac}`:"")}`);
   }).join("");
   const both = [...xs].sort((a,b)=>b.both4-a.both4).slice(0,5).map(x => li(`${esc(x.home)} v ${esc(x.away)}${callBadge(x,"Both 4+ corners")}`, pc(x.both4),
       `Expected ${f1(x.eh)}–${f1(x.ea)} · fair odds ${fair(x.both4)}${actual(x.hc==null?null:x.hc>=4&&x.ac>=4, x.hc!=null?`${x.hc}–${x.ac}`:"")}`)).join("");
@@ -480,7 +487,7 @@ function renderHighlights(){
   const wn = xs.reduce((s,x)=>s+flagsOf(x).length,0);
   $("#highlights").innerHTML = `
     <div class="panel"><h3>Warnings <span class="eyebrow">${wn} this gameweek</span></h3><p class="intro">Recent matches that could throw the predictions. Trust the affected matches a little less.</p><ol>${wl||'<p class="empty">Nothing unusual in recent matches.</p>'}</ol>${wn>8?`<p class="small muted">${wn-8} more in the match list below.</p>`:""}</div>
-    <div class="panel"><h3>Biggest corner gaps</h3><p class="intro">Where one side is expected to win clearly more corners. The model's strongest area.</p><ol>${gaps||e}</ol></div>
+    <div class="panel"><h3>Biggest corner gaps</h3><p class="intro">Where one side is expected to win clearly more corners, with its chance at −1.5 and −2.5. A result is marked green when the favourite won the count by 2 or more.</p><ol>${gaps||e}</ol></div>
     <div class="panel"><h3>Clearest corner totals</h3><p class="intro">Furthest from 50/50 against the usual line. Totals rarely get far from even.</p><ol>${totals||e}</ol></div>
     <div class="panel"><h3>Both teams 4+ corners</h3><p class="intro">Most likely matches for both sides to reach 4 corners.</p><ol>${both||e}</ol></div>
     <div class="panel"><h3>Goals</h3><p class="intro">Highest chances of both teams scoring or a clean sheet.</p><ol>${goals||e}</ol></div>`;
@@ -495,17 +502,14 @@ function renderFixtures(){
   const anyPlayed = xs.some(x => x.hc != null);
   const cols = anyPlayed ? 13 : 12;
   let h = `<thead><tr><th class="l" rowspan="2">Match</th><th class="grp c" colspan="5">Corners</th><th class="grp g" colspan="4">Goals</th>${anyPlayed?'<th rowspan="2">Result<div class="lg" style="text-transform:none;letter-spacing:0">corners (goals)</div></th>':""}<th class="l" rowspan="2">Calls</th></tr>
-    <tr><th>Expected<br>home–away</th><th>Expected<br>total</th><th>Usual line</th><th>Handicap<br>closest to even</th><th>Both 4+</th><th>xG<br>home–away</th><th>Both<br>score</th><th>Over<br>2.5</th><th>Clean sheet<br>home / away</th></tr></thead><tbody>`;
+    <tr><th>Expected<br>home–away</th><th>Expected<br>total</th><th>Usual line</th><th>Handicap<br>favourite −1.5 / −2.5</th><th>Both 4+</th><th>xG<br>home–away</th><th>Both<br>score</th><th>Over<br>2.5</th><th>Clean sheet<br>home / away</th></tr></thead><tbody>`;
   for (const x of xs){
     const k = key(x), l2 = x.league === "League 2";
     const share = x.eh/(x.eh+x.ea);
     const l = BOOK[x.league] || 10.5, po = +x["o"+String(l).replace(".","")];
     const line = po >= .5 || l2 ? `Over ${l} <b>${pc(po)}</b>` : `Under ${l} <b>${pc(1-po)}</b>`;
     let hc = `<span class="lean">not offered</span>`;
-    if (!l2 && x.hcap_line !== "" && x.hcap_line != null){
-      const hl = +x.hcap_line, p = +x.hcap_p;
-      hc = p >= .5 ? `${esc(x.home)} ${sign(hl)} <b>${pc(p)}</b>` : `${esc(x.away)} ${sign(-hl)} <b>${pc(1-p)}</b>`;
-    }
+    if (!l2){ const f = favHcap(x); hc = `${esc(f.team)} −1.5 <b>${pc(f.p15)}</b> · −2.5 <b>${pc(f.p25)}</b>`; }
     const calls = (x.calls||[]).map(c => `<span class="chip ${c.hit==null?'call':c.hit?'hit':'miss'}" title="${pc(c.p)} chance">${esc(describe(c,x).text)}</span>`).join(" ");
     const day = new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"});
     h += `<tr class="fx ${x.calls&&x.calls.length?'has-call':''}" data-k="${esc(k)}" tabindex="0" aria-expanded="${S.open.has(k)}">
@@ -525,10 +529,7 @@ function cardLine(x){
   const l2 = x.league === "League 2", l = BOOK[x.league] || 10.5, po = +x["o"+String(l).replace(".","")];
   const line = po >= .5 || l2 ? `Over ${l} · ${pc(po)}` : `Under ${l} · ${pc(1-po)}`;
   let hc = "not offered";
-  if (!l2 && x.hcap_line !== "" && x.hcap_line != null){
-    const hl = +x.hcap_line, p = +x.hcap_p;
-    hc = p >= .5 ? `${esc(x.home)} ${sign(hl)} · ${pc(p)}` : `${esc(x.away)} ${sign(-hl)} · ${pc(1-p)}`;
-  }
+  if (!l2){ const f = favHcap(x); hc = `${esc(f.team)} −1.5 · ${pc(f.p15)}<br>−2.5 · ${pc(f.p25)}`; }
   return {line, hc};
 }
 function renderCards(){
@@ -578,8 +579,8 @@ function ladders(x){
   if (!l2){
     const d = diffDist(+x.eh, +x.ea, NB);
     const cover = h => Object.entries(d).reduce((s,[k,p]) => s + (+k + h > 0 ? p : 0), 0);
-    hc = [-3.5,-2.5,-1.5,-0.5,0.5,1.5].map(h => rung(`${x.home} ${sign(h)}`, cover(h))).join("")
-       + [-2.5,-1.5,-0.5,0.5,1.5].map(h => rung(`${x.away} ${sign(h)}`, 1 - cover(-h), "u")).join("");
+    hc = [-2.5,-1.5,1.5,2.5].map(h => rung(`${x.home} ${sign(h)}`, cover(h))).join("")
+       + [-2.5,-1.5,1.5,2.5].map(h => rung(`${x.away} ${sign(h)}`, 1 - cover(-h), "u")).join("");
   }
   const warns = flagsOf(x).length ? `<div class="warns">${flagsOf(x).map(f => `<div class="w"><span class="chip warn">${esc(f.kind)}</span> <b>${esc(f.team)}:</b> ${esc(f.text)}</div>`).join("")}</div>` : "";
   const sides = `<div class="ladders">${sideTable(x.home, +x.eh, l2)}${sideTable(x.away, +x.ea, l2)}</div>${l2?'<p class="small muted">League 2 markets offer Over lines only.</p>':""}`;

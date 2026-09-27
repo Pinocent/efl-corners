@@ -2,9 +2,11 @@ name: Update corners board
 
 on:
   schedule:
-    # 07:00 UTC every day. Results usually land in the feed a day or two
-    # after a round, so a daily run picks them up with no one watching.
-    - cron: "0 7 * * *"
+    # 07:00 and 19:00 UTC every day. football-data uploads weekend results
+    # on a weekday evening (the last one landed Mon 17:50 UTC), so the
+    # evening run picks them up the same day and the morning run is a
+    # safety net.
+    - cron: "0 7,19 * * *"
   workflow_dispatch: {}        # "Run workflow" button on GitHub
   push:
     paths:

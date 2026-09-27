@@ -142,8 +142,7 @@ def main():
         print("\nOne-at-a-time sensitivity (v3):")
         grid = {"half_life": [60, 120, 365], "k_team": [3, 5, 8],
                 "k_venue": [5, 10, 20], "shot_blend": [0, 0.4, 0.7],
-                "odds_corner": [0, 0.3, 0.5, 0.8], "xg_weight": [0, 0.5, 0.7, 1],
-                "odds_goals": [0, 0.3, 0.6, 0.9], "nb_size": [6, 9, 12, 20, 1e9],
+                "xg_weight": [0, 0.5, 0.7, 1], "nb_size": [6, 9, 12, 20, 1e9],
                 "prior_regress": [0, 0.5, 0.8]}
         for k, vals in grid.items():
             for v in vals:

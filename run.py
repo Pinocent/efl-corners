@@ -2,7 +2,7 @@
 """
 Weekly (or daily) update. No arguments, no third-party packages.
 
-  1. downloads results (goals, corners, xG, shots, odds) + the fixture list
+  1. downloads results (goals, corners, xG, shots) + the fixture list
   2. merges manual_results.csv for matches the feed hasn't published yet
   3. works out the gameweeks from the dates
   4. fits the model and predicts the upcoming rounds
@@ -155,11 +155,6 @@ def main():
     schedule = sources.get_fixtures(season)
     played = {(m["home"], m["away"]) for m in results}
     todo = [f for f in schedule if (f["home"], f["away"]) not in played]
-    odds = {(o["home"], o["away"]): o for o in sources.get_upcoming_odds()}
-    for f in todo:
-        o = odds.get((f["home"], f["away"]))
-        if o:
-            f.update({k: o[k] for k in ("oh", "od", "oa", "oo25", "ou25")})
     # a result dated today or later can only be a manual entry; still counts
     todo = [f for f in todo if f["date"] >= today - timedelta(days=3)]
 

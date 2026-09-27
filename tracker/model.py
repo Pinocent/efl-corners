@@ -19,9 +19,10 @@ This version fits team ratings the way bookmakers' base models do:
   * recent matches weigh more (half-life in days)
   * corner ratings are blended with shot-volume ratings - shots are a steadier
     read on territorial pressure, which is what produces corners
-  * the betting market's view of the match (1X2 odds) nudges the split of
-    corners between the two sides: favourites win more corners
-  * goals use xG blended with actual goals, then the bookmakers' implied goals
+  * goals use xG blended with actual goals, in the same rating structure
+
+Bookmaker odds are deliberately not used: every number is the model's own,
+from match statistics alone.
 
 All the blend weights live in PARAMS and were chosen by backtest.py on the
 whole of last season, then checked on this season without re-tuning.
@@ -37,9 +38,7 @@ PARAMS = {
     "k_venue": 40.0,         # prior strength for home/away adjustments
     "prior_regress": 0.5,    # last season's rating kept at this fraction
     "shot_blend": 0.4,       # weight of shot ratings in corner ratings
-    "odds_corner": 0.8,      # weight of odds in the corner split
     "xg_weight": 0.7,        # xG vs actual goals in goal ratings
-    "odds_goals": 0.9,       # weight of bookmaker-implied goals
     "nb_size": 10.0,         # corner dispersion (lower = more spread)
     "dc_rho": -0.08,         # Dixon-Coles low-score correction
 }
@@ -213,7 +212,6 @@ class Model:
         gm = _goal_signal(matches, p["xg_weight"])
         self.goals = Ratings("gsh", "gsa", p).fit(
             gm, asof, *pri.get("goals", (None, None)))
-        self.odds_fit = fit_odds_corner_link(matches, asof)
         return self
 
     def priors(self):
@@ -222,7 +220,7 @@ class Model:
                 "goals": season_priors(self.goals)}
 
     def predict(self, fx):
-        """fx: fixture dict (league, home, away, optional odds). -> dict or None."""
+        """fx: fixture dict (league, home, away). -> dict or None."""
         p = self.p
         lg, h, a = fx["league"], fx["home"], fx["away"]
         ch, ca = self.expect_corners(fx)
@@ -232,7 +230,7 @@ class Model:
         return self._with_goals(fx, corners)
 
     def expect_corners(self, fx):
-        """Expected corners for each side, after the shots and odds blends."""
+        """Expected corners for each side, after the shots blend."""
         p = self.p
         lg, h, a = fx["league"], fx["home"], fx["away"]
         ch, ca = self.corners.expect(lg, h, a)
@@ -247,53 +245,13 @@ class Model:
             ch = mh * (ch / mh) ** (1 - b) * (sh / smh) ** b
             ca = ma * (ca / ma) ** (1 - b) * (sa / sma) ** b
 
-        # the market's view of who dominates -> corner split
-        pr = markets.implied(fx.get("oh"), fx.get("od"), fx.get("oa"))
-        if pr and self.odds_fit and p["odds_corner"]:
-            a0, b0 = self.odds_fit
-            lo = a0 + b0 * math.log(pr[0] / pr[2])
-            lm = math.log(ch / ca)
-            l = (1 - p["odds_corner"]) * lm + p["odds_corner"] * lo
-            t = ch + ca
-            ch, ca = t / (1 + math.exp(-l)), t / (1 + math.exp(l))
         return ch, ca
 
     def _with_goals(self, fx, corners):
         p = self.p
         lg, h, a = fx["league"], fx["home"], fx["away"]
-        pr = markets.implied(fx.get("oh"), fx.get("od"), fx.get("oa"))
         gh, ga = self.goals.expect(lg, h, a)
-        mk = markets.market_goals(fx.get("oh"), fx.get("od"), fx.get("oa"),
-                                  fx.get("oo25"), fx.get("ou25"))
-        used_odds = False
-        if mk and p["odds_goals"]:
-            k = p["odds_goals"]
-            gh = math.exp((1 - k) * math.log(gh) + k * math.log(mk[0]))
-            ga = math.exp((1 - k) * math.log(ga) + k * math.log(mk[1]))
-            used_odds = True
         goals = markets.goal_markets(max(gh, 0.15), max(ga, 0.15), p["dc_rho"])
         n = min(self.corners.n.get(h, 0), self.corners.n.get(a, 0))
-        return {"corners": corners, "goals": goals, "odds": used_odds or bool(pr),
-                "sample": n}
+        return {"corners": corners, "goals": goals, "sample": n}
 
-
-def fit_odds_corner_link(matches, asof):
-    """
-    Least squares: log(home corners / away corners) against
-    log(P home win / P away win) from the odds. Returns (a, b).
-    """
-    xs, ys = [], []
-    for m in matches:
-        if m["date"] >= asof or m.get("hc") is None:
-            continue
-        pr = markets.implied(m.get("oh"), m.get("od"), m.get("oa"))
-        if not pr:
-            continue
-        xs.append(math.log(pr[0] / pr[2]))
-        ys.append(math.log((m["hc"] + 0.5) / (m["ac"] + 0.5)))
-    if len(xs) < 60:
-        return None
-    mx, my = sum(xs) / len(xs), sum(ys) / len(ys)
-    sxx = sum((x - mx) ** 2 for x in xs)
-    b = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sxx
-    return my - b * mx, b

@@ -8,7 +8,7 @@ and League 2, logs every prediction, and marks it against the result.
 - **On the Mac:** double-click `Update Dashboard.command`. It opens `docs/index.html`.
 - **In the cloud:** push this folder to a GitHub repo and turn on Pages
   (Settings → Pages → Deploy from branch → `main` / `docs`). The workflow in
-  `.github/workflows/update.yml` then runs every morning at 07:00 UTC and
+  `.github/workflows/update.yml` then runs at 07:00 and 19:00 UTC every day and
   republishes the dashboard, with no terminal involved.
 
 No packages to install. Python 3.9+ standard library only.
