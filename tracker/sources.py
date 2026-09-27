@@ -27,14 +27,14 @@ FIXTURE_URLS = {
 }
 
 NUM_FIELDS = ["hg", "ag", "hc", "ac", "hxg", "axg", "hs", "as_", "hst", "ast",
-              "oh", "od", "oa", "oo25", "ou25"]
+              "oh", "od", "oa", "oo25", "ou25", "hr", "ar"]
 FIELDS = ["date", "time", "league", "home", "away"] + NUM_FIELDS + ["source"]
 
 # football-data column -> our field
 _FD_MAP = {"FTHG": "hg", "FTAG": "ag", "HC": "hc", "AC": "ac", "HxG": "hxg",
            "AxG": "axg", "HS": "hs", "AS": "as_", "HST": "hst", "AST": "ast",
            "AvgH": "oh", "AvgD": "od", "AvgA": "oa",
-           "Avg>2.5": "oo25", "Avg<2.5": "ou25"}
+           "Avg>2.5": "oo25", "Avg<2.5": "ou25", "HR": "hr", "AR": "ar"}
 
 
 def season_code(today=None):

@@ -225,9 +225,19 @@ class Model:
         """fx: fixture dict (league, home, away, optional odds). -> dict or None."""
         p = self.p
         lg, h, a = fx["league"], fx["home"], fx["away"]
-        ch, ca = self.corners.expect(lg, h, a)
+        ch, ca = self.expect_corners(fx)
         if ch is None:
             return None
+        corners = markets.corner_markets(ch, ca, p["nb_size"], lg)
+        return self._with_goals(fx, corners)
+
+    def expect_corners(self, fx):
+        """Expected corners for each side, after the shots and odds blends."""
+        p = self.p
+        lg, h, a = fx["league"], fx["home"], fx["away"]
+        ch, ca = self.corners.expect(lg, h, a)
+        if ch is None:
+            return None, None
         sh, sa = self.shots.expect(lg, h, a)
         mh, ma = self.corners.mu[lg]
         smh, sma = self.shots.mu.get(lg, (None, None))
@@ -246,9 +256,12 @@ class Model:
             l = (1 - p["odds_corner"]) * lm + p["odds_corner"] * lo
             t = ch + ca
             ch, ca = t / (1 + math.exp(-l)), t / (1 + math.exp(l))
+        return ch, ca
 
-        corners = markets.corner_markets(ch, ca, p["nb_size"], lg)
-
+    def _with_goals(self, fx, corners):
+        p = self.p
+        lg, h, a = fx["league"], fx["home"], fx["away"]
+        pr = markets.implied(fx.get("oh"), fx.get("od"), fx.get("oa"))
         gh, ga = self.goals.expect(lg, h, a)
         mk = markets.market_goals(fx.get("oh"), fx.get("od"), fx.get("oa"),
                                   fx.get("oo25"), fx.get("ou25"))

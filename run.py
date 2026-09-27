@@ -19,6 +19,7 @@ from datetime import date, datetime, timedelta, timezone
 
 from tracker import evaluate as ev
 from tracker import markets, sources
+from tracker.flags import fixture_flags
 from tracker.model import PARAMS, Model
 from tracker.rounds import detect_rounds
 from tracker.teams import unknown_names
@@ -253,6 +254,13 @@ def main():
         return out
 
     fixtures = [clean(r) for r in settled if r["round"] in shown_rounds]
+    # warnings about each side's recent matches, as they stood before kick-off
+    cache = {}
+    for x in fixtures:
+        if x["model"] == "v3":
+            fx = {"home": x["home"], "away": x["away"], "league": x["league"],
+                  "date": date.fromisoformat(x["date"])}
+            x["flags"] = fixture_flags(fx, results, model, PARAMS["nb_size"], cache)
     latest = {}
     for m in official:
         latest[m["league"]] = max(latest.get(m["league"], date.min), m["date"])
