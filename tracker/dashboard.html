@@ -8,7 +8,7 @@
 :root{
   --ground:#F1F4F1; --surface:#FFFFFF; --sunk:#E8ECE8; --ink:#15201A; --muted:#5B6860;
   --line:#D6DDD8; --accent:#9B1B42; --accent-soft:#F6E3E9; --blue:#2C5F8D; --blue-soft:#E1EBF4;
-  --good:#2D7A4B; --good-soft:#DFF0E5; --bad:#B0402C; --bad-soft:#F7E2DC; --warn:#946000;
+  --good:#2D7A4B; --good-soft:#DFF0E5; --bad:#B0402C; --bad-soft:#F7E2DC; --warn:#946000; --warn-soft:#F6ECD6;
   --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
@@ -17,30 +17,34 @@
     color-scheme:dark;
     --ground:#0E1411; --surface:#161F1A; --sunk:#1D2822; --ink:#E6ECE8; --muted:#98A69E;
     --line:#2B3731; --accent:#E2729A; --accent-soft:#3A1E29; --blue:#86B4DE; --blue-soft:#1C2B39;
-    --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A;
+    --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A; --warn-soft:#352A14;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
   --ground:#0E1411; --surface:#161F1A; --sunk:#1D2822; --ink:#E6ECE8; --muted:#98A69E;
   --line:#2B3731; --accent:#E2729A; --accent-soft:#3A1E29; --blue:#86B4DE; --blue-soft:#1C2B39;
-  --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A;
+  --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A; --warn-soft:#352A14;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.5 var(--body);font-variant-numeric:tabular-nums}
-.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:28px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:32px}
 h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:.01em;margin:0;text-wrap:balance}
 h1{font-size:34px;line-height:1}
-h2{font-size:24px;line-height:1.1}
+h2{font-size:26px;line-height:1.1}
 h3{font-size:18px}
+p{margin:0}
 .eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .muted{color:var(--muted)}
-small,.small{font-size:12px}
+.small{font-size:12.5px}
 button{font:inherit;color:inherit}
-button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:12px}
+.sechead{display:flex;flex-direction:column;gap:4px}
+.sechead p{max-width:70ch;color:var(--muted)}
 
 header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
-header.top .meta{display:flex;flex-direction:column;gap:2px;text-align:right}
+header.top .meta{display:flex;flex-direction:column;gap:4px;text-align:right}
 .freshness{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .fresh{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--muted)}
 
@@ -55,70 +59,113 @@ header.top .meta{display:flex;flex-direction:column;gap:2px;text-align:right}
 .seg button{border:0;background:none;padding:5px 12px;cursor:pointer;font-size:13px}
 .seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
 
-.lede{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
-.lede h2{font-size:30px}
+/* round summary: calls and predictions side by side, never mixed */
+.lede{display:flex;flex-direction:column;gap:14px}
+.lede h2{font-size:32px}
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.stat.calls{border-top:4px solid var(--accent)}
+.stat.preds{border-top:4px solid var(--blue)}
+.stat .fig{font-family:var(--display);font-size:34px;font-weight:600;line-height:1}
+.stat .what{font-size:13px;color:var(--muted);max-width:52ch}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:4px}
+.tag.call{background:var(--accent);color:#fff}
+.tag.pred{background:var(--blue-soft);color:var(--blue)}
+
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--sunk)}
+th.grp{text-align:center;border-bottom:0;padding-bottom:2px;color:var(--ink)}
+th.grp.c{box-shadow:inset 0 3px 0 var(--accent)}
+th.grp.g{box-shadow:inset 0 3px 0 var(--blue)}
+th.sortable{cursor:pointer}
+td.l,th.l{text-align:left}
+td.wrapcell{white-space:normal;min-width:190px}
+tr.fx{cursor:pointer}
+tr.fx:hover td{background:var(--sunk)}
+tr.fx td.match{position:sticky;left:0;background:var(--surface);min-width:180px}
+tr.fx:hover td.match{background:var(--sunk)}
+tr.fx.has-call td.match{box-shadow:inset 3px 0 0 var(--accent)}
+.match b{font-weight:600}
+.lg{font-size:11.5px;color:var(--muted)}
+.num{font-family:var(--display);font-size:18px;font-weight:600}
+.split{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.bar{display:flex;width:80px;height:8px;border-radius:4px;overflow:hidden;background:var(--sunk)}
+.bar i{display:block;height:100%}
+.bar .h{background:var(--accent)} .bar .a{background:var(--blue)}
+.chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;background:var(--sunk);white-space:nowrap}
+.chip.hit{background:var(--good-soft);color:var(--good);font-weight:600}
+.chip.miss{background:var(--bad-soft);color:var(--bad);font-weight:600}
+.chip.wait{background:var(--sunk);color:var(--muted)}
+.chip.call{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.lean{color:var(--muted)}
+.res{font-family:var(--display);font-size:17px;font-weight:600}
+tr.detail td{background:var(--ground);text-align:left;white-space:normal;padding:14px}
+
+/* calls list */
+.calllist{display:flex;flex-direction:column}
+.callrow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) 64px 60px 92px;gap:6px 14px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+.callrow:last-child{border-bottom:0}
+.callrow.head{padding-block:8px;background:var(--sunk)}
+.callrow.head span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.callrow .pick{font-weight:600}
+.callrow .why{font-size:12px;color:var(--muted);font-weight:400}
+.callrow .r{text-align:right}
+.callrow .big{font-family:var(--display);font-size:20px;font-weight:600}
+@media (max-width:640px){
+  .callrow{grid-template-columns:1fr auto;padding:12px 14px}
+  .callrow.head{display:none}
+  .callrow .m{grid-column:1/-1}
+  .callrow .fairc{display:none}
+}
 
 .hl{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .panel h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.panel ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.panel .intro{font-size:12.5px;color:var(--muted)}
+.panel ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .panel li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline}
 .panel li .sub{grid-column:1/-1;font-size:12px;color:var(--muted)}
 .big{font-family:var(--display);font-size:22px;font-weight:600;line-height:1}
 .empty{color:var(--muted);font-size:13px}
 
-.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
-th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--sunk);position:sticky;top:0}
-th.sortable{cursor:pointer}
-td.l,th.l{text-align:left}
-tr.fx{cursor:pointer}
-tr.fx:hover td{background:var(--sunk)}
-tr.fx td.match{position:sticky;left:0;background:var(--surface);min-width:190px}
-tr.fx:hover td.match{background:var(--sunk)}
-.match b{font-weight:600}
-.lg{font-size:11px;color:var(--muted)}
-.num{font-family:var(--display);font-size:18px;font-weight:600}
-.split{display:flex;align-items:center;gap:6px;justify-content:flex-end}
-.bar{display:flex;width:90px;height:8px;border-radius:4px;overflow:hidden;background:var(--sunk)}
-.bar i{display:block;height:100%}
-.bar .h{background:var(--accent)} .bar .a{background:var(--blue)}
-.chip{display:inline-block;padding:1px 7px;border-radius:99px;font-size:12px;background:var(--sunk)}
-.chip.hot{background:var(--accent-soft);color:var(--accent);font-weight:600}
-.chip.cool{background:var(--blue-soft);color:var(--blue);font-weight:600}
-.chip.hit{background:var(--good-soft);color:var(--good);font-weight:600}
-.chip.miss{background:var(--bad-soft);color:var(--bad);font-weight:600}
-.res{font-family:var(--display);font-size:17px;font-weight:600}
-tr.detail td{background:var(--ground);text-align:left;white-space:normal;padding:14px}
-.ladders{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.ladders{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
 .ladder{display:flex;flex-direction:column;gap:4px}
-.rung{display:grid;grid-template-columns:78px 1fr 44px 44px;gap:8px;align-items:center;font-size:12.5px}
+.rung{display:grid;grid-template-columns:minmax(96px,1.2fr) 1fr 40px 44px;gap:8px;align-items:center;font-size:12.5px}
 .rung .track{height:6px;background:var(--sunk);border-radius:3px;overflow:hidden}
 .rung .track i{display:block;height:100%;background:var(--accent)}
 .rung.u .track i{background:var(--blue)}
 .rung .p{text-align:right;font-weight:600}
 .rung .o{text-align:right;color:var(--muted)}
+.rung.hdr{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
 
 .score{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
-.mk{display:grid;grid-template-columns:1fr 56px 70px;gap:6px 10px;font-size:13px;align-items:center}
+.mk{display:grid;grid-template-columns:1fr auto auto;gap:7px 14px;font-size:13px;align-items:center}
 .mk .h{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .pct{font-weight:600;text-align:right}
-.skillbar{height:8px;background:var(--sunk);border-radius:4px;position:relative;overflow:hidden}
-.skillbar i{position:absolute;top:0;bottom:0;left:50%}
-.good{color:var(--good)} .bad{color:var(--bad)}
-.weeks{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:8px;border-bottom:1px solid var(--line)}
-.wk{flex:1;min-width:18px;max-width:46px;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.good{color:var(--good)} .bad{color:var(--bad)} .meh{color:var(--warn)}
+.verdict{font-size:12px;padding:1px 8px;border-radius:99px;font-weight:600;white-space:nowrap}
+.verdict.good{background:var(--good-soft)} .verdict.bad{background:var(--bad-soft)} .verdict.meh{background:var(--warn-soft)}
+.weeks{display:flex;align-items:flex-end;gap:6px;height:130px;padding-top:8px;border-bottom:1px solid var(--line);position:relative}
+.weeks .fifty{position:absolute;left:0;right:0;border-top:1px dashed var(--line)}
+.weeks .fifty span{position:absolute;right:0;top:-16px;font-size:10.5px;color:var(--muted)}
+.wk{flex:1;min-width:20px;max-width:46px;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end;position:relative;z-index:1}
 .wk i{display:block;width:100%;border-radius:3px 3px 0 0;background:var(--accent)}
 .wk span{font-size:11px;color:var(--muted)}
 .wklabels{display:flex;gap:6px}
-.wklabels span{flex:1;min-width:18px;max-width:46px;font-size:10.5px;color:var(--muted);text-align:center}
-.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 28px;font-size:13.5px}
-.notes p{margin:0;max-width:65ch}
+.wklabels span{flex:1;min-width:20px;max-width:46px;font-size:10.5px;color:var(--muted);text-align:center;line-height:1.2}
+details.glossary{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+details.glossary summary{cursor:pointer;font-weight:600}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 28px;font-size:13.5px;margin-top:12px}
+.notes p{max-width:65ch}
 .notes b{font-weight:600}
-.callout{border-left:3px solid var(--warn);padding:6px 12px;background:var(--surface);border-radius:0 8px 8px 0;font-size:13px}
+dl.terms{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;font-size:13.5px;margin:12px 0 0}
+dl.terms dt{font-weight:600}
+dl.terms dd{margin:0;color:var(--muted);max-width:70ch}
+.callout{border-left:3px solid var(--warn);padding:8px 12px;background:var(--surface);border-radius:0 8px 8px 0;font-size:13px}
 @media (max-width:760px){ .controls{position:static} }
-@media (max-width:560px){ h1{font-size:28px} .lede h2{font-size:24px} header.top .meta{text-align:left} .freshness{justify-content:flex-start} }
+@media (max-width:560px){ h1{font-size:28px} .lede h2{font-size:26px} header.top .meta{text-align:left} .freshness{justify-content:flex-start} dl.terms{grid-template-columns:1fr} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -127,7 +174,7 @@ tr.detail td{background:var(--ground);text-align:left;white-space:normal;padding
     <div>
       <div class="eyebrow" id="season"></div>
       <h1>EFL Corners Board</h1>
-      <div class="muted small">Championship · League 1 · League 2 · corners, handicaps and goals, marked every week</div>
+      <div class="muted small">Corners, corner handicaps and goals for the Championship, League 1 and League 2</div>
     </div>
     <div class="meta">
       <div class="small muted" id="updated"></div>
@@ -139,44 +186,77 @@ tr.detail td{background:var(--ground);text-align:left;white-space:normal;padding
     <div class="row" id="roundTabs" role="group" aria-label="Gameweek"></div>
     <div class="row">
       <div class="seg" id="leagueSeg" role="group" aria-label="League"></div>
-      <span class="small muted" id="roundNote"></span>
     </div>
   </div>
 
   <section class="lede" id="lede"></section>
-  <section class="hl" id="highlights"></section>
 
-  <section style="display:flex;flex-direction:column;gap:10px">
-    <div class="row" style="justify-content:space-between">
-      <h2 id="fxTitle">Fixtures</h2>
-      <span class="small muted">Tap a match for every line and handicap. Home in claret, away in blue.</span>
+  <section id="callsSec">
+    <div class="sechead">
+      <div><span class="tag call">Calls</span></div>
+      <h2>Calls for this gameweek</h2>
+      <p id="callsIntro"></p>
+    </div>
+    <div class="tablebox calllist" id="calls"></div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <div><span class="tag pred">Predictions</span></div>
+      <h2>Predictions worth a look</h2>
+      <p>The model's view of every match, sorted to surface the standouts. These are not recommendations unless marked <span class="chip call">Call</span>.</p>
+    </div>
+    <div class="hl" id="highlights"></div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <div><span class="tag pred">Predictions</span></div>
+      <h2 id="fxTitle">Every match</h2>
+      <p>Tap a match to see the chance of every corners line, handicap and goals market. Matches with a call have a claret edge.</p>
     </div>
     <div class="tablebox"><table id="fxTable"></table></div>
   </section>
 
-  <section style="display:flex;flex-direction:column;gap:12px" id="reviewSec">
-    <h2>How the predictions did</h2>
+  <section id="reviewSec">
+    <div class="sechead">
+      <h2>Track record</h2>
+      <p>Calls and predictions are marked separately. Calls are judged on whether they landed. Predictions are judged on whether they beat simply using the league average.</p>
+    </div>
     <div class="score" id="review"></div>
   </section>
 
-  <section style="display:flex;flex-direction:column;gap:12px">
-    <div class="row" style="justify-content:space-between">
+  <section>
+    <div class="sechead">
       <h2>Teams</h2>
-      <span class="small muted">Actual averages per match. “Model” is what the ratings expect against an average side.</span>
+      <p>Corners per match this season. “Expected” is what the model rates each side at against an average opponent, after allowing for who they've played.</p>
     </div>
     <div class="tablebox"><table id="teamTable"></table></div>
   </section>
 
-  <section style="display:flex;flex-direction:column;gap:12px">
-    <h2>Reading this board</h2>
-    <div class="notes">
-      <p><b>Gameweeks</b> are worked out from the fixture dates. Matches on days close together form one round, and no club plays twice in a round. Thu–Mon and Tue–Wed rounds, Friday starts and Boxing Day all group correctly without a fixed rule.</p>
-      <p><b>Expected corners</b> come from team attack and defence ratings for corners and shots, with a home and away adjustment for each club. Recent matches count more, and last season's ratings give a starting point. The bookmakers' 1X2 odds adjust how the corners split between the two sides.</p>
-      <p><b>Totals are hard to call.</b> Across the last two seasons, expected totals only just beat quoting the league average. The model is much better at <b>who wins more corners</b>: strong calls landed about 76% of the time. Handicaps and big gaps are its strongest markets.</p>
-      <p><b>Goals</b> blend each side's xG and goal record with the goals implied by the bookmakers' prices. BTTS and clean sheets use a Dixon–Coles score grid, which corrects the usual under-count of 0–0 and 1–1.</p>
-      <p><b>Calls</b> are predictions above a set confidence level: <span id="callRules"></span>. League 2 only shows Over lines, and handicaps appear in the Championship and League 1.</p>
-      <p><b>Fair odds</b> are 1 ÷ probability. A price above fair may be value. A price below fair means you are paying the bookmaker's margin.</p>
-    </div>
+  <section>
+    <details class="glossary" id="glossary">
+      <summary>How this works, and what the terms mean</summary>
+      <dl class="terms">
+        <dt>Prediction</dt><dd>The model's estimate for a match: expected corners for each side, and the chance of each market. Every match gets one.</dd>
+        <dt>Call</dt><dd id="defCall"></dd>
+        <dt>Landed / missed</dt><dd>Whether a call came off once the result was in. Calls freeze at kick-off and are never changed afterwards.</dd>
+        <dt>Chance</dt><dd>How likely the model thinks something is. 60% means it should happen about 6 times in 10.</dd>
+        <dt>Fair odds</dt><dd>1 ÷ chance. A bookmaker price above fair may be value. Below fair, you're paying their margin.</dd>
+        <dt>Corner handicap</dt><dd>A head start in corners. "Stockport −1.5" means Stockport need to win the corner count by 2 or more. "Peterborough +1.5" means Peterborough can lose it by 1 and still win the bet.</dd>
+        <dt>Line</dt><dd id="defLine"></dd>
+        <dt>xG</dt><dd>Expected goals. The model blends each side's shot quality, goals and the bookmakers' prices.</dd>
+        <dt>Clean sheet</dt><dd>The side concedes no goals.</dd>
+        <dt>BTTS</dt><dd>Both teams score.</dd>
+        <dt>Gameweek</dt><dd>Matches played within a few days of each other, with no club playing twice. Worked out from the dates, so Thursday–Monday and Tuesday–Wednesday rounds both group correctly.</dd>
+      </dl>
+      <div class="notes">
+        <p><b>Where the model is strongest.</b> Across the last two seasons it was right about which side wins more corners in about 76% of confident cases. Corner totals are much harder to call; it only slightly beats using the league average. That's why most calls are handicaps.</p>
+        <p><b>How corners are predicted.</b> Team ratings for corners won and conceded, and for shots, each with a home and away adjustment. Recent matches count more. Bookmakers' match odds adjust how corners split between the sides.</p>
+        <p><b>How goals are predicted.</b> xG and goals blended with the goals implied by the bookmakers' prices, on a score grid that corrects for the extra 0–0 and 1–1 draws a simpler model misses.</p>
+        <p><b>League 2</b> markets only offer Over lines, so League 2 shows no Under or handicap calls.</p>
+      </div>
+    </details>
   </section>
 </div>
 
@@ -184,7 +264,7 @@ tr.detail td{background:var(--ground);text-align:left;white-space:normal;padding
 const DATA = /*__DATA__*/null;
 const $ = (s, el=document) => el.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const pc = p => p == null ? "–" : Math.round(p*100) + "%";
+const pc = p => p == null || isNaN(p) ? "–" : Math.round(p*100) + "%";
 const f1 = x => x == null ? "–" : (+x).toFixed(1);
 const f2 = x => x == null ? "–" : (+x).toFixed(2);
 const fair = p => p && p > .01 ? (1/p).toFixed(2) : "–";
@@ -192,9 +272,11 @@ const LINES = [7.5,8.5,9.5,10.5,11.5,12.5,13.5];
 const LEAGUES = ["All","Championship","League 1","League 2"];
 const store = { get(k){ try { return localStorage.getItem(k) } catch(e){ return null } },
                 set(k,v){ try { localStorage.setItem(k,v) } catch(e){} } };
+const CALL = DATA.meta.call, BOOK = DATA.meta.book_line || {};
+const sign = h => (h > 0 ? "+" : h < 0 ? "−" : "") + Math.abs(h);
 
-// ---- negative binomial, same as the Python side, for ladders
-function lgamma(x){ // Lanczos
+// ---- negative binomial, same as the Python side, for the per-match ladders
+function lgamma(x){
   const g=7, c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
   if (x < 0.5) return Math.log(Math.PI/Math.sin(Math.PI*x)) - lgamma(1-x);
   x -= 1; let a=c[0]; const t=x+g+0.5;
@@ -212,42 +294,62 @@ function diffDist(eh, ea, r){
   return d;
 }
 
+// ---- turn a stored call into words a person would use
+function describe(c, x){
+  const m = c.market, p = c.pick;
+  if (m === "Corners total") return {text: `${p} corners`, why: `Total corners in the match. Model expects ${f1(x.et)}.`};
+  if (m === "Corner handicap"){
+    const mm = p.match(/^(.*) ([+-]?\d+(?:\.\d)?)$/); const team = mm ? mm[1] : p, h = mm ? +mm[2] : 0;
+    const n = Math.abs(h) - .5;
+    const plain = h < 0 ? (n === 0 ? `${team} to win more corners` : `${team} to win the corner count by ${n+1} or more`)
+                        : `${team} not to lose the corner count by more than ${n}`;
+    return {text: `${team} ${sign(h)} corner handicap`, why: `${plain}. Expected ${f1(x.eh)}–${f1(x.ea)}.`};
+  }
+  if (m === "Both 4+ corners") return {text: "Both teams 4+ corners", why: `Expected ${f1(x.eh)}–${f1(x.ea)}.`};
+  if (m === "BTTS") return {text: p === "Yes" ? "Both teams to score" : "Not both teams to score", why: `xG ${f2(x.lh)}–${f2(x.la)}.`};
+  if (m === "Goals 2.5") return {text: `${p} 2.5 goals`, why: `Model expects ${f2(+x.lh + +x.la)} goals.`};
+  return {text: `${m}: ${p}`, why: ""};
+}
+function outcome(c, x){
+  if (c.hit === true) return `<span class="chip hit">Landed</span>`;
+  if (c.hit === false) return `<span class="chip miss">Missed</span>`;
+  return `<span class="chip wait">${x.hc != null ? "–" : "Not played"}</span>`;
+}
+
 // ---- state
-const S = {
-  round: null,
-  league: store.get("league") || "All",
-  teamSort: {k:"cf", dir:-1},
-  open: new Set(),
-};
+const S = { round: null, league: store.get("league") || "All", teamSort: {k:"cf", dir:-1}, open: new Set() };
 const rounds = DATA.rounds;
 const v3 = DATA.fixtures.filter(x => x.model === "v3");
 const NB = DATA.meta.params.nb_size;
+const gwOf = id => (rounds.find(r => r.id === id) || {}).n;
 
 function defaultRound(){
   const live = rounds.find(r => r.status !== "completed" && v3.some(x => x.round === r.id));
   return (live || rounds[rounds.length-1] || {}).id;
 }
 S.round = defaultRound();
+const inLeague = x => S.league === "All" || x.league === S.league;
 
-function inLeague(x){ return S.league === "All" || x.league === S.league; }
-
-// ---- header
+// ---- header + glossary text
 $("#season").textContent = `Season ${DATA.meta.season}`;
-$("#updated").textContent = `Updated ${DATA.meta.updated}`;
+$("#updated").textContent = `Updated ${new Date(DATA.meta.updated.replace(" UTC","Z").replace(" ","T")).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}`;
 $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
-  `<span class="fresh">${esc(k)} results to ${new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")
-  + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} from Flashscore</span>` : "");
-$("#callRules").textContent = `totals ${pc(DATA.meta.call.total)} against the usual line (${Object.entries(DATA.meta.book_line).map(([k,v])=>k.replace('League ','L')+' '+v).join(', ')}), handicap ${pc(DATA.meta.call.hcap)}, both 4+ ${pc(DATA.meta.call.both4)}, BTTS and 2.5 goals ${pc(DATA.meta.call.btts)}`;
+  `<span class="fresh">${esc(k)} results in to ${new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")
+  + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "");
+const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
+$("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.hcap)} for a corner handicap, ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
+$("#defLine").textContent = `The total-corners line bookmakers usually lead with: ${lines}. Corner total calls are made against this line.`;
 
 function renderTabs(){
-  const shown = rounds.filter(r => v3.some(x => x.round === r.id)).slice(-8);
+  const shown = rounds.filter(r => v3.some(x => x.round === r.id)).slice(-10);
   const tabs = $("#roundTabs");
   tabs.innerHTML = shown.map(r => {
-    const st = r.status === "completed" ? "result" : r.status === "in play" ? "in play" : "next";
-    return `<button class="pill" aria-pressed="${r.id===S.round}" data-r="${r.id}">${esc(r.label.replace(/^(Weekend|Midweek) · /,"$1 "))}<span class="st">${st}</span></button>`;
+    const st = r.status === "completed" ? "results" : r.status === "in play" ? "in play" : "upcoming";
+    const short = r.label.replace(/^(Weekend|Midweek) · /, "");
+    return `<button class="pill" aria-pressed="${r.id===S.round}" data-r="${r.id}">GW${r.n} · ${esc(short)}<span class="st">${st}</span></button>`;
   }).join("");
   const on = tabs.querySelector('[aria-pressed="true"]'); if (on) tabs.scrollLeft = on.offsetLeft - 16;
-  $("#leagueSeg").innerHTML = LEAGUES.map(l => `<button aria-pressed="${l===S.league}" data-l="${l}">${l==="All"?"All":l.replace("League ","L").replace("Championship","Champ")}</button>`).join("");
+  $("#leagueSeg").innerHTML = LEAGUES.map(l => `<button aria-pressed="${l===S.league}" data-l="${l}">${l==="All"?"All leagues":l}</button>`).join("");
 }
 document.addEventListener("click", e => {
   const r = e.target.closest("[data-r]"); if (r){ S.round = r.dataset.r; S.open.clear(); render(); return; }
@@ -257,157 +359,206 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("tr.fx")) e.target.click(); });
 
-function rows(){ return v3.filter(x => x.round === S.round && inLeague(x)).sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time) || a.league.localeCompare(b.league)); }
-function key(x){ return x.home + "|" + x.away; }
+function rows(){ return v3.filter(x => x.round === S.round && inLeague(x)).sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time) || a.league.localeCompare(b.league) || a.home.localeCompare(b.home)); }
+const key = x => x.home + "|" + x.away;
+const allCalls = xs => xs.flatMap(x => (x.calls||[]).map(c => ({...c, x})));
 
-// ---- lede + highlights
+// ---- round summary: two cards, calls and predictions
 function renderLede(){
   const r = rounds.find(r => r.id === S.round) || {};
-  const xs = rows(); const played = xs.filter(x => x.hc != null);
-  const calls = played.flatMap(x => x.calls || []); const hits = calls.filter(c => c.hit).length;
-  let side = "";
-  if (played.length) side = `<span class="muted">${played.length} of ${xs.length} played · <b class="${hits/calls.length>=.5?'good':'bad'}">${hits}/${calls.length}</b> calls landed</span>`;
-  else side = `<span class="muted">${xs.length} fixtures · ${xs.filter(x=>+x.odds).length} with bookmaker odds so far</span>`;
-  $("#lede").innerHTML = `<div class="eyebrow">Gameweek ${r.n ?? ""}</div><h2>${esc(r.label || "No round")}</h2>${side}`;
-  $("#fxTitle").textContent = S.league === "All" ? "Fixtures" : `${S.league} fixtures`;
-  $("#roundNote").textContent = r.status === "completed" ? "Showing what was predicted before kick-off, beside what happened." : "";
+  const xs = rows(), played = xs.filter(x => x.hc != null), calls = allCalls(xs);
+  const settled = calls.filter(c => c.hit != null), hits = settled.filter(c => c.hit).length;
+  const lg = S.league === "All" ? "" : ` in ${S.league}`;
+
+  let callCard, predCard;
+  if (settled.length){
+    callCard = `<div class="fig ${hits/settled.length>=.5?'good':'bad'}">${hits} of ${settled.length} landed</div>
+      <div class="what">The model made ${calls.length} call${calls.length===1?"":"s"}${lg} this gameweek. ${calls.length > settled.length ? `${calls.length-settled.length} still to be played.` : ""}</div>`;
+  } else if (calls.length){
+    callCard = `<div class="fig">${calls.length} call${calls.length===1?"":"s"}</div><div class="what">Recommended picks${lg}, listed below. They'll be marked once results are in.</div>`;
+  } else {
+    callCard = `<div class="fig">No calls</div><div class="what">Nothing${lg} reached the confidence bar this gameweek. The predictions below still cover every match.</div>`;
+  }
+  if (played.length){
+    const dec = played.filter(x => x.hc !== x.ac);
+    const side = dec.filter(x => (x.eh > x.ea) === (x.hc > x.ac)).length;
+    const mae = played.reduce((s,x)=>s+Math.abs(x.eh + x.ea - x.hc - x.ac),0)/played.length;
+    predCard = `<div class="fig">${side} of ${dec.length} right</div>
+      <div class="what">Picked the side that won more corners in ${side} of ${dec.length} matches (level counts left out). Corner totals were off by ${f1(mae)} on average. ${played.length} of ${xs.length} matches played${lg}.</div>`;
+  } else {
+    predCard = `<div class="fig">${xs.length} matches</div><div class="what">Every match${lg} has a prediction${xs.some(x=>+x.odds)?"":". Bookmaker odds aren't out yet, so these rely on team ratings alone and will sharpen once prices appear, usually 2 days before kick-off"}.</div>`;
+  }
+  $("#lede").innerHTML = `<div class="sechead"><div class="eyebrow">Gameweek ${r.n ?? ""} · ${esc(r.kind || "")} · ${r.status === "completed" ? "results in" : r.status === "in play" ? "in play" : "upcoming"}</div>
+    <h2>${esc((r.label||"").replace(/^(Weekend|Midweek) · /,""))}</h2></div>
+    <div class="duo">
+      <div class="stat calls"><div><span class="tag call">Calls</span></div>${callCard}</div>
+      <div class="stat preds"><div><span class="tag pred">Predictions</span></div>${predCard}</div>
+    </div>`;
+  $("#fxTitle").textContent = S.league === "All" ? "Every match" : `Every ${S.league} match`;
 }
 
-function li(main, val, sub, cls=""){ return `<li><span>${main}</span><span class="big ${cls}">${val}</span>${sub?`<span class="sub">${sub}</span>`:""}</li>`; }
+// ---- the calls list
+function renderCalls(){
+  const r = rounds.find(r => r.id === S.round) || {};
+  const calls = allCalls(rows()).sort((a,b) => b.p - a.p);
+  $("#callsIntro").textContent = r.status === "completed"
+    ? "What the model recommended before kick-off, and whether each one came off."
+    : "The model's recommended picks: predictions confident enough to act on. Compare the fair odds with your bookmaker's price before betting.";
+  if (!calls.length){
+    $("#calls").innerHTML = `<div class="callrow"><span class="empty" style="grid-column:1/-1">No calls this gameweek. Nothing reached the confidence bar, which is common for corner totals. See the predictions below for the closest cases.</span></div>`;
+    return;
+  }
+  $("#calls").innerHTML = `<div class="callrow head"><span>Match</span><span>Call</span><span class="r">Chance</span><span class="r fairc">Fair odds</span><span class="r">Result</span></div>` +
+    calls.map(c => { const d = describe(c, c.x);
+      return `<div class="callrow">
+        <span class="m"><b>${esc(c.x.home)} v ${esc(c.x.away)}</b><div class="lg">${new Date(c.x.date).toLocaleDateString("en-GB",{weekday:"short"})} ${esc(c.x.time||"")} · ${esc(c.x.league)}</div></span>
+        <span class="pick">${esc(d.text)}<div class="why">${esc(d.why)}</div></span>
+        <span class="r big">${pc(c.p)}</span><span class="r fairc muted">${fair(c.p)}</span>
+        <span class="r">${outcome(c, c.x)}${c.x.hc!=null?`<div class="lg">corners ${c.x.hc}–${c.x.ac} · goals ${c.x.hg}–${c.x.ag}</div>`:""}</span></div>`; }).join("");
+}
+
+// ---- prediction highlights (never presented as calls)
+function li(main, val, sub){ return `<li><span>${main}</span><span class="big">${val}</span>${sub?`<span class="sub">${sub}</span>`:""}</li>`; }
+const callBadge = (x, market) => (x.calls||[]).some(c => c.market === market) ? ` <span class="chip call">Call</span>` : "";
+const actual = (ok, text) => ok == null ? "" : ` · <span class="chip ${ok?'hit':'miss'}">${text}</span>`;
 function renderHighlights(){
   const xs = rows();
-  const gaps = [...xs].sort((a,b)=>Math.abs(b.eh-b.ea)-Math.abs(a.eh-a.ea)).slice(0,5);
-  const gapHtml = gaps.map(x => {
-    const fav = x.eh >= x.ea ? x.home : x.away, dog = x.eh >= x.ea ? x.away : x.home;
-    const pm = x.eh >= x.ea ? x.home_more : 1 - x.home_more;
-    const h = (x.calls||[]).find(c => c.market === "Corner handicap");
-    return li(`<b>${esc(fav)}</b> <span class="muted">over</span> ${esc(dog)}`, `+${f1(Math.abs(x.eh-x.ea))}`,
-      `${f1(x.eh)} v ${f1(x.ea)} expected · wins more corners ${pc(pm)}${h?` · <span class="chip hot">${esc(h.pick)} ${pc(h.p)}</span>`:""}${x.hc!=null?` · actual ${x.hc}–${x.ac}`:""}`);
+  const e = `<p class="empty">No matches for this filter.</p>`;
+  const gaps = [...xs].sort((a,b)=>Math.abs(b.eh-b.ea)-Math.abs(a.eh-a.ea)).slice(0,5).map(x => {
+    const homeFav = x.eh >= x.ea, fav = homeFav ? x.home : x.away, dog = homeFav ? x.away : x.home;
+    const pm = homeFav ? x.home_more : 1 - x.home_more;
+    const ok = x.hc == null || x.hc === x.ac ? null : (x.hc > x.ac) === homeFav;
+    return li(`<b>${esc(fav)}</b> v ${esc(dog)}${callBadge(x,"Corner handicap")}`, `+${f1(Math.abs(x.eh-x.ea))}`,
+      `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))} · ${pc(pm)} chance ${esc(fav)} win more corners${actual(ok, x.hc!=null?`${x.hc}–${x.ac}`:"")}`);
   }).join("");
-  const calls = xs.flatMap(x => (x.calls||[]).filter(c => !c.market.startsWith("BTTS") && !c.market.startsWith("Goals")).map(c => ({...c, x})))
-                  .sort((a,b)=>b.p-a.p).slice(0,6);
-  const callHtml = calls.map(c => li(`${esc(c.x.home)} v ${esc(c.x.away)}`, pc(c.p),
-      `${esc(c.market)}: <b>${esc(c.pick)}</b> · fair ${fair(c.p)}${c.hit!=null?` · <span class="chip ${c.hit?'hit':'miss'}">${c.hit?'landed':'missed'}</span>`:""}`)).join("");
-  const goals = xs.flatMap(x => {
-      const out = [];
-      if (x.btts >= .58) out.push({t:"BTTS yes", p:x.btts, x, ok: x.hg!=null ? x.hg>0&&x.ag>0 : null});
-      if (x.cs_home >= .38) out.push({t:`${x.home} clean sheet`, p:x.cs_home, x, ok: x.ag!=null ? x.ag===0 : null});
-      if (x.cs_away >= .33) out.push({t:`${x.away} clean sheet`, p:x.cs_away, x, ok: x.hg!=null ? x.hg===0 : null});
-      return out; }).sort((a,b)=>b.p-a.p).slice(0,6);
-  const goalHtml = goals.map(g => li(`${esc(g.t)}`, pc(g.p),
-      `${esc(g.x.home)} v ${esc(g.x.away)} · xG ${f2(g.x.lh)}–${f2(g.x.la)} · fair ${fair(g.p)}${g.ok!=null?` · <span class="chip ${g.ok?'hit':'miss'}">${g.ok?'landed':'missed'}</span>`:""}`)).join("");
-  const both = [...xs].sort((a,b)=>b.both4-a.both4).slice(0,5).map(x => li(`${esc(x.home)} v ${esc(x.away)}`, pc(x.both4),
-      `${f1(x.eh)} v ${f1(x.ea)} · fair ${fair(x.both4)}${x.hc!=null?` · <span class="chip ${x.hc>=4&&x.ac>=4?'hit':'miss'}">${x.hc}–${x.ac}</span>`:""}`)).join("");
-  const e = `<p class="empty">Nothing in this round clears the bar.</p>`;
+  const both = [...xs].sort((a,b)=>b.both4-a.both4).slice(0,5).map(x => li(`${esc(x.home)} v ${esc(x.away)}${callBadge(x,"Both 4+ corners")}`, pc(x.both4),
+      `Expected ${f1(x.eh)}–${f1(x.ea)} · fair odds ${fair(x.both4)}${actual(x.hc==null?null:x.hc>=4&&x.ac>=4, x.hc!=null?`${x.hc}–${x.ac}`:"")}`)).join("");
+  const totals = [...xs].map(x => { const l = BOOK[x.league] || 10.5, po = +x["o"+String(l).replace(".","")];
+      return {x, l, po, lean: Math.abs(po - .5)}; }).sort((a,b)=>b.lean-a.lean).slice(0,5).map(({x,l,po}) => {
+      const over = po >= .5, t = x.hc!=null ? x.hc + x.ac : null;
+      return li(`${esc(x.home)} v ${esc(x.away)}${callBadge(x,"Corners total")}`, pc(over?po:1-po),
+        `${over?"Over":"Under"} ${l} · expected ${f1(x.et)}${x.league==="League 2"&&!over?" · unders not offered in League 2":""}${actual(t==null?null:(over?t>l:t<l), t!=null?`${t} corners`:"")}`); }).join("");
+  const goals = xs.flatMap(x => [
+      {t:"Both teams to score", p:x.btts, x, ok: x.hg!=null ? x.hg>0&&x.ag>0 : null},
+      {t:`${x.home} clean sheet`, p:x.cs_home, x, ok: x.ag!=null ? x.ag===0 : null},
+      {t:`${x.away} clean sheet`, p:x.cs_away, x, ok: x.hg!=null ? x.hg===0 : null}]).sort((a,b)=>b.p-a.p).slice(0,5)
+    .map(g => li(`${esc(g.t)}${g.t.startsWith("Both")?callBadge(g.x,"BTTS"):""}`, pc(g.p),
+      `${esc(g.x.home)} v ${esc(g.x.away)} · xG ${f2(g.x.lh)}–${f2(g.x.la)} · fair odds ${fair(g.p)}${actual(g.ok, g.x.hg!=null?`${g.x.hg}–${g.x.ag}`:"")}`)).join("");
   $("#highlights").innerHTML = `
-    <div class="panel"><h3>Biggest corner gaps <span class="eyebrow">handicap angle</span></h3><ol>${gapHtml||e}</ol></div>
-    <div class="panel"><h3>Strongest corner calls <span class="eyebrow">prob · fair</span></h3><ol>${callHtml||e}</ol></div>
-    <div class="panel"><h3>Both teams 4+ corners</h3><ol>${both||e}</ol></div>
-    <div class="panel"><h3>Goals: BTTS &amp; clean sheets</h3><ol>${goalHtml||e}</ol></div>`;
+    <div class="panel"><h3>Biggest corner gaps</h3><p class="intro">Where one side is expected to win clearly more corners. The model's strongest area.</p><ol>${gaps||e}</ol></div>
+    <div class="panel"><h3>Clearest corner totals</h3><p class="intro">Furthest from 50/50 against the usual line. Totals rarely get far from even.</p><ol>${totals||e}</ol></div>
+    <div class="panel"><h3>Both teams 4+ corners</h3><p class="intro">Most likely matches for both sides to reach 4 corners.</p><ol>${both||e}</ol></div>
+    <div class="panel"><h3>Goals</h3><p class="intro">Highest chances of both teams scoring or a clean sheet.</p><ol>${goals||e}</ol></div>`;
 }
 
-// ---- fixtures table
+// ---- every match
 function renderFixtures(){
   const xs = rows();
   const anyPlayed = xs.some(x => x.hc != null);
-  let h = `<thead><tr><th class="l">Match</th><th>Corners H–A</th><th>Total</th><th>Main line</th><th>Handicap</th><th>Both 4+</th><th>xG H–A</th><th>BTTS</th><th>O2.5</th><th>CS H / A</th>${anyPlayed?"<th>Result</th><th class='l'>Calls</th>":"<th class='l'>Calls</th>"}</tr></thead><tbody>`;
+  const cols = anyPlayed ? 13 : 12;
+  let h = `<thead><tr><th class="l" rowspan="2">Match</th><th class="grp c" colspan="5">Corners</th><th class="grp g" colspan="4">Goals</th>${anyPlayed?'<th rowspan="2">Result<div class="lg" style="text-transform:none;letter-spacing:0">corners (goals)</div></th>':""}<th class="l" rowspan="2">Calls</th></tr>
+    <tr><th>Expected<br>home–away</th><th>Expected<br>total</th><th>Usual line</th><th>Handicap<br>closest to even</th><th>Both 4+</th><th>xG<br>home–away</th><th>Both<br>score</th><th>Over<br>2.5</th><th>Clean sheet<br>home / away</th></tr></thead><tbody>`;
   for (const x of xs){
     const k = key(x), l2 = x.league === "League 2";
     const share = x.eh/(x.eh+x.ea);
-    const ml = +x.main_line, po = x["o"+String(ml).replace(".","")];
-    const main = l2 ? `O${ml} <b>${pc(po)}</b>` : (po>=.5?`O${ml} <b>${pc(po)}</b>`:`U${ml} <b>${pc(1-po)}</b>`);
-    let hc = "–";
+    const l = BOOK[x.league] || 10.5, po = +x["o"+String(l).replace(".","")];
+    const line = po >= .5 || l2 ? `Over ${l} <b>${pc(po)}</b>` : `Under ${l} <b>${pc(1-po)}</b>`;
+    let hc = `<span class="lean">not offered</span>`;
     if (!l2 && x.hcap_line !== "" && x.hcap_line != null){
       const hl = +x.hcap_line, p = +x.hcap_p;
-      hc = p >= .5 ? `${esc(x.home.split(" ")[0])} ${hl>0?"+":""}${hl} <b>${pc(p)}</b>` : `${esc(x.away.split(" ")[0])} ${-hl>0?"+":""}${-hl} <b>${pc(1-p)}</b>`;
+      hc = p >= .5 ? `${esc(x.home)} ${sign(hl)} <b>${pc(p)}</b>` : `${esc(x.away)} ${sign(-hl)} <b>${pc(1-p)}</b>`;
     }
-    const calls = (x.calls||[]).map(c => `<span class="chip ${c.hit==null?'':c.hit?'hit':'miss'}" title="${esc(c.market)} ${pc(c.p)}">${esc(c.market.replace("Corners total","Cnr").replace("Corner handicap","HC").replace("Both 4+ corners","Both4+").replace("Goals 2.5","Gls"))} ${esc(c.pick.replace(/^(\S+) /, (m,t)=> t===x.home.split(" ")[0]||t===x.away.split(" ")[0]? t.slice(0,4)+" ": m))}</span>`).join(" ");
+    const calls = (x.calls||[]).map(c => `<span class="chip ${c.hit==null?'call':c.hit?'hit':'miss'}" title="${pc(c.p)} chance">${esc(describe(c,x).text)}</span>`).join(" ");
     const day = new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"});
-    h += `<tr class="fx" data-k="${esc(k)}" tabindex="0" aria-expanded="${S.open.has(k)}">
-      <td class="l match"><b>${esc(x.home)}</b> v <b>${esc(x.away)}</b><div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · thin data":""}</div></td>
-      <td><div class="split"><span class="num">${f1(x.eh)}</span><span class="bar"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span></div></td>
-      <td class="num">${f1(x.et)}</td><td>${main}</td><td>${hc}</td>
-      <td><span class="chip ${x.both4>=.6?'hot':''}">${pc(x.both4)}</span></td>
+    h += `<tr class="fx ${x.calls&&x.calls.length?'has-call':''}" data-k="${esc(k)}" tabindex="0" aria-expanded="${S.open.has(k)}">
+      <td class="l match"><b>${esc(x.home)}</b> v <b>${esc(x.away)}</b><div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · few matches yet":""}</div></td>
+      <td><div class="split"><span class="num">${f1(x.eh)}</span><span class="bar" aria-hidden="true"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span></div></td>
+      <td class="num">${f1(x.et)}</td><td>${line}</td><td>${hc}</td><td>${pc(x.both4)}</td>
       <td>${f2(x.lh)}–${f2(x.la)}</td><td>${pc(x.btts)}</td><td>${pc(x.o25)}</td><td>${pc(x.cs_home)} / ${pc(x.cs_away)}</td>
       ${anyPlayed?`<td class="res">${x.hc!=null?`${x.hc}–${x.ac} <span class="small muted">(${x.hg}–${x.ag})</span>`:"–"}</td>`:""}
-      <td class="l">${calls||'<span class="muted small">no call</span>'}</td></tr>`;
-    if (S.open.has(k)) h += `<tr class="detail"><td colspan="${anyPlayed?12:11}">${ladders(x)}</td></tr>`;
+      <td class="l wrapcell">${calls||'<span class="lean small">none</span>'}</td></tr>`;
+    if (S.open.has(k)) h += `<tr class="detail"><td colspan="${cols}">${ladders(x)}</td></tr>`;
   }
-  if (!xs.length) h += `<tr><td class="l" colspan="11"><span class="empty">No fixtures for this filter.</span></td></tr>`;
+  if (!xs.length) h += `<tr><td class="l" colspan="${cols}"><span class="empty">No matches for this filter.</span></td></tr>`;
   $("#fxTable").innerHTML = h + "</tbody>";
 }
 
 function rung(label, p, cls=""){
-  return `<div class="rung ${cls}"><span>${label}</span><span class="track"><i style="width:${p*100}%"></i></span><span class="p">${pc(p)}</span><span class="o">${fair(p)}</span></div>`;
+  return `<div class="rung ${cls}"><span>${esc(label)}</span><span class="track"><i style="width:${Math.max(0,Math.min(1,p))*100}%"></i></span><span class="p">${pc(p)}</span><span class="o">${fair(p)}</span></div>`;
 }
+const rhead = t => `<div class="rung hdr"><span>${t}</span><span></span><span class="p">Chance</span><span class="o">Fair</span></div>`;
 function ladders(x){
   const l2 = x.league === "League 2";
-  const tot = LINES.map(l => rung(`Over ${l}`, +x["o"+String(l).replace(".","")])).join("");
-  const und = l2 ? "" : LINES.map(l => rung(`Under ${l}`, 1 - x["o"+String(l).replace(".","")], "u")).join("");
+  const o = l => +x["o"+String(l).replace(".","")];
+  const tot = LINES.map(l => rung(`Over ${l}`, o(l))).join("");
+  const und = LINES.map(l => rung(`Under ${l}`, 1 - o(l), "u")).join("");
   let hc = "";
   if (!l2){
     const d = diffDist(+x.eh, +x.ea, NB);
     const cover = h => Object.entries(d).reduce((s,[k,p]) => s + (+k + h > 0 ? p : 0), 0);
-    hc = [-3.5,-2.5,-1.5,-0.5,0.5,1.5,2.5].map(h => rung(`${x.home.split(" ")[0]} ${h>0?"+":""}${h}`, cover(h))).join("")
-       + [-2.5,-1.5,-0.5].map(h => rung(`${x.away.split(" ")[0]} ${h}`, 1 - cover(-h), "u")).join("");
+    hc = [-3.5,-2.5,-1.5,-0.5,0.5,1.5].map(h => rung(`${x.home} ${sign(h)}`, cover(h))).join("")
+       + [-2.5,-1.5,-0.5,0.5,1.5].map(h => rung(`${x.away} ${sign(h)}`, 1 - cover(-h), "u")).join("");
   }
-  const act = x.hc != null ? `<div class="callout">Actual: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>. Predicted ${f1(x.eh)}–${f1(x.ea)} corners, xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
+  const act = x.hc != null ? `<div class="callout">Result: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>. The model expected ${f1(x.eh)}–${f1(x.ea)} corners and xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
   return `<div style="display:flex;flex-direction:column;gap:12px">${act}<div class="ladders">
-    <div class="ladder"><div class="eyebrow">Total corners · prob · fair</div>${tot}</div>
-    ${l2 ? `<div class="ladder"><div class="eyebrow">League 2</div><p class="small muted" style="margin:0">Over lines only in League 2 markets.</p>${rung(`${x.home} 4+`, +x.home4)}${rung(`${x.away} 4+`, +x.away4)}${rung("Both 4+", +x.both4)}</div>`
-          : `<div class="ladder"><div class="eyebrow">Unders</div>${und}</div><div class="ladder"><div class="eyebrow">Corner handicap · prob · fair</div>${hc}</div>`}
-    <div class="ladder"><div class="eyebrow">Goals · prob · fair</div>${rung(`${x.home} win`, +x.p_home)}${rung("Draw", +x.p_draw)}${rung(`${x.away} win`, +x.p_away)}${rung("BTTS", +x.btts)}${rung("Over 2.5", +x.o25)}${rung(`${x.home} clean sheet`, +x.cs_home)}${rung(`${x.away} clean sheet`, +x.cs_away)}${!l2?rung("Both 4+ corners", +x.both4):""}</div>
+    <div class="ladder">${rhead("Total corners")}${tot}</div>
+    ${l2 ? `<div class="ladder">${rhead("Each side")}${rung(`${x.home} 4+`, +x.home4)}${rung(`${x.away} 4+`, +x.away4)}${rung("Both 4+", +x.both4)}<p class="small muted">League 2 markets offer Over lines only.</p></div>`
+          : `<div class="ladder">${rhead("Under")}${und}</div><div class="ladder">${rhead("Corner handicap")}${hc}</div>`}
+    <div class="ladder">${rhead("Goals")}${rung(`${x.home} win`, +x.p_home)}${rung("Draw", +x.p_draw)}${rung(`${x.away} win`, +x.p_away)}${rung("Both teams score", +x.btts)}${rung("Over 2.5 goals", +x.o25)}${rung(`${x.home} clean sheet`, +x.cs_home)}${rung(`${x.away} clean sheet`, +x.cs_away)}${!l2?rung("Both 4+ corners", +x.both4):""}</div>
   </div></div>`;
 }
 
-// ---- review
+// ---- track record: calls and predictions judged separately
 function renderReview(){
-  const rv = DATA.reviews.filter(r => r.model === "v3");
-  const sel = rv.find(r => r.round === S.round) || rv[rv.length-1];
+  const rv = DATA.reviews.filter(r => r.model === "v3").sort((a,b)=>a.round.localeCompare(b.round));
   const box = $("#review");
-  if (!sel && !DATA.reviews.length){ box.innerHTML = `<div class="panel"><p class="empty">Nothing marked yet. Predictions are marked once results arrive, usually a day or two after the round.</p></div>`; return; }
-  let html = "";
-  if (sel){
-    const lab = (rounds.find(r => r.id === sel.round)||{}).label || sel.round;
-    const rowsM = Object.entries(sel.by_market).map(([m,[n,h]]) => `<span>${esc(m)}</span><span class="pct ${h/n>=.5?'good':'bad'}">${h}/${n}</span><span class="pct">${pc(h/n)}</span>`).join("");
-    html += `<div class="panel"><h3>${esc(lab)} <span class="eyebrow">round marked</span></h3>
-      <div class="lede"><span class="big ${sel.hits/sel.calls>=.5?'good':'bad'}">${sel.hits}/${sel.calls}</span><span class="muted">calls landed · ${sel.matches} matches · corner total missed by ${f1(sel.corner_mae)} on average</span></div>
-      <div class="mk"><span class="h">Market</span><span class="h pct">Hits</span><span class="h pct">Rate</span>${rowsM||'<span class="muted">No calls</span>'}</div></div>`;
-  }
-  // round-by-round bars
-  if (rv.length){
-    const max = 1;
-    html += `<div class="panel"><h3>Round by round <span class="eyebrow">share of calls landed</span></h3>
-      <div class="weeks">${rv.map(r => `<div class="wk" title="${r.hits}/${r.calls}"><span>${pc(r.hits/r.calls)}</span><i style="height:${Math.max(r.hits/r.calls*80,2)}px;opacity:${r.round===S.round?1:.55}"></i></div>`).join("")}</div>
-      <div class="wklabels">${rv.map(r => `<span>${new Date(r.round).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")}</div>
-      <div class="small muted">All rounds: ${rv.reduce((s,r)=>s+r.hits,0)}/${rv.reduce((s,r)=>s+r.calls,0)} calls. One round is a small sample; the running total is the number to watch.</div></div>`;
-  }
-  // skill vs baseline
-  const sk = (DATA.skill.v3||[]).filter(s => s.n);
-  const old = Object.fromEntries((DATA.skill.v2||[]).map(s => [s.market, s]));
-  if (sk.length){
-    html += `<div class="panel"><h3>Better than the league average? <span class="eyebrow">Brier skill</span></h3>
-      <div class="mk" style="grid-template-columns:1fr 90px 60px 60px"><span class="h">Market</span><span class="h"></span><span class="h pct">New</span><span class="h pct">Old</span>
-      ${sk.map(s => { const v = s.skill ?? 0, w = Math.min(Math.abs(v)*250, 50), o = old[s.market];
-        return `<span>${esc(s.market)} <span class="small muted">n=${s.n}</span></span><span class="skillbar"><i style="${v>=0?`left:50%;width:${w}%;background:var(--good)`:`left:${50-w}%;width:${w}%;background:var(--bad)`}"></i></span><span class="pct ${v>=0?'good':'bad'}">${v>=0?"+":""}${(v*100).toFixed(0)}%</span><span class="pct muted">${o&&o.skill!=null?(o.skill>=0?"+":"")+(o.skill*100).toFixed(0)+"%":"–"}</span>`; }).join("")}
-      </div><div class="small muted">Positive means the probabilities beat quoting the league-average rate for every match. "Old" is the spreadsheet method's predictions, where they exist.</div></div>`;
-  }
+  if (!rv.length){ box.innerHTML = `<div class="panel"><p class="empty">Nothing marked yet. Rounds are marked once results arrive, usually a day or two after the games.</p></div>`; return; }
+
+  // calls, season to date, by market
+  const byM = {};
+  rv.forEach(r => Object.entries(r.by_market).forEach(([m,[n,h]]) => { const v = byM[m] ||= [0,0]; v[0]+=n; v[1]+=h; }));
+  const tc = rv.reduce((s,r)=>s+r.calls,0), th = rv.reduce((s,r)=>s+r.hits,0);
+  const mkRows = Object.entries(byM).sort((a,b)=>b[1][0]-a[1][0]).map(([m,[n,h]]) =>
+    `<span>${esc({"Corners total":"Corner totals","Corner handicap":"Corner handicaps","Both 4+ corners":"Both teams 4+ corners","BTTS":"Both teams to score","Goals 2.5":"Over/under 2.5 goals"}[m]||m)}</span><span class="pct">${h} of ${n}</span><span class="pct ${h/n>=.5?'good':'bad'}">${pc(h/n)}</span>`).join("");
+  const maxH = 96;
+  const bars = `<div class="weeks"><div class="fifty" style="bottom:${maxH/2+2}px"><span>50%</span></div>${rv.map(r => { const p = r.calls ? r.hits/r.calls : 0;
+      return `<div class="wk" title="GW${gwOf(r.round)}: ${r.hits} of ${r.calls}"><span>${r.calls?pc(p):"–"}</span><i style="height:${Math.max(p*maxH,2)}px;opacity:${r.round===S.round?1:.5}"></i></div>`; }).join("")}</div>
+    <div class="wklabels">${rv.map(r => `<span>GW${gwOf(r.round)}<br>${r.calls} call${r.calls===1?"":"s"}</span>`).join("")}</div>`;
+  let html = `<div class="panel"><h3><span><span class="tag call">Calls</span> Did they land?</span></h3>
+    <div class="lede" style="gap:4px"><span class="big ${th/tc>=.5?'good':'bad'}">${th} of ${tc} landed · ${pc(th/tc)}</span><span class="small muted">All calls this season, by gameweek. Darker bar = the gameweek you're viewing.</span></div>
+    ${bars}
+    <div class="mk"><span class="h">Market</span><span class="h pct">Landed</span><span class="h pct">Rate</span>${mkRows}</div>
+    <p class="small muted">Calls before this model went live were worked out afterwards, using only data from before each gameweek.${tc < 100 ? " Fewer than 100 calls so far, so treat the rate as a rough guide." : ""}</p></div>`;
+
+  // predictions, season to date
+  const sideN = rv.reduce((s,r)=>s+(r.side_n||0),0), sideH = rv.reduce((s,r)=>s+(r.side_hit||0),0);
+  const n = rv.reduce((s,r)=>s+r.matches,0);
+  const mae = rv.reduce((s,r)=>s+r.corner_mae*r.matches,0)/n, bmae = rv.reduce((s,r)=>s+(r.base_mae||0)*r.matches,0)/n;
+  const verdict = s => s == null ? ["–","meh"] : s > .02 ? ["Better","good"] : s < -.02 ? ["Worse","bad"] : ["About the same","meh"];
+  const names = {"Corners over 9.5":"Corners over 9.5","Corners over 10.5":"Corners over 10.5","Both 4+ corners":"Both teams 4+ corners","Who wins more corners":"Which side wins more corners","BTTS":"Both teams to score","Over 2.5 goals":"Over 2.5 goals","Home clean sheet":"Home clean sheet","Away clean sheet":"Away clean sheet"};
+  const sk = (DATA.skill.v3||[]).filter(s => s.n).map(s => { const [t,c] = verdict(s.skill);
+    return `<span>${esc(names[s.market]||s.market)}</span><span class="small muted">${s.skill==null?"":(s.skill>=0?"+":"")+(s.skill*100).toFixed(0)+"%"}</span><span class="verdict ${c}">${t}</span>`; }).join("");
+  html += `<div class="panel"><h3><span><span class="tag pred">Predictions</span> Better than the league average?</span></h3>
+    <div class="lede" style="gap:4px"><span class="big">${sideH} of ${sideN} · ${pc(sideH/sideN)}</span><span class="small muted">matches where it picked the side that won more corners (level counts left out). Corner totals were off by ${f1(mae)} on average, against ${f1(bmae)} using the league average.</span></div>
+    <div class="mk"><span class="h">Market</span><span class="h pct">Score</span><span class="h pct">Verdict</span>${sk}</div>
+    <p class="small muted">Every prediction's chance is compared with the league's usual rate. "Better" means the model knew something the average didn't. Most markets sit close to the average, which is why so few predictions become calls.</p></div>`;
   box.innerHTML = html;
 }
 
 // ---- teams
 function renderTeams(){
-  const cols = [["team","Team","l"],["p","P"],["cf","Won"],["ca","Conc"],["h_cf","Home won"],["h_ca","Home conc"],["a_cf","Away won"],["a_ca","Away conc"],["f_cf","Last 6 won"],["f_ca","Last 6 conc"],["m_h_cf","Model H won"],["m_a_cf","Model A won"],["xgf","xG for"],["xga","xG agst"],["gf","Gls for"],["ga","Gls agst"]];
+  const cols = [["team","Team","l"],["p","Played"],["cf","Won"],["ca","Conceded"],["h_cf","Won"],["h_ca","Conceded"],["a_cf","Won"],["a_ca","Conceded"],["f_cf","Won"],["f_ca","Conceded"],["m_h_cf","Home"],["m_a_cf","Away"],["xgf","For"],["xga","Against"]];
+  const groups = `<tr><th class="l"></th><th></th><th class="grp c" colspan="2">Corners, all</th><th class="grp c" colspan="2">At home</th><th class="grp c" colspan="2">Away</th><th class="grp c" colspan="2">Last 6</th><th class="grp c" colspan="2">Expected won</th><th class="grp g" colspan="2">xG per match</th></tr>`;
   const {k, dir} = S.teamSort;
   const xs = DATA.teams.filter(inLeague).sort((a,b) => (typeof a[k]==="string" ? a[k].localeCompare(b[k]) : ((a[k]??-1)-(b[k]??-1))) * dir);
-  let h = `<thead><tr>${cols.map(([c,t,cl]) => `<th class="sortable ${cl||""}" data-sort="${c}" aria-sort="${k===c?(dir<0?'descending':'ascending'):'none'}">${t}${k===c?(dir<0?" ↓":" ↑"):""}</th>`).join("")}</tr></thead><tbody>`;
+  let h = `<thead>${groups}<tr>${cols.map(([c,t,cl]) => `<th class="sortable ${cl||""}" data-sort="${c}" aria-sort="${k===c?(dir<0?'descending':'ascending'):'none'}">${t}${k===c?(dir<0?" ↓":" ↑"):""}</th>`).join("")}</tr></thead><tbody>`;
   for (const t of xs){
     h += `<tr>${cols.map(([c,,cl]) => c==="team" ? `<td class="l"><b>${esc(t.team)}</b><div class="lg">${esc(t.league)}</div></td>`
-      : `<td>${c==="p"?t.p:(c.startsWith("x")||c.startsWith("g")?f2(t[c]):f1(t[c]))}</td>`).join("")}</tr>`;
+      : `<td>${c==="p"?t.p:(c.startsWith("xg")?f2(t[c]):f1(t[c]))}</td>`).join("")}</tr>`;
   }
-  $("#teamTable").innerHTML = h + "</tbody>";
+  $("#teamTable").innerHTML = h + `</tbody>`;
 }
 
-function render(){ renderTabs(); renderLede(); renderHighlights(); renderFixtures(); renderReview(); renderTeams(); }
+function render(){ renderTabs(); renderLede(); renderCalls(); renderHighlights(); renderFixtures(); renderReview(); renderTeams(); }
 render();
 </script>

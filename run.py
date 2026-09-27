@@ -215,7 +215,15 @@ def main():
             for c in calls:
                 v = by.setdefault(c["market"], [0, 0])
                 v[0] += 1; v[1] += c["hit"]
+            # prediction accuracy, separate from calls: did the side expected
+            # to win more corners do so, and how far off were the totals
+            # compared with just quoting the league average
+            dec = [r for r in rs if r["hc"] != r["ac"]]
+            side_hit = sum((float(r["eh"]) > float(r["ea"])) == (r["hc"] > r["ac"]) for r in dec)
+            base_mae = sum(abs(rates.get(r["league"], {}).get("avg_corners", 10) - r["hc"] - r["ac"])
+                           for r in rs) / len(rs)
             reviews.append({"round": rid, "model": model_name, "matches": len(rs),
+                            "side_n": len(dec), "side_hit": side_hit, "base_mae": base_mae,
                             "calls": len(calls), "hits": sum(c["hit"] for c in calls),
                             "by_market": by,
                             "corner_mae": sum(abs(float(r["et"]) - r["hc"] - r["ac"]) for r in rs) / len(rs)})
