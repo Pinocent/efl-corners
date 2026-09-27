@@ -28,13 +28,13 @@ The official feed replaces these numbers when it publishes them.
 | File | What it is |
 |---|---|
 | `data/matches.csv` | Every result this season, with gameweek, corners, goals, xG, shots and odds |
-| `data/predictions.csv` | Every prediction made, frozen on match day (`v3` = this model, `v2` = the old spreadsheet's) |
+| `data/predictions.csv` | Every prediction and its calls, frozen at kick-off, with the result once known (`v3` = this model, `v2` = the old spreadsheet's) |
 | `manual_results.csv` | Flashscore numbers for matches the feed hasn't published yet. The official feed replaces them once it has them |
 | `docs/index.html` | The dashboard |
 | `backtest.py` | Replays past seasons to test the model: `python3 backtest.py 2526` |
-| `tracker/` | The code: `rounds.py` gameweeks, `model.py` ratings, `markets.py` probabilities, `evaluate.py` marking |
+| `tracker/` | The code: `rounds.py` gameweeks, `model.py` ratings, `markets.py` probabilities, `evaluate.py` calls and marking, `flags.py` warnings |
 
-`update_corners.py` and `corners_tracker.xlsx` are the old version, left untouched.
+The old spreadsheet version is in `old version/`, untouched.
 
 ## Tuning
 

@@ -14,8 +14,6 @@ left is a round. It works across all three divisions at once, so one "round"
 covers the Championship, League 1 and League 2 matches played together.
 """
 
-from datetime import timedelta
-
 MAX_GAP_DAYS = 2        # Thu -> Sat stays together; Sat -> Tue does not
 
 
@@ -96,25 +94,3 @@ def _label(kind, a, b):
     return f"{kind} · {a.strftime('%a %-d')} – {b.strftime('%a %-d %b')}" \
         if a.month == b.month else \
         f"{kind} · {a.strftime('%a %-d %b')} – {b.strftime('%a %-d %b')}"
-
-
-def round_of(rounds, d):
-    for r in rounds.values():
-        if r["start"] <= d <= r["end"]:
-            return r
-    return None
-
-
-def next_rounds(rounds, today, n=2):
-    """The next n rounds that still have something to play (today counts)."""
-    ahead = [r for r in rounds.values() if r["end"] >= today]
-    return ahead[:n]
-
-
-def last_completed(rounds, today):
-    done = [r for r in rounds.values() if r["end"] < today]
-    return done[-1] if done else None
-
-
-def week_span(d):
-    return d - timedelta(days=d.weekday())

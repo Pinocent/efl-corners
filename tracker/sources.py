@@ -1,9 +1,8 @@
 """
 Downloads. Everything comes back as plain dicts with canonical team names.
 
-  results   football-data.co.uk  - goals, corners, xG, shots, pre-match odds
+  results   football-data.co.uk  - goals, corners, xG, shots, red cards
   fixtures  fixturedownload.com  - the full season schedule, all three divisions
-  odds      football-data fixtures.csv - odds for the next few days' fixtures
   manual    manual_results.csv   - Flashscore numbers typed in (or written by
                                    the Cowork skill) before the feed catches up
 """
@@ -18,7 +17,6 @@ from datetime import date, datetime
 from .teams import LEAGUES, canon
 
 RESULTS_URL = "https://www.football-data.co.uk/mmz4281/{season}/{div}.csv"
-ODDS_URL = "https://www.football-data.co.uk/fixtures.csv"
 FIXTURE_URLS = {
     "Championship": ["https://fixturedownload.com/download/championship-{yr}-GMTStandardTime.csv",
                      "https://fixturedownload.com/download/efl-championship-{yr}-GMTStandardTime.csv"],
@@ -27,14 +25,13 @@ FIXTURE_URLS = {
 }
 
 NUM_FIELDS = ["hg", "ag", "hc", "ac", "hxg", "axg", "hs", "as_", "hst", "ast",
-              "oh", "od", "oa", "oo25", "ou25", "hr", "ar"]
+              "hr", "ar"]
 FIELDS = ["date", "time", "league", "home", "away"] + NUM_FIELDS + ["source"]
 
 # football-data column -> our field
 _FD_MAP = {"FTHG": "hg", "FTAG": "ag", "HC": "hc", "AC": "ac", "HxG": "hxg",
            "AxG": "axg", "HS": "hs", "AS": "as_", "HST": "hst", "AST": "ast",
-           "AvgH": "oh", "AvgD": "od", "AvgA": "oa",
-           "Avg>2.5": "oo25", "Avg<2.5": "ou25", "HR": "hr", "AR": "ar"}
+           "HR": "hr", "AR": "ar"}
 
 
 def season_code(today=None):
@@ -124,29 +121,6 @@ def get_results(season, cache_dir=None, log=print):
     return out
 
 
-def get_upcoming_odds(log=print):
-    """Pre-match odds for fixtures in the next few days (football-data)."""
-    try:
-        text = fetch(ODDS_URL)
-    except Exception as e:
-        log(f"  ! odds download failed ({e})")
-        return []
-    out = []
-    for r in csv.DictReader(io.StringIO(text)):
-        div = (r.get("Div") or "").strip()
-        if div in LEAGUES:
-            out.extend(_fd_rows(_one_row_csv(r), LEAGUES[div], "odds"))
-    return out
-
-
-def _one_row_csv(r):
-    buf = io.StringIO()
-    w = csv.DictWriter(buf, fieldnames=list(r.keys()))
-    w.writeheader()
-    w.writerow(r)
-    return buf.getvalue()
-
-
 def get_fixtures(season, log=print):
     """Whole-season schedule for all three divisions."""
     yr = 2000 + int(season[:2])
@@ -206,18 +180,30 @@ def get_manual(path, log=print):
     return out
 
 
-def merge_results(official, manual):
+def merge_results(official, manual, known):
     """
     Official feed wins. A manual row is kept only when the feed has no match
     between the same two clubs within three days of it.
+
+    known: {(league, club)} from the official feed and fixture list. A manual
+    row naming a club that isn't there (a typo, or a spelling the name list
+    doesn't cover yet) is set aside rather than creating a phantom club -
+    that's how the old spreadsheet ended up double-counting matches.
+    Returns (results, manual rows used, [skipped descriptions]).
     """
     have = {}
     for m in official:
         have.setdefault((m["home"], m["away"]), []).append(m["date"])
-    extra = [m for m in manual
-             if not any(abs((d - m["date"]).days) <= 3
-                        for d in have.get((m["home"], m["away"]), []))]
-    return official + extra, len(extra)
+    extra, skipped = [], []
+    for m in manual:
+        bad = [t for t in (m["home"], m["away"]) if (m["league"], t) not in known]
+        if bad:
+            skipped.append(f'{m["date"]:%-d %b} {m["home"]} v {m["away"]}: '
+                           f'{" and ".join(bad)} not recognised in {m["league"]}')
+            continue
+        if not any(abs((d - m["date"]).days) <= 3 for d in have.get((m["home"], m["away"]), [])):
+            extra.append(m)
+    return official + extra, len(extra), skipped
 
 
 def write_csv(path, rows, fields):

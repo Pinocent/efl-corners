@@ -8,7 +8,7 @@ using only matches played before it, then score against what happened.
 
 Lower is better for every column except 'hit%'.
   MAE tot    average miss on total corners
-  LL team    log-loss of each side's exact corner count (the sharpest test)
+  LL team    log-loss of each side's corner count, 0-15+ (the sharpest test)
   Brier ...  squared error of the probability for that market (0.25 = coin flip)
 """
 
@@ -51,9 +51,8 @@ def evaluate(matches, prior_model, predictor, skip_rounds=3):
             tot = hc + ac
             s["n"] += 1
             s["mae"] += abs(c["et"] - tot)
-            ph = markets.nb_pmf(c["eh"], p.get("nb"))
-            pa = markets.nb_pmf(c["ea"], p.get("nb"))
-            s["ll"] += -math.log(max(ph[min(hc, 30)], 1e-9)) - math.log(max(pa[min(ac, 30)], 1e-9))
+            ph, pa = c["ph"], c["pa"]          # each side's chances, 0..15
+            s["ll"] += -math.log(max(ph[min(hc, 15)], 1e-9)) - math.log(max(pa[min(ac, 15)], 1e-9))
             s["b95"] += (c["totals"][9.5] - (tot > 9.5)) ** 2
             s["b105"] += (c["totals"][10.5] - (tot > 10.5)) ** 2
             s["bboth"] += (c["both4"] - (hc >= 4 and ac >= 4)) ** 2
@@ -77,20 +76,14 @@ def evaluate(matches, prior_model, predictor, skip_rounds=3):
 
 
 def v2(matches, asof, _prior):
-    return lambda m: _tag(predict_v2(matches, asof, m), None)
+    return lambda m: predict_v2(matches, asof, m)
 
 
 def v3(params):
     def run(matches, asof, prior):
         mdl = Model(params).fit(matches, asof, prior)
-        return lambda m: _tag(mdl.predict(m), params["nb_size"])
+        return mdl.predict
     return run
-
-
-def _tag(p, nb):
-    if p:
-        p["nb"] = nb
-    return p
 
 
 def baseline(matches, asof, _prior):
@@ -105,8 +98,8 @@ def baseline(matches, asof, _prior):
         v = mu.get(m["league"])
         if not v or v[4] < 10:
             return None
-        return {"corners": markets.corner_markets(v[0] / v[4], v[1] / v[4], 12, m["league"]),
-                "goals": markets.goal_markets(v[2] / v[4], v[3] / v[4]), "nb": 12}
+        return {"corners": markets.corner_markets(v[0] / v[4], v[1] / v[4], m["league"]),
+                "goals": markets.goal_markets(v[2] / v[4], v[3] / v[4])}
     return pred
 
 
@@ -142,7 +135,7 @@ def main():
         print("\nOne-at-a-time sensitivity (v3):")
         grid = {"half_life": [60, 120, 365], "k_team": [3, 5, 8],
                 "k_venue": [5, 10, 20], "shot_blend": [0, 0.4, 0.7],
-                "xg_weight": [0, 0.5, 0.7, 1], "nb_size": [6, 9, 12, 20, 1e9],
+                "goal_k_team": [12, 25, 40], "goal_half_life": [60, 120, 240],
                 "prior_regress": [0, 0.5, 0.8]}
         for k, vals in grid.items():
             for v in vals:

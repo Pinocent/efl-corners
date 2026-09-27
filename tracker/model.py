@@ -19,7 +19,11 @@ This version fits team ratings the way bookmakers' base models do:
   * recent matches weigh more (half-life in days)
   * corner ratings are blended with shot-volume ratings - shots are a steadier
     read on territorial pressure, which is what produces corners
-  * goals use xG blended with actual goals, in the same rating structure
+  * goals use the same rating structure on a blend of goals, xG and shots on
+    target, with heavier pulling towards average than corners need. Goals
+    alone swing too much: replaying the last two seasons, "60%+" goals calls
+    landed only 52-57% of the time; with shots on target and more shrinkage
+    they land 61-67%, and every goals market scores better.
 
 Bookmaker odds are deliberately not used: every number is the model's own,
 from match statistics alone.
@@ -38,9 +42,12 @@ PARAMS = {
     "k_venue": 40.0,         # prior strength for home/away adjustments
     "prior_regress": 0.5,    # last season's rating kept at this fraction
     "shot_blend": 0.4,       # weight of shot ratings in corner ratings
-    "xg_weight": 0.7,        # xG vs actual goals in goal ratings
-    "nb_size": 10.0,         # corner dispersion (lower = more spread)
+    "nb_size": 10.0,         # per-side corner spread, used by the warnings
     "dc_rho": -0.08,         # Dixon-Coles low-score correction
+    # goals
+    "goal_mix": (0.2, 0.4, 0.4),  # goals, xG, shots on target x conversion
+    "goal_k_team": 25.0,     # goals need more pulling towards average
+    "goal_half_life": 120,
 }
 
 
@@ -76,8 +83,9 @@ class Ratings:
             self.n[a] = self.n.get(a, 0) + 1
         self.league_of = teams
 
-        # league means, leaning on last season's until ~40 matches are in
-        for lg in {t for t in teams.values()}:
+        # league means, leaning on last season's until ~40 matches are in.
+        # A league with no matches yet (gameweek 1) uses last season's.
+        for lg in set(teams.values()) | set(league_prior or {}):
             lr = [r for r in rows if r[0] == lg]
             sw = sum(r[5] for r in lr)
             mh = sum(r[3] * r[5] for r in lr) / sw if sw else 0
@@ -142,6 +150,8 @@ class Ratings:
             # keep each league's average rating at 1 so the league mean means something
             for lg in self.mu:
                 ts = [t for t in teams if teams[t] == lg]
+                if not ts:
+                    continue
                 for d in (att, dfn, ah, aa, dh, da):
                     g = math.exp(sum(math.log(d[t]) for t in ts) / len(ts))
                     for t in ts:
@@ -180,18 +190,31 @@ def season_priors(rat):
             dict(rat.mu))
 
 
-def _goal_signal(matches, xw):
-    """Per match, a blend of xG and goals for each side (xG alone when goals missing)."""
+def _goal_signal(matches, mix):
+    """
+    Per match, each side's goal signal: a weighted blend of goals scored, xG,
+    and shots on target converted at the league's goals-per-shot-on-target
+    rate. Whatever is missing (xG before 2026-27) is left out and the rest
+    re-weighted.
+    """
+    conv = {}
+    for lg in {m["league"] for m in matches}:
+        rs = [m for m in matches if m["league"] == lg and m.get("hst") is not None
+              and m.get("hg") is not None]
+        sot = sum(m["hst"] + m["ast"] for m in rs)
+        conv[lg] = sum(m["hg"] + m["ag"] for m in rs) / sot if sot else 0.3
+    wg, wx, ws = mix
     out = []
     for m in matches:
         m = dict(m)
-        for side, g, xg in (("h", "hg", "hxg"), ("a", "ag", "axg")):
+        for side, g, xg, st in (("h", "hg", "hxg", "hst"), ("a", "ag", "axg", "ast")):
             if m.get(g) is None:
                 m["gs" + side] = None
-            elif m.get(xg) is None:
-                m["gs" + side] = m[g]
-            else:
-                m["gs" + side] = xw * m[xg] + (1 - xw) * m[g]
+                continue
+            parts = [(wg, m[g]), (wx, m.get(xg)),
+                     (ws, m[st] * conv[m["league"]] if m.get(st) is not None else None)]
+            parts = [(w, v) for w, v in parts if v is not None and w]
+            m["gs" + side] = sum(w * v for w, v in parts) / sum(w for w, _ in parts)
         out.append(m)
     return out
 
@@ -209,9 +232,9 @@ class Model:
             matches, asof, *pri.get("corners", (None, None)))
         self.shots = Ratings("hs", "as_", p).fit(
             matches, asof, *pri.get("shots", (None, None)))
-        gm = _goal_signal(matches, p["xg_weight"])
-        self.goals = Ratings("gsh", "gsa", p).fit(
-            gm, asof, *pri.get("goals", (None, None)))
+        gp = dict(p, k_team=p["goal_k_team"], half_life=p["goal_half_life"])
+        self.goals = Ratings("gsh", "gsa", gp).fit(
+            _goal_signal(matches, p["goal_mix"]), asof, *pri.get("goals", (None, None)))
         return self
 
     def priors(self):
@@ -226,7 +249,7 @@ class Model:
         ch, ca = self.expect_corners(fx)
         if ch is None:
             return None
-        corners = markets.corner_markets(ch, ca, p["nb_size"], lg)
+        corners = markets.corner_markets(ch, ca, lg)
         return self._with_goals(fx, corners)
 
     def expect_corners(self, fx):

@@ -299,11 +299,11 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
       <dl class="terms">
         <dt>Prediction</dt><dd>The model's estimate for a match: expected corners for each side, and the chance of each market. Every match gets one.</dd>
         <dt>Call</dt><dd id="defCall"></dd>
-        <dt>Landed / missed</dt><dd>Whether a call came off once the result was in. Calls freeze at kick-off and are never changed afterwards.</dd>
+        <dt>Landed / missed</dt><dd>Whether a call came off once the result was in. A call is made together with its prediction, against the corners line of the day, and both freeze at kick-off. Changing a threshold later never rewrites a past call.</dd>
         <dt>Chance</dt><dd>How likely the model thinks something is. 60% means it should happen about 6 times in 10.</dd>
         <dt>Fair odds</dt><dd>The chance written as decimal odds (1 ÷ chance). 60% is 1.67. A price higher than this would be good value if the model is right.</dd>
         <dt>Big gap</dt><dd id="defGap"></dd>
-        <dt>High corners</dt><dd>A side the model expects to take at least the chosen number of corners (5+, 6+ or 7+; switch it on the High-corner sides panel). 6+ is the default: at 5+ over half of all sides qualify, so the tag stops picking anything out. A prediction, not a call.</dd>
+        <dt>High corners</dt><dd>A side the model expects to take at least the chosen number of corners (5+, 6+ or 7+; switch it on the High-corner sides panel). 6+ is the default. In the last two seasons about 1 side in 8 was tagged 6+, and 59% of them reached it, against 38% of all sides. At 5+ half of all sides qualify, so the tag picks out much less. A prediction, not a call.</dd>
         <dt>Under 3 corners</dt><dd id="defU3"></dd>
         <dt>Line</dt><dd id="defLine"></dd>
         <dt>xG</dt><dd>Expected goals, from the quality of chances created. The model blends each side's xG with the goals they actually scored.</dd>
@@ -313,9 +313,9 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
         <dt>Gameweek</dt><dd>Matches played within a few days of each other, with no club playing twice. Worked out from the dates, so Thursday–Monday and Tuesday–Wednesday rounds both group correctly.</dd>
       </dl>
       <div class="notes">
-        <p><b>Where the model is strongest.</b> Telling which side will dominate the corner count. Over the last two seasons, in matches with a big gap the side expected to win more corners did so about 80% of the time. Corner totals are much harder; the model only slightly beats using the league average.</p>
-        <p><b>How corners are predicted.</b> Team ratings for corners won and conceded, and for shots, each with a home and away adjustment. Recent matches count more. Match statistics only: no bookmaker prices go in.</p>
-        <p><b>How goals are predicted.</b> The same rating method applied to xG and goals, on a score grid that corrects for the extra 0–0 and 1–1 draws a simpler model misses.</p>
+        <p><b>Where the model is strongest.</b> Telling which side will dominate the corner count: in big-gap matches over the last two seasons, the side expected to win more corners did so 75% of the time. Corner totals are harder, but its confident totals (65%+ either way on 9.5) came off 73% of the time in 2025-26.</p>
+        <p><b>How corners are predicted.</b> Team ratings for corners won and conceded, and for shots, each with a home and away adjustment. Recent matches count more. The match total is predicted first and then split between the sides, because one side's corners come partly at the other's expense. Match statistics only: no bookmaker prices go in.</p>
+        <p><b>How goals are predicted.</b> The same rating method applied to a blend of goals, xG and shots on target, pulled harder towards average because goals are noisier. A score grid corrects for the extra 0–0 and 1–1 draws a simpler model misses.</p>
         <p><b>League 2</b> markets only offer Over lines, so League 2 shows no Under calls and no under-3 corners.</p>
       </div>
     </details>
@@ -337,29 +337,12 @@ const store = { get(k){ try { return localStorage.getItem(k) } catch(e){ return 
 const CALL = DATA.meta.call, BOOK = DATA.meta.book_line || {};
 const sign = h => (h > 0 ? "+" : h < 0 ? "−" : "") + Math.abs(h);
 
-// ---- negative binomial, same as the Python side, for the per-match ladders
-function lgamma(x){
-  const g=7, c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
-  if (x < 0.5) return Math.log(Math.PI/Math.sin(Math.PI*x)) - lgamma(1-x);
-  x -= 1; let a=c[0]; const t=x+g+0.5;
-  for (let i=1;i<g+2;i++) a += c[i]/(x+i);
-  return 0.5*Math.log(2*Math.PI) + (x+0.5)*Math.log(t) - t + Math.log(a);
-}
-function nb(mu, r, kmax=30){
-  mu = Math.max(mu, .05); const p = r/(r+mu), out=[];
-  for (let k=0;k<=kmax;k++) out.push(Math.exp(lgamma(k+r)-lgamma(r)-lgamma(k+1)+r*Math.log(p)+k*Math.log(1-p)));
-  const s = out.reduce((a,b)=>a+b,0); out[kmax] += Math.max(1-s,0); return out;
-}
-function diffDist(eh, ea, r){
-  const a=nb(eh,r), b=nb(ea,r), d={};
-  a.forEach((x,i)=>b.forEach((y,j)=>{ d[i-j]=(d[i-j]||0)+x*y }));
-  return d;
-}
+// each side's chances of 0..15 corners, straight from the model (ph / pa)
+const sum = a => a.reduce((x,y)=>x+y,0);
+const atLeastP = (pmf, k) => pmf ? sum(pmf.slice(k)) : null;
 
 const TAG = DATA.meta.tag, RATES = DATA.rates;
-const u3 = mu => nb(+mu, NB).slice(0,3).reduce((a,b)=>a+b,0);
 const gap = x => Math.abs(x.eh - x.ea);
-const atLeast = (mu, k) => nb(+mu, NB).slice(k).reduce((a,b)=>a+b,0);
 const isHigh = mu => +mu >= S.hi;
 const hiChips = x => [[x.home, x.eh], [x.away, x.ea]].filter(([,mu]) => isHigh(mu))
   .map(([t]) => `<span class="chip hi">${esc(t)} ${S.hi}+</span>`).join(" ");
@@ -389,7 +372,6 @@ function outcome(c, x){
 const S = { round: null, league: store.get("league") || "All", hi: +(store.get("hi") || 6), teamSort: {k:"cf", dir:-1}, open: new Set() };
 const rounds = DATA.rounds;
 const v3 = DATA.fixtures.filter(x => x.model === "v3");
-const NB = DATA.meta.params.nb_size;
 const gwOf = id => (rounds.find(r => r.id === id) || {}).n;
 
 function defaultRound(){
@@ -404,12 +386,13 @@ $("#season").textContent = `Season ${DATA.meta.season}`;
 $("#updated").textContent = `Updated ${new Date(DATA.meta.updated.replace(" UTC","Z").replace(" ","T")).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}`;
 $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
   `<span class="fresh">${esc(k)} results in to ${new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")
-  + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "");
+  + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "")
+  + ((DATA.meta.skipped||[]).length ? `<span class="fresh chip warn" title="${esc(DATA.meta.skipped.join("\n"))}">${DATA.meta.skipped.length} Flashscore row${DATA.meta.skipped.length>1?"s":""} not used: team name not recognised</span>` : "");
 const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
 $("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
-$("#defGap").textContent = `The model expects one side to win at least ${TAG.big_gap} more corners than the other. In the last two seasons that side won more corners about 80% of the time, and by 2 or more about 65% of the time. A prediction, not a call.`;
-$("#defU3").textContent = `A side taking 0, 1 or 2 corners. It happens to about ${pc(avgRate("u3"))} of sides this season. "Low corners" marks sides the model gives ${pc(TAG.low_u3)} or more. The chance rarely goes above 45%, so it's never a call. Not offered in League 2.`;
-$("#defCS").textContent = `The side concedes no goals. About ${pc(avgRate("cs"))} of sides keep one this season. "Good chance" marks ${pc(TAG.cs)} or more; in the last two seasons those sides kept a clean sheet about 37% of the time.`;
+$("#defGap").textContent = `The model expects one side to win at least ${TAG.big_gap} more corners than the other. In the last two seasons that side won more corners 75% of the time, and by 2 or more 67% of the time. A prediction, not a call.`;
+$("#defU3").textContent = `A side taking 0, 1 or 2 corners. It happens to about ${pc(avgRate("u3"))} of sides this season. "Low corners" marks sides the model gives ${pc(TAG.low_u3)} or more. In the last two seasons those sides took under 3 about 36% of the time, twice the usual rate. The chance rarely goes above 45%, so it's never a call. Not offered in League 2.`;
+$("#defCS").textContent = `The side concedes no goals. About ${pc(avgRate("cs"))} of sides keep one this season. "Good chance" marks ${pc(TAG.cs)} or more; in the last two seasons those sides kept a clean sheet 40% of the time, against 27% for all sides.`;
 $("#defLine").textContent = `The league's typical corner total this season, rounded to the nearest .5: ${lines}. It's roughly where bookmakers set their main line. Corner total calls are made against it.`;
 
 function renderTabs(){
@@ -463,7 +446,7 @@ function renderLede(){
     predCard = `<div class="fig">${side} of ${dec.length} right</div>
       <div class="what">Picked the side that won more corners in ${side} of ${dec.length} matches (level counts left out). Corner totals were off by ${f1(mae)} on average. ${played.length} of ${xs.length} matches played${lg}.</div>`;
   } else {
-    predCard = `<div class="fig">${xs.length} matches</div><div class="what">Every match${lg} has a prediction. They refresh each morning as new results come in, and freeze on match day.</div>`;
+    predCard = `<div class="fig">${xs.length} matches</div><div class="what">Every match${lg} has a prediction. They update twice a day as results come in, until kick-off, then freeze.</div>`;
   }
   $("#lede").innerHTML = `<div class="sechead"><div class="eyebrow">Gameweek ${r.n ?? ""} · ${esc(r.kind || "")} · ${r.status === "completed" ? "results in" : r.status === "in play" ? "in play" : "upcoming"}</div>
     <h2>${esc((r.label||"").replace(/^(Weekend|Midweek) · /,""))}</h2></div>
@@ -508,14 +491,14 @@ function renderHighlights(){
       `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))} corners${actual(ok, x.hc!=null?`${homeFav?x.hc:x.ac}–${homeFav?x.ac:x.hc}`:"")}`);
   }).join("");
   const his = xs.flatMap(x => [
-      {team:x.home, opp:x.away, where:"v", mu:+x.eh, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, x, n:x.ac}])
-    .map(o => ({...o, p: atLeast(o.mu, S.hi)})).sort((a,b)=>b.p-a.p);
+      {team:x.home, opp:x.away, where:"v", mu:+x.eh, pmf:x.ph, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, pmf:x.pa, x, n:x.ac}])
+    .map(o => ({...o, p: atLeastP(o.pmf, S.hi)})).sort((a,b)=>b.p-a.p);
   const hiN = his.filter(o => isHigh(o.mu)).length;
   const hiList = his.slice(0, Math.max(6, Math.min(hiN, 10))).map(o => li(`<b>${esc(o.team)}</b> ${o.where} ${esc(o.opp)}${isHigh(o.mu)?` <span class="chip hi">High</span>`:""}`, pc(o.p),
       `Expected ${f1(o.mu)} corners · chance of ${S.hi}+ · fair odds ${fair(o.p)}${actual(o.n==null?null:o.n>=S.hi, o.n!=null?`took ${o.n}`:"")}`)).join("");
   const lows = xs.filter(x => x.league !== "League 2").flatMap(x => [
-      {team:x.home, opp:x.away, where:"v", mu:+x.eh, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, x, n:x.ac}])
-    .map(o => ({...o, p:u3(o.mu)})).sort((a,b)=>b.p-a.p).slice(0,5)
+      {team:x.home, opp:x.away, where:"v", mu:+x.eh, p:+x.home_u3, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, p:+x.away_u3, x, n:x.ac}])
+    .sort((a,b)=>b.p-a.p).slice(0,5)
     .map(o => li(`<b>${esc(o.team)}</b> ${o.where} ${esc(o.opp)}${lowChip(o.p)}`, pc(o.p),
       `Expected ${f1(o.mu)} corners · fair odds ${fair(o.p)}${actual(o.n==null?null:o.n<3, o.n!=null?`took ${o.n}`:"")}`)).join("");
   const both = [...xs].sort((a,b)=>b.both4-a.both4).slice(0,5).map(x => li(`${esc(x.home)} v ${esc(x.away)}${callBadge(x,"Both 4+ corners")}`, pc(x.both4),
@@ -573,7 +556,7 @@ function renderFixtures(){
     const share = x.eh/(x.eh+x.ea);
     const l = BOOK[x.league] || 10.5, po = +x["o"+String(l).replace(".","")];
     const line = po >= .5 || l2 ? `Over ${l} <b>${pc(po)}</b>` : `Under ${l} <b>${pc(1-po)}</b>`;
-    const hu = u3(x.eh), au = u3(x.ea);
+    const hu = +x.home_u3, au = +x.away_u3;
     const under3 = l2 ? `<span class="lean">not offered</span>` : `${pc(hu)} / ${pc(au)}${hu>=TAG.low_u3||au>=TAG.low_u3?` <span class="chip low">Low</span>`:""}`;
     const calls = (x.calls||[]).map(c => `<span class="chip ${c.hit==null?'call':c.hit?'hit':'miss'}" title="${pc(c.p)} chance">${esc(describe(c,x).text)}</span>`).join(" ");
     const day = new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"});
@@ -593,7 +576,7 @@ function renderFixtures(){
 function cardLine(x){
   const l2 = x.league === "League 2", l = BOOK[x.league] || 10.5, po = +x["o"+String(l).replace(".","")];
   const line = po >= .5 || l2 ? `Over ${l} · ${pc(po)}` : `Under ${l} · ${pc(1-po)}`;
-  const under3 = l2 ? "not offered" : `${pc(u3(x.eh))} / ${pc(u3(x.ea))}`;
+  const under3 = l2 ? "not offered" : `${pc(+x.home_u3)} / ${pc(+x.away_u3)}`;
   return {line, under3};
 }
 function renderCards(){
@@ -623,8 +606,8 @@ function renderCards(){
 // both sides' corners in one mirrored chart: home left, line in the middle,
 // away right. The bar behind each Over grows from the centre.
 function sidesChart(x, l2){
-  const ph = nb(+x.eh, NB), pa = nb(+x.ea, NB);
-  const over = (pmf, l) => pmf.slice(Math.floor(l) + 1).reduce((a,b)=>a+b,0);
+  const ph = x.ph, pa = x.pa;
+  const over = (pmf, l) => sum(pmf.slice(Math.floor(l) + 1));
   const ov = (p, side) => {
     const col = side === "h" ? "var(--accent-soft)" : "var(--blue-soft)";
     const dir = side === "h" ? "to left" : "to right";
@@ -655,7 +638,7 @@ function ladders(x){
   const tot = LINES.map(l => rung(`Over ${l}`, o(l))).join("");
   const und = LINES.map(l => rung(`Under ${l}`, 1 - o(l), "u")).join("");
   const warns = flagsOf(x).length ? `<div class="warns">${flagsOf(x).map(f => `<div class="w"><span class="chip warn">${esc(f.kind)}</span> <b>${esc(f.team)}:</b> ${esc(f.text)}</div>`).join("")}</div>` : "";
-  const sides = sidesChart(x, l2);
+  const sides = x.ph && x.pa ? sidesChart(x, l2) : "";
   const act = x.hc != null ? `<div class="callout">Result: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>. The model expected ${f1(x.eh)}–${f1(x.ea)} corners and xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
   return `<div style="display:flex;flex-direction:column;gap:14px">${warns}${act}${sides}<div class="ladders">
     <div class="ladder">${rhead("Total corners")}${tot}</div>
@@ -695,7 +678,7 @@ function renderReview(){
   const names = {"Corners over 9.5":"Corners over 9.5","Corners over 10.5":"Corners over 10.5","Both 4+ corners":"Both teams 4+ corners","Who wins more corners":"Which side wins more corners","BTTS":"Both teams to score","Over 2.5 goals":"Over 2.5 goals","Home clean sheet":"Home clean sheet","Away clean sheet":"Away clean sheet"};
   const sk = (DATA.skill.v3||[]).filter(s => s.n).map(s => { const [t,c] = verdict(s.skill);
     return `<span>${esc(names[s.market]||s.market)}</span><span class="small muted">${s.skill==null?"":(s.skill>=0?"+":"")+(s.skill*100).toFixed(0)+"%"}</span><span class="verdict ${c}">${t}</span>`; }).join("");
-  const sum = k => rv.reduce((s,r)=>s+(r[k]||0),0);
+  const total = k => rv.reduce((s,r)=>s+(r[k]||0),0);
   const tr = (label, hit, n, usual) => `<span>${label}</span><span class="pct">${n?`${hit} of ${n}`:"none yet"}</span><span class="pct ${n&&usual!=null?(hit/n>usual?'good':'bad'):''}">${n?pc(hit/n):""}</span>${usual!=null?`<span class="small muted" style="grid-column:1/-1;margin-top:-4px">usually ${pc(usual)}</span>`:""}`;
   const done = v3.filter(x => x.hc != null);
   const sidesDone = done.flatMap(x => [[+x.eh, x.hc], [+x.ea, x.ac]]);
@@ -703,14 +686,14 @@ function renderReview(){
   const hiUsual = sidesDone.length ? sidesDone.filter(([,n]) => n >= S.hi).length / sidesDone.length : null;
   const tagRows = `<div class="trk"><span class="h">Tagged predictions</span><span class="h pct">Came off</span><span class="h pct">Rate</span>
       ${tr(`<span class="chip hi">High ${S.hi}+</span> side took ${S.hi}+ corners`, hiHit, hiTag.length, hiUsual)}
-      ${tr(`<span class="chip gap">Big gap</span> side won more corners`, sum("gap_hit"), sum("gap_n"), null)}
-      ${tr(`<span class="chip cs">Good chance</span> clean sheet kept`, sum("cs_hit"), sum("cs_n"), avgRate("cs"))}
-      ${tr(`<span class="chip low">Low corners</span> side took under 3`, sum("u3_hit"), sum("u3_n"), avgRate("u3"))}</div>`;
+      ${tr(`<span class="chip gap">Big gap</span> side won more corners`, total("gap_hit"), total("gap_n"), null)}
+      ${tr(`<span class="chip cs">Good chance</span> clean sheet kept`, total("cs_hit"), total("cs_n"), avgRate("cs"))}
+      ${tr(`<span class="chip low">Low corners</span> side took under 3`, total("u3_hit"), total("u3_n"), avgRate("u3"))}</div>`;
   html += `<div class="panel"><h3><span><span class="tag pred">Predictions</span> Better than the league average?</span></h3>
     <div class="lede" style="gap:4px"><span class="big">${sideH} of ${sideN} · ${pc(sideH/sideN)}</span><span class="small muted">matches where it picked the side that won more corners (level counts left out). Corner totals were off by ${f1(mae)} on average, against ${f1(bmae)} using the league average.</span></div>
     ${tagRows}
     <div class="mk"><span class="h">Market</span><span class="h pct">Score</span><span class="h pct">Verdict</span>${sk}</div>
-    <p class="small muted">Every prediction's chance is compared with the league's usual rate. "Better" means the model knew something the average didn't. Most markets sit close to the average, which is why so few predictions become calls.</p></div>`;
+    <p class="small muted">Every prediction's chance is compared with the league's rate as it stood before that gameweek. "Better" means the model knew something the average didn't. Most markets sit close to the average, which is why so few predictions become calls.</p></div>`;
   box.innerHTML = html;
 }
 
