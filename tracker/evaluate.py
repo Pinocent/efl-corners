@@ -17,12 +17,21 @@ from datetime import date
 TOTAL_LINES = (7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5)
 
 # how sure the model must be before a prediction becomes a call
-CALL = {"total": 0.58, "hcap": 0.60, "both4": 0.60, "btts": 0.60, "o25": 0.60}
+CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60}
+
+# Prediction tags - not calls. Each marks where the model says something
+# clearly different from the norm; the rates in brackets are from replaying
+# the last two seasons.
+TAG = {
+    "big_gap": 2.0,   # expected corners differ by this much (fav won more ~80%)
+    "low_u3": 0.30,   # side's chance of 0-2 corners (happened ~35%, usual 19%)
+    "cs": 0.35,       # clean sheet chance (kept ~37%, usual 27%)
+}
 
 FIELDS = (["model", "made", "round", "date", "time", "league", "home", "away",
            "eh", "ea", "et", "main_line"] +
           [f"o{str(l).replace('.', '')}" for l in TOTAL_LINES] +
-          ["home4", "away4", "both4", "hcap_line", "hcap_p", "home_more",
+          ["home4", "away4", "both4", "home_u3", "away_u3", "home_more",
            "lh", "la", "p_home", "p_draw", "p_away", "btts", "o25", "cs_home",
            "cs_away", "sample"])
 
@@ -33,14 +42,12 @@ def _k(line):
 
 def to_row(fx, pred, made, model="v3"):
     c, g = pred["corners"], pred["goals"]
-    diff_ok = c.get("hcap")
     row = {"model": model, "made": made.isoformat(), "round": fx.get("round", ""),
            "date": fx["date"].isoformat(), "time": fx.get("time", ""),
            "league": fx["league"], "home": fx["home"], "away": fx["away"],
            "eh": c["eh"], "ea": c["ea"], "et": c["et"], "main_line": c["main_line"],
            "home4": c["home4"], "away4": c["away4"], "both4": c["both4"],
-           "hcap_line": c.get("hcap_main") if diff_ok else "",
-           "hcap_p": c["hcap"][c["hcap_main"]] if diff_ok else "",
+           "home_u3": c["home_u3"], "away_u3": c["away_u3"],
            "home_more": c["home_more"],
            "lh": g["lh"], "la": g["la"], "p_home": g["home"], "p_draw": g["draw"],
            "p_away": g["away"], "btts": g["btts"], "o25": g["o25"],
@@ -97,26 +104,6 @@ def calls_for(p):
         out.append(("Corners total", f"Over {l}", q, lambda hc, ac, hg, ag, l=l: hc + ac > l))
     elif q is not None and lg != "League 2" and 1 - q >= CALL["total"]:
         out.append(("Corners total", f"Under {l}", 1 - q, lambda hc, ac, hg, ag, l=l: hc + ac < l))
-
-    # handicap: only the favourite giving 2.5 or 1.5 corners. The underdog's
-    # +1.5 / +2.5 clears the bar in almost every match, so calling it would
-    # just list every game.
-    if lg != "League 2" and f(p.get("eh")) is not None:
-        eh, ea = f(p["eh"]), f(p["ea"])
-        from .markets import corner_markets
-        from .model import PARAMS
-        cm = corner_markets(eh, ea, PARAMS["nb_size"], lg)
-        home_fav = eh >= ea
-        team = p["home"] if home_fav else p["away"]
-        for h in (-2.5, -1.5):
-            q = cm["hcap"][h] if home_fav else 1 - cm["hcap"][-h]
-            if q >= CALL["hcap"]:
-                if home_fav:
-                    chk = lambda hc, ac, hg, ag, h=h: hc + h > ac
-                else:
-                    chk = lambda hc, ac, hg, ag, h=h: ac + h > hc
-                out.append(("Corner handicap", f"{team} {h:+g}", q, chk))
-                break
 
     b4 = f(p.get("both4"))
     if b4 is not None and b4 >= CALL["both4"]:
@@ -215,6 +202,8 @@ def league_rates(results, before):
             "o25": sum(m["hg"] + m["ag"] > 2 for m in ms) / n,
             "cs_home": sum(m["ag"] == 0 for m in ms) / n,
             "cs_away": sum(m["hg"] == 0 for m in ms) / n,
+            "cs": sum((m["ag"] == 0) + (m["hg"] == 0) for m in ms) / (2 * n),
+            "u3": sum((m["hc"] < 3) + (m["ac"] < 3) for m in ms) / (2 * n),
             "avg_corners": sum(m["hc"] + m["ac"] for m in ms) / n,
         }
     return out

@@ -218,8 +218,24 @@ def main():
             side_hit = sum((float(r["eh"]) > float(r["ea"])) == (r["hc"] > r["ac"]) for r in dec)
             base_mae = sum(abs(rates.get(r["league"], {}).get("avg_corners", 10) - r["hc"] - r["ac"])
                            for r in rs) / len(rs)
+            # tagged predictions: big gaps, strong clean-sheet chances, low-corner sides
+            T = ev.TAG
+            gap = [r for r in rs if abs(float(r["eh"]) - float(r["ea"])) >= T["big_gap"]]
+            gap_hit = sum((r["hc"] > r["ac"]) if float(r["eh"]) >= float(r["ea"]) else (r["ac"] > r["hc"])
+                          for r in gap)
+            cs = [(float(r["cs_home"]) , r["ag"] == 0) for r in rs] + [(float(r["cs_away"]), r["hg"] == 0) for r in rs]
+            cs = [ok for p_, ok in cs if p_ >= T["cs"]]
+            u3 = []
+            for r in rs:
+                if r["league"] == "League 2":
+                    continue
+                for mu, n in ((float(r["eh"]), r["hc"]), (float(r["ea"]), r["ac"])):
+                    if sum(markets.nb_pmf(mu, PARAMS["nb_size"])[:3]) >= T["low_u3"]:
+                        u3.append(n < 3)
             reviews.append({"round": rid, "model": model_name, "matches": len(rs),
                             "side_n": len(dec), "side_hit": side_hit, "base_mae": base_mae,
+                            "gap_n": len(gap), "gap_hit": gap_hit, "cs_n": len(cs), "cs_hit": sum(cs),
+                            "u3_n": len(u3), "u3_hit": sum(u3),
                             "calls": len(calls), "hits": sum(c["hit"] for c in calls),
                             "by_market": by,
                             "corner_mae": sum(abs(float(r["et"]) - r["hc"] - r["ac"]) for r in rs) / len(rs)})
@@ -265,7 +281,7 @@ def main():
                  "season": f"20{season[:2]}-{season[2:]}",
                  "latest": {k: v.isoformat() for k, v in latest.items()},
                  "manual": n_manual, "unknown": unknown_names(),
-                 "matches": len(results), "call": ev.CALL, "book_line": ev.BOOK_LINE, "params": PARAMS},
+                 "matches": len(results), "call": ev.CALL, "tag": ev.TAG, "book_line": ev.BOOK_LINE, "params": PARAMS},
         "rounds": rinfo, "fixtures": fixtures, "reviews": reviews, "skill": skill,
         "rates": rates, "teams": team_table(results, model),
     }
