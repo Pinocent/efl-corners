@@ -1,0 +1,413 @@
+<title>EFL Corners Board</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F1F4F1; --surface:#FFFFFF; --sunk:#E8ECE8; --ink:#15201A; --muted:#5B6860;
+  --line:#D6DDD8; --accent:#9B1B42; --accent-soft:#F6E3E9; --blue:#2C5F8D; --blue-soft:#E1EBF4;
+  --good:#2D7A4B; --good-soft:#DFF0E5; --bad:#B0402C; --bad-soft:#F7E2DC; --warn:#946000;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0E1411; --surface:#161F1A; --sunk:#1D2822; --ink:#E6ECE8; --muted:#98A69E;
+    --line:#2B3731; --accent:#E2729A; --accent-soft:#3A1E29; --blue:#86B4DE; --blue-soft:#1C2B39;
+    --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0E1411; --surface:#161F1A; --sunk:#1D2822; --ink:#E6ECE8; --muted:#98A69E;
+  --line:#2B3731; --accent:#E2729A; --accent-soft:#3A1E29; --blue:#86B4DE; --blue-soft:#1C2B39;
+  --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.5 var(--body);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:.01em;margin:0;text-wrap:balance}
+h1{font-size:34px;line-height:1}
+h2{font-size:24px;line-height:1.1}
+h3{font-size:18px}
+.eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+small,.small{font-size:12px}
+button{font:inherit;color:inherit}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+header.top .meta{display:flex;flex-direction:column;gap:2px;text-align:right}
+.freshness{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.fresh{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--muted)}
+
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);padding-block:10px;
+  display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+#roundTabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 12px;cursor:pointer;font-size:13px;white-space:nowrap}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.pill .st{font-size:11px;margin-left:6px;opacity:.75}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:5px 12px;cursor:pointer;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+.lede{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.lede h2{font-size:30px}
+
+.hl{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.panel h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.panel ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.panel li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline}
+.panel li .sub{grid-column:1/-1;font-size:12px;color:var(--muted)}
+.big{font-family:var(--display);font-size:22px;font-weight:600;line-height:1}
+.empty{color:var(--muted);font-size:13px}
+
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--sunk);position:sticky;top:0}
+th.sortable{cursor:pointer}
+td.l,th.l{text-align:left}
+tr.fx{cursor:pointer}
+tr.fx:hover td{background:var(--sunk)}
+tr.fx td.match{position:sticky;left:0;background:var(--surface);min-width:190px}
+tr.fx:hover td.match{background:var(--sunk)}
+.match b{font-weight:600}
+.lg{font-size:11px;color:var(--muted)}
+.num{font-family:var(--display);font-size:18px;font-weight:600}
+.split{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.bar{display:flex;width:90px;height:8px;border-radius:4px;overflow:hidden;background:var(--sunk)}
+.bar i{display:block;height:100%}
+.bar .h{background:var(--accent)} .bar .a{background:var(--blue)}
+.chip{display:inline-block;padding:1px 7px;border-radius:99px;font-size:12px;background:var(--sunk)}
+.chip.hot{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.chip.cool{background:var(--blue-soft);color:var(--blue);font-weight:600}
+.chip.hit{background:var(--good-soft);color:var(--good);font-weight:600}
+.chip.miss{background:var(--bad-soft);color:var(--bad);font-weight:600}
+.res{font-family:var(--display);font-size:17px;font-weight:600}
+tr.detail td{background:var(--ground);text-align:left;white-space:normal;padding:14px}
+.ladders{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.ladder{display:flex;flex-direction:column;gap:4px}
+.rung{display:grid;grid-template-columns:78px 1fr 44px 44px;gap:8px;align-items:center;font-size:12.5px}
+.rung .track{height:6px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.rung .track i{display:block;height:100%;background:var(--accent)}
+.rung.u .track i{background:var(--blue)}
+.rung .p{text-align:right;font-weight:600}
+.rung .o{text-align:right;color:var(--muted)}
+
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.mk{display:grid;grid-template-columns:1fr 56px 70px;gap:6px 10px;font-size:13px;align-items:center}
+.mk .h{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.pct{font-weight:600;text-align:right}
+.skillbar{height:8px;background:var(--sunk);border-radius:4px;position:relative;overflow:hidden}
+.skillbar i{position:absolute;top:0;bottom:0;left:50%}
+.good{color:var(--good)} .bad{color:var(--bad)}
+.weeks{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:8px;border-bottom:1px solid var(--line)}
+.wk{flex:1;min-width:18px;max-width:46px;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.wk i{display:block;width:100%;border-radius:3px 3px 0 0;background:var(--accent)}
+.wk span{font-size:11px;color:var(--muted)}
+.wklabels{display:flex;gap:6px}
+.wklabels span{flex:1;min-width:18px;max-width:46px;font-size:10.5px;color:var(--muted);text-align:center}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 28px;font-size:13.5px}
+.notes p{margin:0;max-width:65ch}
+.notes b{font-weight:600}
+.callout{border-left:3px solid var(--warn);padding:6px 12px;background:var(--surface);border-radius:0 8px 8px 0;font-size:13px}
+@media (max-width:760px){ .controls{position:static} }
+@media (max-width:560px){ h1{font-size:28px} .lede h2{font-size:24px} header.top .meta{text-align:left} .freshness{justify-content:flex-start} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow" id="season"></div>
+      <h1>EFL Corners Board</h1>
+      <div class="muted small">Championship · League 1 · League 2 · corners, handicaps and goals, marked every week</div>
+    </div>
+    <div class="meta">
+      <div class="small muted" id="updated"></div>
+      <div class="freshness" id="fresh"></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="row" id="roundTabs" role="group" aria-label="Gameweek"></div>
+    <div class="row">
+      <div class="seg" id="leagueSeg" role="group" aria-label="League"></div>
+      <span class="small muted" id="roundNote"></span>
+    </div>
+  </div>
+
+  <section class="lede" id="lede"></section>
+  <section class="hl" id="highlights"></section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <div class="row" style="justify-content:space-between">
+      <h2 id="fxTitle">Fixtures</h2>
+      <span class="small muted">Tap a match for every line and handicap. Home in claret, away in blue.</span>
+    </div>
+    <div class="tablebox"><table id="fxTable"></table></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px" id="reviewSec">
+    <h2>How the predictions did</h2>
+    <div class="score" id="review"></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <div class="row" style="justify-content:space-between">
+      <h2>Teams</h2>
+      <span class="small muted">Actual averages per match. “Model” is what the ratings expect against an average side.</span>
+    </div>
+    <div class="tablebox"><table id="teamTable"></table></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>Reading this board</h2>
+    <div class="notes">
+      <p><b>Gameweeks</b> are worked out from the fixture dates. Matches on days close together form one round, and no club plays twice in a round. Thu–Mon and Tue–Wed rounds, Friday starts and Boxing Day all group correctly without a fixed rule.</p>
+      <p><b>Expected corners</b> come from team attack and defence ratings for corners and shots, with a home and away adjustment for each club. Recent matches count more, and last season's ratings give a starting point. The bookmakers' 1X2 odds adjust how the corners split between the two sides.</p>
+      <p><b>Totals are hard to call.</b> Across the last two seasons, expected totals only just beat quoting the league average. The model is much better at <b>who wins more corners</b>: strong calls landed about 76% of the time. Handicaps and big gaps are its strongest markets.</p>
+      <p><b>Goals</b> blend each side's xG and goal record with the goals implied by the bookmakers' prices. BTTS and clean sheets use a Dixon–Coles score grid, which corrects the usual under-count of 0–0 and 1–1.</p>
+      <p><b>Calls</b> are predictions above a set confidence level: <span id="callRules"></span>. League 2 only shows Over lines, and handicaps appear in the Championship and League 1.</p>
+      <p><b>Fair odds</b> are 1 ÷ probability. A price above fair may be value. A price below fair means you are paying the bookmaker's margin.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pc = p => p == null ? "–" : Math.round(p*100) + "%";
+const f1 = x => x == null ? "–" : (+x).toFixed(1);
+const f2 = x => x == null ? "–" : (+x).toFixed(2);
+const fair = p => p && p > .01 ? (1/p).toFixed(2) : "–";
+const LINES = [7.5,8.5,9.5,10.5,11.5,12.5,13.5];
+const LEAGUES = ["All","Championship","League 1","League 2"];
+const store = { get(k){ try { return localStorage.getItem(k) } catch(e){ return null } },
+                set(k,v){ try { localStorage.setItem(k,v) } catch(e){} } };
+
+// ---- negative binomial, same as the Python side, for ladders
+function lgamma(x){ // Lanczos
+  const g=7, c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if (x < 0.5) return Math.log(Math.PI/Math.sin(Math.PI*x)) - lgamma(1-x);
+  x -= 1; let a=c[0]; const t=x+g+0.5;
+  for (let i=1;i<g+2;i++) a += c[i]/(x+i);
+  return 0.5*Math.log(2*Math.PI) + (x+0.5)*Math.log(t) - t + Math.log(a);
+}
+function nb(mu, r, kmax=30){
+  mu = Math.max(mu, .05); const p = r/(r+mu), out=[];
+  for (let k=0;k<=kmax;k++) out.push(Math.exp(lgamma(k+r)-lgamma(r)-lgamma(k+1)+r*Math.log(p)+k*Math.log(1-p)));
+  const s = out.reduce((a,b)=>a+b,0); out[kmax] += Math.max(1-s,0); return out;
+}
+function diffDist(eh, ea, r){
+  const a=nb(eh,r), b=nb(ea,r), d={};
+  a.forEach((x,i)=>b.forEach((y,j)=>{ d[i-j]=(d[i-j]||0)+x*y }));
+  return d;
+}
+
+// ---- state
+const S = {
+  round: null,
+  league: store.get("league") || "All",
+  teamSort: {k:"cf", dir:-1},
+  open: new Set(),
+};
+const rounds = DATA.rounds;
+const v3 = DATA.fixtures.filter(x => x.model === "v3");
+const NB = DATA.meta.params.nb_size;
+
+function defaultRound(){
+  const live = rounds.find(r => r.status !== "completed" && v3.some(x => x.round === r.id));
+  return (live || rounds[rounds.length-1] || {}).id;
+}
+S.round = defaultRound();
+
+function inLeague(x){ return S.league === "All" || x.league === S.league; }
+
+// ---- header
+$("#season").textContent = `Season ${DATA.meta.season}`;
+$("#updated").textContent = `Updated ${DATA.meta.updated}`;
+$("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
+  `<span class="fresh">${esc(k)} results to ${new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")
+  + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} from Flashscore</span>` : "");
+$("#callRules").textContent = `totals ${pc(DATA.meta.call.total)} against the usual line (${Object.entries(DATA.meta.book_line).map(([k,v])=>k.replace('League ','L')+' '+v).join(', ')}), handicap ${pc(DATA.meta.call.hcap)}, both 4+ ${pc(DATA.meta.call.both4)}, BTTS and 2.5 goals ${pc(DATA.meta.call.btts)}`;
+
+function renderTabs(){
+  const shown = rounds.filter(r => v3.some(x => x.round === r.id)).slice(-8);
+  const tabs = $("#roundTabs");
+  tabs.innerHTML = shown.map(r => {
+    const st = r.status === "completed" ? "result" : r.status === "in play" ? "in play" : "next";
+    return `<button class="pill" aria-pressed="${r.id===S.round}" data-r="${r.id}">${esc(r.label.replace(/^(Weekend|Midweek) · /,"$1 "))}<span class="st">${st}</span></button>`;
+  }).join("");
+  const on = tabs.querySelector('[aria-pressed="true"]'); if (on) tabs.scrollLeft = on.offsetLeft - 16;
+  $("#leagueSeg").innerHTML = LEAGUES.map(l => `<button aria-pressed="${l===S.league}" data-l="${l}">${l==="All"?"All":l.replace("League ","L").replace("Championship","Champ")}</button>`).join("");
+}
+document.addEventListener("click", e => {
+  const r = e.target.closest("[data-r]"); if (r){ S.round = r.dataset.r; S.open.clear(); render(); return; }
+  const l = e.target.closest("[data-l]"); if (l){ S.league = l.dataset.l; store.set("league", S.league); render(); return; }
+  const fx = e.target.closest("tr.fx"); if (fx){ const k = fx.dataset.k; S.open.has(k) ? S.open.delete(k) : S.open.add(k); renderFixtures(); return; }
+  const th = e.target.closest("th[data-sort]"); if (th){ const k = th.dataset.sort; S.teamSort = {k, dir: S.teamSort.k===k ? -S.teamSort.dir : -1}; renderTeams(); }
+});
+document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("tr.fx")) e.target.click(); });
+
+function rows(){ return v3.filter(x => x.round === S.round && inLeague(x)).sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time) || a.league.localeCompare(b.league)); }
+function key(x){ return x.home + "|" + x.away; }
+
+// ---- lede + highlights
+function renderLede(){
+  const r = rounds.find(r => r.id === S.round) || {};
+  const xs = rows(); const played = xs.filter(x => x.hc != null);
+  const calls = played.flatMap(x => x.calls || []); const hits = calls.filter(c => c.hit).length;
+  let side = "";
+  if (played.length) side = `<span class="muted">${played.length} of ${xs.length} played · <b class="${hits/calls.length>=.5?'good':'bad'}">${hits}/${calls.length}</b> calls landed</span>`;
+  else side = `<span class="muted">${xs.length} fixtures · ${xs.filter(x=>+x.odds).length} with bookmaker odds so far</span>`;
+  $("#lede").innerHTML = `<div class="eyebrow">Gameweek ${r.n ?? ""}</div><h2>${esc(r.label || "No round")}</h2>${side}`;
+  $("#fxTitle").textContent = S.league === "All" ? "Fixtures" : `${S.league} fixtures`;
+  $("#roundNote").textContent = r.status === "completed" ? "Showing what was predicted before kick-off, beside what happened." : "";
+}
+
+function li(main, val, sub, cls=""){ return `<li><span>${main}</span><span class="big ${cls}">${val}</span>${sub?`<span class="sub">${sub}</span>`:""}</li>`; }
+function renderHighlights(){
+  const xs = rows();
+  const gaps = [...xs].sort((a,b)=>Math.abs(b.eh-b.ea)-Math.abs(a.eh-a.ea)).slice(0,5);
+  const gapHtml = gaps.map(x => {
+    const fav = x.eh >= x.ea ? x.home : x.away, dog = x.eh >= x.ea ? x.away : x.home;
+    const pm = x.eh >= x.ea ? x.home_more : 1 - x.home_more;
+    const h = (x.calls||[]).find(c => c.market === "Corner handicap");
+    return li(`<b>${esc(fav)}</b> <span class="muted">over</span> ${esc(dog)}`, `+${f1(Math.abs(x.eh-x.ea))}`,
+      `${f1(x.eh)} v ${f1(x.ea)} expected · wins more corners ${pc(pm)}${h?` · <span class="chip hot">${esc(h.pick)} ${pc(h.p)}</span>`:""}${x.hc!=null?` · actual ${x.hc}–${x.ac}`:""}`);
+  }).join("");
+  const calls = xs.flatMap(x => (x.calls||[]).filter(c => !c.market.startsWith("BTTS") && !c.market.startsWith("Goals")).map(c => ({...c, x})))
+                  .sort((a,b)=>b.p-a.p).slice(0,6);
+  const callHtml = calls.map(c => li(`${esc(c.x.home)} v ${esc(c.x.away)}`, pc(c.p),
+      `${esc(c.market)}: <b>${esc(c.pick)}</b> · fair ${fair(c.p)}${c.hit!=null?` · <span class="chip ${c.hit?'hit':'miss'}">${c.hit?'landed':'missed'}</span>`:""}`)).join("");
+  const goals = xs.flatMap(x => {
+      const out = [];
+      if (x.btts >= .58) out.push({t:"BTTS yes", p:x.btts, x, ok: x.hg!=null ? x.hg>0&&x.ag>0 : null});
+      if (x.cs_home >= .38) out.push({t:`${x.home} clean sheet`, p:x.cs_home, x, ok: x.ag!=null ? x.ag===0 : null});
+      if (x.cs_away >= .33) out.push({t:`${x.away} clean sheet`, p:x.cs_away, x, ok: x.hg!=null ? x.hg===0 : null});
+      return out; }).sort((a,b)=>b.p-a.p).slice(0,6);
+  const goalHtml = goals.map(g => li(`${esc(g.t)}`, pc(g.p),
+      `${esc(g.x.home)} v ${esc(g.x.away)} · xG ${f2(g.x.lh)}–${f2(g.x.la)} · fair ${fair(g.p)}${g.ok!=null?` · <span class="chip ${g.ok?'hit':'miss'}">${g.ok?'landed':'missed'}</span>`:""}`)).join("");
+  const both = [...xs].sort((a,b)=>b.both4-a.both4).slice(0,5).map(x => li(`${esc(x.home)} v ${esc(x.away)}`, pc(x.both4),
+      `${f1(x.eh)} v ${f1(x.ea)} · fair ${fair(x.both4)}${x.hc!=null?` · <span class="chip ${x.hc>=4&&x.ac>=4?'hit':'miss'}">${x.hc}–${x.ac}</span>`:""}`)).join("");
+  const e = `<p class="empty">Nothing in this round clears the bar.</p>`;
+  $("#highlights").innerHTML = `
+    <div class="panel"><h3>Biggest corner gaps <span class="eyebrow">handicap angle</span></h3><ol>${gapHtml||e}</ol></div>
+    <div class="panel"><h3>Strongest corner calls <span class="eyebrow">prob · fair</span></h3><ol>${callHtml||e}</ol></div>
+    <div class="panel"><h3>Both teams 4+ corners</h3><ol>${both||e}</ol></div>
+    <div class="panel"><h3>Goals: BTTS &amp; clean sheets</h3><ol>${goalHtml||e}</ol></div>`;
+}
+
+// ---- fixtures table
+function renderFixtures(){
+  const xs = rows();
+  const anyPlayed = xs.some(x => x.hc != null);
+  let h = `<thead><tr><th class="l">Match</th><th>Corners H–A</th><th>Total</th><th>Main line</th><th>Handicap</th><th>Both 4+</th><th>xG H–A</th><th>BTTS</th><th>O2.5</th><th>CS H / A</th>${anyPlayed?"<th>Result</th><th class='l'>Calls</th>":"<th class='l'>Calls</th>"}</tr></thead><tbody>`;
+  for (const x of xs){
+    const k = key(x), l2 = x.league === "League 2";
+    const share = x.eh/(x.eh+x.ea);
+    const ml = +x.main_line, po = x["o"+String(ml).replace(".","")];
+    const main = l2 ? `O${ml} <b>${pc(po)}</b>` : (po>=.5?`O${ml} <b>${pc(po)}</b>`:`U${ml} <b>${pc(1-po)}</b>`);
+    let hc = "–";
+    if (!l2 && x.hcap_line !== "" && x.hcap_line != null){
+      const hl = +x.hcap_line, p = +x.hcap_p;
+      hc = p >= .5 ? `${esc(x.home.split(" ")[0])} ${hl>0?"+":""}${hl} <b>${pc(p)}</b>` : `${esc(x.away.split(" ")[0])} ${-hl>0?"+":""}${-hl} <b>${pc(1-p)}</b>`;
+    }
+    const calls = (x.calls||[]).map(c => `<span class="chip ${c.hit==null?'':c.hit?'hit':'miss'}" title="${esc(c.market)} ${pc(c.p)}">${esc(c.market.replace("Corners total","Cnr").replace("Corner handicap","HC").replace("Both 4+ corners","Both4+").replace("Goals 2.5","Gls"))} ${esc(c.pick.replace(/^(\S+) /, (m,t)=> t===x.home.split(" ")[0]||t===x.away.split(" ")[0]? t.slice(0,4)+" ": m))}</span>`).join(" ");
+    const day = new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"});
+    h += `<tr class="fx" data-k="${esc(k)}" tabindex="0" aria-expanded="${S.open.has(k)}">
+      <td class="l match"><b>${esc(x.home)}</b> v <b>${esc(x.away)}</b><div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · thin data":""}</div></td>
+      <td><div class="split"><span class="num">${f1(x.eh)}</span><span class="bar"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span></div></td>
+      <td class="num">${f1(x.et)}</td><td>${main}</td><td>${hc}</td>
+      <td><span class="chip ${x.both4>=.6?'hot':''}">${pc(x.both4)}</span></td>
+      <td>${f2(x.lh)}–${f2(x.la)}</td><td>${pc(x.btts)}</td><td>${pc(x.o25)}</td><td>${pc(x.cs_home)} / ${pc(x.cs_away)}</td>
+      ${anyPlayed?`<td class="res">${x.hc!=null?`${x.hc}–${x.ac} <span class="small muted">(${x.hg}–${x.ag})</span>`:"–"}</td>`:""}
+      <td class="l">${calls||'<span class="muted small">no call</span>'}</td></tr>`;
+    if (S.open.has(k)) h += `<tr class="detail"><td colspan="${anyPlayed?12:11}">${ladders(x)}</td></tr>`;
+  }
+  if (!xs.length) h += `<tr><td class="l" colspan="11"><span class="empty">No fixtures for this filter.</span></td></tr>`;
+  $("#fxTable").innerHTML = h + "</tbody>";
+}
+
+function rung(label, p, cls=""){
+  return `<div class="rung ${cls}"><span>${label}</span><span class="track"><i style="width:${p*100}%"></i></span><span class="p">${pc(p)}</span><span class="o">${fair(p)}</span></div>`;
+}
+function ladders(x){
+  const l2 = x.league === "League 2";
+  const tot = LINES.map(l => rung(`Over ${l}`, +x["o"+String(l).replace(".","")])).join("");
+  const und = l2 ? "" : LINES.map(l => rung(`Under ${l}`, 1 - x["o"+String(l).replace(".","")], "u")).join("");
+  let hc = "";
+  if (!l2){
+    const d = diffDist(+x.eh, +x.ea, NB);
+    const cover = h => Object.entries(d).reduce((s,[k,p]) => s + (+k + h > 0 ? p : 0), 0);
+    hc = [-3.5,-2.5,-1.5,-0.5,0.5,1.5,2.5].map(h => rung(`${x.home.split(" ")[0]} ${h>0?"+":""}${h}`, cover(h))).join("")
+       + [-2.5,-1.5,-0.5].map(h => rung(`${x.away.split(" ")[0]} ${h}`, 1 - cover(-h), "u")).join("");
+  }
+  const act = x.hc != null ? `<div class="callout">Actual: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>. Predicted ${f1(x.eh)}–${f1(x.ea)} corners, xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
+  return `<div style="display:flex;flex-direction:column;gap:12px">${act}<div class="ladders">
+    <div class="ladder"><div class="eyebrow">Total corners · prob · fair</div>${tot}</div>
+    ${l2 ? `<div class="ladder"><div class="eyebrow">League 2</div><p class="small muted" style="margin:0">Over lines only in League 2 markets.</p>${rung(`${x.home} 4+`, +x.home4)}${rung(`${x.away} 4+`, +x.away4)}${rung("Both 4+", +x.both4)}</div>`
+          : `<div class="ladder"><div class="eyebrow">Unders</div>${und}</div><div class="ladder"><div class="eyebrow">Corner handicap · prob · fair</div>${hc}</div>`}
+    <div class="ladder"><div class="eyebrow">Goals · prob · fair</div>${rung(`${x.home} win`, +x.p_home)}${rung("Draw", +x.p_draw)}${rung(`${x.away} win`, +x.p_away)}${rung("BTTS", +x.btts)}${rung("Over 2.5", +x.o25)}${rung(`${x.home} clean sheet`, +x.cs_home)}${rung(`${x.away} clean sheet`, +x.cs_away)}${!l2?rung("Both 4+ corners", +x.both4):""}</div>
+  </div></div>`;
+}
+
+// ---- review
+function renderReview(){
+  const rv = DATA.reviews.filter(r => r.model === "v3");
+  const sel = rv.find(r => r.round === S.round) || rv[rv.length-1];
+  const box = $("#review");
+  if (!sel && !DATA.reviews.length){ box.innerHTML = `<div class="panel"><p class="empty">Nothing marked yet. Predictions are marked once results arrive, usually a day or two after the round.</p></div>`; return; }
+  let html = "";
+  if (sel){
+    const lab = (rounds.find(r => r.id === sel.round)||{}).label || sel.round;
+    const rowsM = Object.entries(sel.by_market).map(([m,[n,h]]) => `<span>${esc(m)}</span><span class="pct ${h/n>=.5?'good':'bad'}">${h}/${n}</span><span class="pct">${pc(h/n)}</span>`).join("");
+    html += `<div class="panel"><h3>${esc(lab)} <span class="eyebrow">round marked</span></h3>
+      <div class="lede"><span class="big ${sel.hits/sel.calls>=.5?'good':'bad'}">${sel.hits}/${sel.calls}</span><span class="muted">calls landed · ${sel.matches} matches · corner total missed by ${f1(sel.corner_mae)} on average</span></div>
+      <div class="mk"><span class="h">Market</span><span class="h pct">Hits</span><span class="h pct">Rate</span>${rowsM||'<span class="muted">No calls</span>'}</div></div>`;
+  }
+  // round-by-round bars
+  if (rv.length){
+    const max = 1;
+    html += `<div class="panel"><h3>Round by round <span class="eyebrow">share of calls landed</span></h3>
+      <div class="weeks">${rv.map(r => `<div class="wk" title="${r.hits}/${r.calls}"><span>${pc(r.hits/r.calls)}</span><i style="height:${Math.max(r.hits/r.calls*80,2)}px;opacity:${r.round===S.round?1:.55}"></i></div>`).join("")}</div>
+      <div class="wklabels">${rv.map(r => `<span>${new Date(r.round).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")}</div>
+      <div class="small muted">All rounds: ${rv.reduce((s,r)=>s+r.hits,0)}/${rv.reduce((s,r)=>s+r.calls,0)} calls. One round is a small sample; the running total is the number to watch.</div></div>`;
+  }
+  // skill vs baseline
+  const sk = (DATA.skill.v3||[]).filter(s => s.n);
+  const old = Object.fromEntries((DATA.skill.v2||[]).map(s => [s.market, s]));
+  if (sk.length){
+    html += `<div class="panel"><h3>Better than the league average? <span class="eyebrow">Brier skill</span></h3>
+      <div class="mk" style="grid-template-columns:1fr 90px 60px 60px"><span class="h">Market</span><span class="h"></span><span class="h pct">New</span><span class="h pct">Old</span>
+      ${sk.map(s => { const v = s.skill ?? 0, w = Math.min(Math.abs(v)*250, 50), o = old[s.market];
+        return `<span>${esc(s.market)} <span class="small muted">n=${s.n}</span></span><span class="skillbar"><i style="${v>=0?`left:50%;width:${w}%;background:var(--good)`:`left:${50-w}%;width:${w}%;background:var(--bad)`}"></i></span><span class="pct ${v>=0?'good':'bad'}">${v>=0?"+":""}${(v*100).toFixed(0)}%</span><span class="pct muted">${o&&o.skill!=null?(o.skill>=0?"+":"")+(o.skill*100).toFixed(0)+"%":"–"}</span>`; }).join("")}
+      </div><div class="small muted">Positive means the probabilities beat quoting the league-average rate for every match. "Old" is the spreadsheet method's predictions, where they exist.</div></div>`;
+  }
+  box.innerHTML = html;
+}
+
+// ---- teams
+function renderTeams(){
+  const cols = [["team","Team","l"],["p","P"],["cf","Won"],["ca","Conc"],["h_cf","Home won"],["h_ca","Home conc"],["a_cf","Away won"],["a_ca","Away conc"],["f_cf","Last 6 won"],["f_ca","Last 6 conc"],["m_h_cf","Model H won"],["m_a_cf","Model A won"],["xgf","xG for"],["xga","xG agst"],["gf","Gls for"],["ga","Gls agst"]];
+  const {k, dir} = S.teamSort;
+  const xs = DATA.teams.filter(inLeague).sort((a,b) => (typeof a[k]==="string" ? a[k].localeCompare(b[k]) : ((a[k]??-1)-(b[k]??-1))) * dir);
+  let h = `<thead><tr>${cols.map(([c,t,cl]) => `<th class="sortable ${cl||""}" data-sort="${c}" aria-sort="${k===c?(dir<0?'descending':'ascending'):'none'}">${t}${k===c?(dir<0?" ↓":" ↑"):""}</th>`).join("")}</tr></thead><tbody>`;
+  for (const t of xs){
+    h += `<tr>${cols.map(([c,,cl]) => c==="team" ? `<td class="l"><b>${esc(t.team)}</b><div class="lg">${esc(t.league)}</div></td>`
+      : `<td>${c==="p"?t.p:(c.startsWith("x")||c.startsWith("g")?f2(t[c]):f1(t[c]))}</td>`).join("")}</tr>`;
+  }
+  $("#teamTable").innerHTML = h + "</tbody>";
+}
+
+function render(){ renderTabs(); renderLede(); renderHighlights(); renderFixtures(); renderReview(); renderTeams(); }
+render();
+</script>

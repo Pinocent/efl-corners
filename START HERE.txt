@@ -1,0 +1,76 @@
+CORNERS & GOALS TRACKER
+=======================
+
+TO RUN IT
+---------
+
+  Double-click:  Update Corners.command
+
+  The very first time, macOS may block it. If so:
+  right-click (or Ctrl-click) the file -> Open -> Open again.
+  After that a normal double-click works.
+
+  A black window opens and tells you what it found.
+  Close it when you're done reading.
+
+
+WHAT HAPPENS ON THE FIRST RUN
+-----------------------------
+
+  It downloads every Championship, League 1 and League 2 match
+  played this season - around 200 - and builds the spreadsheet
+  from scratch. Takes maybe 30 seconds.
+
+  If it says a component is being installed, that is normal and
+  happens once only.
+
+
+WHEN TO RUN IT
+--------------
+
+  Tuesday evening. Corner data lags the results by a day or two,
+  so Sunday is usually too early.
+
+  Safe to run as often as you like. It never duplicates anything,
+  and it backs the spreadsheet up every single time.
+
+
+THE SPREADSHEET
+---------------
+
+  Weekend / Midweek tabs   Upcoming fixtures. Each side's own
+                           projected corner count, with flags.
+  Goals tabs               Clean sheets, over/under, both to score.
+  Predictions              What was predicted, and what happened.
+  Weekly Results           Percentage correct, week by week.
+  Read Me                  Explains every column.
+  Teams                    Corner and goal averages per team.
+  Match Log                Raw history. The only tab that keeps
+                           its data between runs.
+
+  The blue "Line" column on the fixture tabs is yours to fill in
+  with the bookmaker's total corners line, if you want your calls
+  scored. Everything else is written for you.
+
+
+IF SOMETHING LOOKS WRONG
+------------------------
+
+  Few or no matches added    Corner data not published yet.
+                             Run again tomorrow.
+  A club appears twice       Two spellings of one team. Tell
+                             Claude the pair - one-line fix.
+  Something broke            corners_tracker_backup.xlsx is the
+                             previous copy, saved on every run.
+
+
+WORTH REMEMBERING
+-----------------
+
+  These numbers are averages from a small number of matches.
+  Corners follow the scoreline, and the bookmaker's line reflects
+  more than this sheet knows. When the two disagree, the sheet is
+  usually the one that's wrong.
+
+  The Weekly Results tab is the honest test. Give it 40+ calls
+  before you trust it either way.
