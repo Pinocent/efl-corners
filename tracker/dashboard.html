@@ -165,6 +165,10 @@ details.glossary summary{cursor:pointer;font-weight:600}
 dl.terms{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;font-size:13.5px;margin:12px 0 0}
 dl.terms dt{font-weight:600}
 dl.terms dd{margin:0;color:var(--muted);max-width:70ch}
+.chip.hi{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.minis{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--surface)}
+.minis button{border:0;background:none;padding:2px 9px;cursor:pointer;font-size:12px;font-weight:600}
+.minis button[aria-pressed="true"]{background:var(--accent);color:#fff}
 .chip.gap{background:var(--blue-soft);color:var(--blue);font-weight:600}
 .chip.low{background:var(--blue-soft);color:var(--blue);font-weight:600}
 .chip.cs{background:var(--good-soft);color:var(--good);font-weight:600}
@@ -299,6 +303,7 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
         <dt>Chance</dt><dd>How likely the model thinks something is. 60% means it should happen about 6 times in 10.</dd>
         <dt>Fair odds</dt><dd>The chance written as decimal odds (1 ÷ chance). 60% is 1.67. A price higher than this would be good value if the model is right.</dd>
         <dt>Big gap</dt><dd id="defGap"></dd>
+        <dt>High corners</dt><dd>A side the model expects to take at least the chosen number of corners (5+, 6+ or 7+; switch it on the High-corner sides panel). 6+ is the default: at 5+ over half of all sides qualify, so the tag stops picking anything out. A prediction, not a call.</dd>
         <dt>Under 3 corners</dt><dd id="defU3"></dd>
         <dt>Line</dt><dd id="defLine"></dd>
         <dt>xG</dt><dd>Expected goals, from the quality of chances created. The model blends each side's xG with the goals they actually scored.</dd>
@@ -354,6 +359,11 @@ function diffDist(eh, ea, r){
 const TAG = DATA.meta.tag, RATES = DATA.rates;
 const u3 = mu => nb(+mu, NB).slice(0,3).reduce((a,b)=>a+b,0);
 const gap = x => Math.abs(x.eh - x.ea);
+const atLeast = (mu, k) => nb(+mu, NB).slice(k).reduce((a,b)=>a+b,0);
+const isHigh = mu => +mu >= S.hi;
+const hiChips = x => [[x.home, x.eh], [x.away, x.ea]].filter(([,mu]) => isHigh(mu))
+  .map(([t]) => `<span class="chip hi">${esc(t)} ${S.hi}+</span>`).join(" ");
+const hiSwitch = () => `<span class="minis" role="group" aria-label="Corner target">${[5,6,7].map(n => `<button data-hi="${n}" aria-pressed="${n===S.hi}">${n}+</button>`).join("")}</span>`;
 const bigGap = x => gap(x) >= TAG.big_gap;
 const gapChip = x => bigGap(x) ? `<span class="chip gap">Big gap</span>` : "";
 const lowChip = p => p >= TAG.low_u3 ? ` <span class="chip low">Low corners</span>` : "";
@@ -376,7 +386,7 @@ function outcome(c, x){
 }
 
 // ---- state
-const S = { round: null, league: store.get("league") || "All", teamSort: {k:"cf", dir:-1}, open: new Set() };
+const S = { round: null, league: store.get("league") || "All", hi: +(store.get("hi") || 6), teamSort: {k:"cf", dir:-1}, open: new Set() };
 const rounds = DATA.rounds;
 const v3 = DATA.fixtures.filter(x => x.model === "v3");
 const NB = DATA.meta.params.nb_size;
@@ -415,6 +425,7 @@ function renderTabs(){
 }
 document.addEventListener("click", e => {
   const r = e.target.closest("[data-r]"); if (r){ S.round = r.dataset.r; S.open.clear(); render(); return; }
+  const hb = e.target.closest("[data-hi]"); if (hb){ S.hi = +hb.dataset.hi; store.set("hi", S.hi); render(); return; }
   const l = e.target.closest("[data-l]"); if (l){ S.league = l.dataset.l; store.set("league", S.league); render(); return; }
   const fx = e.target.closest("tr.fx, [data-open]"); if (fx){ const k = fx.dataset.k; S.open.has(k) ? S.open.delete(k) : S.open.add(k); renderFixtures(); return; }
   const th = e.target.closest("th[data-sort]"); if (th){ const k = th.dataset.sort; S.teamSort = {k, dir: S.teamSort.k===k ? -S.teamSort.dir : -1}; renderTeams(); }
@@ -496,6 +507,12 @@ function renderHighlights(){
     return li(`<b>${esc(fav)}</b> v ${esc(dog)} ${gapChip(x)}`, `+${f1(gap(x))}`,
       `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))} corners${actual(ok, x.hc!=null?`${homeFav?x.hc:x.ac}–${homeFav?x.ac:x.hc}`:"")}`);
   }).join("");
+  const his = xs.flatMap(x => [
+      {team:x.home, opp:x.away, where:"v", mu:+x.eh, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, x, n:x.ac}])
+    .map(o => ({...o, p: atLeast(o.mu, S.hi)})).sort((a,b)=>b.p-a.p);
+  const hiN = his.filter(o => isHigh(o.mu)).length;
+  const hiList = his.slice(0, Math.max(6, Math.min(hiN, 10))).map(o => li(`<b>${esc(o.team)}</b> ${o.where} ${esc(o.opp)}${isHigh(o.mu)?` <span class="chip hi">High</span>`:""}`, pc(o.p),
+      `Expected ${f1(o.mu)} corners · chance of ${S.hi}+ · fair odds ${fair(o.p)}${actual(o.n==null?null:o.n>=S.hi, o.n!=null?`took ${o.n}`:"")}`)).join("");
   const lows = xs.filter(x => x.league !== "League 2").flatMap(x => [
       {team:x.home, opp:x.away, where:"v", mu:+x.eh, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, x, n:x.ac}])
     .map(o => ({...o, p:u3(o.mu)})).sort((a,b)=>b.p-a.p).slice(0,5)
@@ -516,6 +533,7 @@ function renderHighlights(){
   $("#highlights").innerHTML = `
     <div class="panel"><h3>Warnings <span class="eyebrow">${wn} this gameweek</span></h3><p class="intro">Recent matches that could throw the predictions. Trust the affected matches a little less.</p><ol>${wl||'<p class="empty">Nothing unusual in recent matches.</p>'}</ol>${wn>8?`<p class="small muted">${wn-8} more in the match list below.</p>`:""}</div>
     <div class="panel"><h3>Biggest corner gaps</h3><p class="intro">Where one side is expected to win clearly more corners. "Big gap" means ${TAG.big_gap}+ apart. Green when that side did win more.</p><ol>${gaps||e}</ol></div>
+    <div class="panel"><h3>High-corner sides ${hiSwitch()}</h3><p class="intro">Each side's chance of taking ${S.hi} or more corners. "High" marks sides expected to reach ${S.hi}+. ${hiN ? `${hiN} this gameweek.` : `None this gameweek, so the closest are shown.`}</p><ol>${hiList||e}</ol></div>
     <div class="panel"><h3>Clearest corner totals</h3><p class="intro">Furthest from 50/50 against the usual line. Totals rarely get far from even.</p><ol>${totals||e}</ol></div>
     <div class="panel"><h3>Both teams 4+ corners</h3><p class="intro">Most likely matches for both sides to reach 4 corners.</p><ol>${both||e}</ol></div>
     <div class="panel"><h3>Under 3 corners</h3><p class="intro">Sides most likely to take 0–2 corners. Usually about ${pc(avgRate("u3"))} of sides do. League 2 left out: no under markets.</p><ol>${lows||e}</ol></div>
@@ -561,7 +579,7 @@ function renderFixtures(){
     const day = new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"});
     h += `<tr class="fx ${x.calls&&x.calls.length?'has-call':''}" data-k="${esc(k)}" tabindex="0" aria-expanded="${S.open.has(k)}">
       <td class="l match"><b>${esc(x.home)}</b> v <b>${esc(x.away)}</b><div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · few matches yet":""}</div>${warnChip(x)}</td>
-      <td><div class="split"><span class="num">${f1(x.eh)}</span><span class="bar" aria-hidden="true"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span></div>${bigGap(x)?`<div style="text-align:right;margin-top:3px">${gapChip(x)}</div>`:""}</td>
+      <td><div class="split"><span class="num">${f1(x.eh)}</span><span class="bar" aria-hidden="true"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span></div>${bigGap(x)||hiChips(x)?`<div style="text-align:right;margin-top:3px;display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap">${hiChips(x)}${gapChip(x)}</div>`:""}</td>
       <td class="num">${f1(x.et)}</td><td>${line}</td><td>${under3}</td><td>${pc(x.both4)}</td>
       <td>${f2(x.lh)}–${f2(x.la)}</td><td>${pc(x.btts)}</td><td>${pc(x.o25)}</td><td>${pc(x.cs_home)} / ${pc(x.cs_away)}${x.cs_home>=TAG.cs||x.cs_away>=TAG.cs?` <span class="chip cs">Good</span>`:""}</td>
       ${anyPlayed?`<td class="res">${x.hc!=null?`${x.hc}–${x.ac} <span class="small muted">(${x.hg}–${x.ag})</span>`:"–"}</td>`:""}
@@ -589,7 +607,7 @@ function renderCards(){
     return `<article class="card ${x.calls&&x.calls.length?'has-call':''}">
       <div class="top"><div><b>${esc(x.home)}</b> v <b>${esc(x.away)}</b><div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · few matches yet":""}</div></div>
         ${x.hc!=null?`<div class="res" style="text-align:right">${x.hc}–${x.ac}<div class="lg">corners · goals ${x.hg}–${x.ag}</div></div>`:""}</div>
-      ${calls||flagsOf(x).length||bigGap(x)?`<div class="chips">${calls}${gapChip(x)}${warnChip(x)}</div>`:""}
+      ${calls||flagsOf(x).length||bigGap(x)||hiChips(x)?`<div class="chips">${calls}${hiChips(x)}${gapChip(x)}${warnChip(x)}</div>`:""}
       <div class="band">Corners</div>
       <div class="split"><span class="num">${f1(x.eh)}</span><span class="bar" aria-hidden="true"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span><span class="small muted">expected · total ${f1(x.et)}</span></div>
       <div class="grid"><div class="kv"><span>Usual line</span><b>${line}</b></div><div class="kv"><span>Under 3 H / A</span><b>${under3}</b></div><div class="kv"><span>Both 4+</span><b>${pc(x.both4)}</b></div></div>
@@ -679,7 +697,12 @@ function renderReview(){
     return `<span>${esc(names[s.market]||s.market)}</span><span class="small muted">${s.skill==null?"":(s.skill>=0?"+":"")+(s.skill*100).toFixed(0)+"%"}</span><span class="verdict ${c}">${t}</span>`; }).join("");
   const sum = k => rv.reduce((s,r)=>s+(r[k]||0),0);
   const tr = (label, hit, n, usual) => `<span>${label}</span><span class="pct">${n?`${hit} of ${n}`:"none yet"}</span><span class="pct ${n&&usual!=null?(hit/n>usual?'good':'bad'):''}">${n?pc(hit/n):""}</span>${usual!=null?`<span class="small muted" style="grid-column:1/-1;margin-top:-4px">usually ${pc(usual)}</span>`:""}`;
+  const done = v3.filter(x => x.hc != null);
+  const sidesDone = done.flatMap(x => [[+x.eh, x.hc], [+x.ea, x.ac]]);
+  const hiTag = sidesDone.filter(([mu]) => isHigh(mu)), hiHit = hiTag.filter(([,n]) => n >= S.hi).length;
+  const hiUsual = sidesDone.length ? sidesDone.filter(([,n]) => n >= S.hi).length / sidesDone.length : null;
   const tagRows = `<div class="trk"><span class="h">Tagged predictions</span><span class="h pct">Came off</span><span class="h pct">Rate</span>
+      ${tr(`<span class="chip hi">High ${S.hi}+</span> side took ${S.hi}+ corners`, hiHit, hiTag.length, hiUsual)}
       ${tr(`<span class="chip gap">Big gap</span> side won more corners`, sum("gap_hit"), sum("gap_n"), null)}
       ${tr(`<span class="chip cs">Good chance</span> clean sheet kept`, sum("cs_hit"), sum("cs_n"), avgRate("cs"))}
       ${tr(`<span class="chip low">Low corners</span> side took under 3`, sum("u3_hit"), sum("u3_n"), avgRate("u3"))}</div>`;
