@@ -13,6 +13,16 @@ and League 2, logs every prediction, and marks it against the result.
 
 No packages to install. Python 3.9+ standard library only.
 
+## Adding Flashscore results early
+
+1. In Claude's Cowork tab, with this folder selected, ask: "Run the Midweek
+   Corners Check for Saturday 3 October" (any date). It adds rows to
+   `manual_results.csv`.
+2. Double-click `Send Flashscore Results.command`. It uploads the file to
+   GitHub, and the online dashboard refreshes about 2 minutes later.
+
+The official feed replaces these numbers when it publishes them.
+
 ## Files
 
 | File | What it is |
