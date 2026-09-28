@@ -1,7 +1,10 @@
 """
 Downloads. Everything comes back as plain dicts with canonical team names.
 
-  results   football-data.co.uk  - goals, corners, xG, shots, red cards
+  results   football-data.co.uk  - goals, corners, xG, shots, cards, fouls, referee
+  referees  football-data fixtures.csv - referee appointments for the next few
+                                   days (published about a day before), plus
+                                   referees.csv written by the Cowork task
   fixtures  fixturedownload.com  - the full season schedule, all three divisions
   manual    manual_results.csv   - Flashscore numbers typed in (or written by
                                    the Cowork skill) before the feed catches up
@@ -25,13 +28,16 @@ FIXTURE_URLS = {
 }
 
 NUM_FIELDS = ["hg", "ag", "hc", "ac", "hxg", "axg", "hs", "as_", "hst", "ast",
-              "hr", "ar", "hp", "ap", "hcr", "acr"]    # hp/ap possession %, hcr/acr crosses
-FIELDS = ["date", "time", "league", "home", "away"] + NUM_FIELDS + ["source"]
+              "hy", "ay", "hr", "ar", "hf", "af",        # yellow cards, red cards, fouls
+              "hp", "ap", "hcr", "acr"]                  # hp/ap possession %, hcr/acr crosses
+FIELDS = ["date", "time", "league", "home", "away", "ref"] + NUM_FIELDS + ["source"]
+FIXTURES_URL = "https://www.football-data.co.uk/fixtures.csv"
+REFEREE_FILE = "referees.csv"
 
 # football-data column -> our field
 _FD_MAP = {"FTHG": "hg", "FTAG": "ag", "HC": "hc", "AC": "ac", "HxG": "hxg",
            "AxG": "axg", "HS": "hs", "AS": "as_", "HST": "hst", "AST": "ast",
-           "HR": "hr", "AR": "ar"}
+           "HR": "hr", "AR": "ar", "HY": "hy", "AY": "ay", "HF": "hf", "AF": "af"}
 
 
 def season_code(today=None):
@@ -68,6 +74,50 @@ def parse_date(raw):
     return None
 
 
+def ref_key(name):
+    """
+    One spelling per referee: 'B Toner'. football-data writes initial and
+    surname (with the odd typo - 'Mm Coy', 'O  Yates'); Flashscore writes the
+    full name ('Ben Toner'). Returns '' when there's no name.
+    """
+    words = str(name or "").replace(".", " ").split()
+    if not words:
+        return ""
+    last = words[-1]
+    if len(last) > 1 and last[0].islower() and last[1].isupper():   # 'jBrooks'
+        last = last[1:]
+    last = last[0].upper() + last[1:]
+    return f"{words[0][0].upper()} {last}" if len(words) > 1 else last
+
+
+def get_upcoming_referees(log=print):
+    """{(home, away): referee} for the next few days' matches (football-data)."""
+    try:
+        text = fetch(FIXTURES_URL)
+    except Exception as e:
+        log(f"  ! referee appointments unavailable ({e})")
+        return {}
+    out = {}
+    for r in csv.DictReader(io.StringIO(text)):
+        if (r.get("Div") or "").strip() in LEAGUES and (r.get("Referee") or "").strip():
+            out[(canon(r.get("HomeTeam")), canon(r.get("AwayTeam")))] = ref_key(r["Referee"])
+    return out
+
+
+def get_manual_referees(path):
+    """referees.csv (Date,League,Home,Away,Referee), written by the Cowork task."""
+    if not os.path.exists(path):
+        return {}
+    out = {}
+    with open(path, newline="", encoding="utf-8-sig") as fh:
+        for r in csv.DictReader(fh):
+            g = {k.lower().strip(): v for k, v in r.items() if k}
+            ref = ref_key(g.get("referee"))
+            if ref and g.get("home") and g.get("away"):
+                out[(canon(g["home"]), canon(g["away"]))] = ref
+    return out
+
+
 def fnum(v):
     try:
         x = float(v)
@@ -84,7 +134,7 @@ def _fd_rows(text, league, source):
         if not (d and h and a):
             continue
         m = {"date": d, "time": (r.get("Time") or "").strip(), "league": league,
-             "home": h, "away": a, "source": source}
+             "home": h, "away": a, "source": source, "ref": ref_key(r.get("Referee"))}
         for col, key in _FD_MAP.items():
             m[key] = fnum(r.get(col))
         out.append(m)
@@ -154,7 +204,8 @@ def get_manual(path, log=print):
     """
     manual_results.csv - header row required:
     Date,League,Home,Away,HomeGoals,AwayGoals,HomeCorners,AwayCorners
-    optional: HomePossession,AwayPossession,HomeCrosses,AwayCrosses
+    optional: HomePossession,AwayPossession,HomeCrosses,AwayCrosses,
+              HomeYellow,AwayYellow,HomeRed,AwayRed,HomeFouls,AwayFouls,Referee
     (crosses as attempted crosses; "7/22" or "22" both read as 22)
     """
     if not os.path.exists(path):
@@ -179,7 +230,13 @@ def get_manual(path, log=print):
                   "hp": _stat(g, "homepossession", "home possession", "hp"),
                   "ap": _stat(g, "awaypossession", "away possession", "ap"),
                   "hcr": _stat(g, "homecrosses", "home crosses", "hcr"),
-                  "acr": _stat(g, "awaycrosses", "away crosses", "acr")})
+                  "acr": _stat(g, "awaycrosses", "away crosses", "acr"),
+                  "hy": _stat(g, "homeyellow", "homeyellows", "hy"),
+                  "ay": _stat(g, "awayyellow", "awayyellows", "ay"),
+                  "hr": _stat(g, "homered", "homereds", "hr"),
+                  "ar": _stat(g, "awayred", "awayreds", "ar"),
+                  "hf": _stat(g, "homefouls", "hf"), "af": _stat(g, "awayfouls", "af"),
+                  "ref": ref_key(g.get("referee"))})
         out.append(m)
     if out:
         log(f"  Manual results: {len(out)} rows")
@@ -228,8 +285,8 @@ def merge_results(official, manual, known):
         if same:
             # the feed's numbers win, but it has no possession or crosses:
             # keep Flashscore's
-            for k in ("hp", "ap", "hcr", "acr"):
-                if m.get(k) is not None and same[0].get(k) is None:
+            for k in ("hp", "ap", "hcr", "acr", "ref"):
+                if m.get(k) and not same[0].get(k):
                     same[0][k] = m[k]
         else:
             extra.append(m)

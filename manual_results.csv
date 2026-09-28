@@ -1,47 +1,47 @@
-Date,League,Home,Away,HomeGoals,AwayGoals,HomeCorners,AwayCorners,HomePossession,AwayPossession
-2026-09-19,Championship,Birmingham,Middlesbrough,2,2,5,3,48,52
-2026-09-19,Championship,Burnley,Derby,1,1,4,6,52,48
-2026-09-19,Championship,Lincoln,Swansea,1,2,2,1,32,68
-2026-09-19,Championship,Portsmouth,Blackburn,2,2,9,7,51,49
-2026-09-19,Championship,QPR,Preston,2,2,10,3,61,39
-2026-09-19,Championship,Wrexham,Southampton,2,1,2,3,34,66
-2026-09-19,Championship,Cardiff,Charlton,3,1,6,1,62,38
-2026-09-19,Championship,Millwall,West Ham,2,2,3,11,34,66
-2026-09-19,Championship,Stoke,Sheffield Utd,2,1,8,1,62,38
-2026-09-19,League 1,Blackpool,Plymouth,2,4,3,8,51,49
-2026-09-19,League 1,Bromley,Huddersfield,2,1,4,9,31,69
-2026-09-19,League 1,Leyton Orient,Stevenage,1,0,3,6,47,53
-2026-09-19,League 1,Luton,Bradford City,0,1,14,3,64,36
-2026-09-19,League 1,Oxford Utd,Cambridge Utd,1,1,5,8,66,34
-2026-09-19,League 1,Peterborough,Doncaster,0,2,8,3,63,37
-2026-09-19,League 1,Reading,Notts County,2,0,4,1,48,52
-2026-09-19,League 1,Sheffield Wed,Stockport County,0,0,4,5,48,52
-2026-09-19,League 1,Wigan,Wycombe,0,1,4,5,56,44
-2026-09-19,League 1,Barnsley,Leicester,1,1,5,12,21,79
-2026-09-19,League 1,Burton,Mansfield,2,2,4,5,50,50
-2026-09-19,League 2,Accrington,Newport,0,0,4,5,58,42
-2026-09-19,League 2,Barnet,Fleetwood,3,1,5,6,43,57
-2026-09-19,League 2,Chesterfield,York City,2,0,7,4,48,52
-2026-09-19,League 2,Colchester,Cheltenham,1,1,3,9,45,55
-2026-09-19,League 2,Crewe,Shrewsbury,1,1,6,9,62,38
-2026-09-19,League 2,Exeter,Tranmere,0,0,6,2,44,56
-2026-09-19,League 2,Gillingham,Bristol Rovers,3,0,2,1,53,47
-2026-09-19,League 2,Grimsby,Crawley,2,0,9,6,44,56
-2026-09-19,League 2,Northampton,Rotherham,0,1,5,7,44,56
-2026-09-19,League 2,Salford,Swindon,1,0,12,5,60,40
-2026-09-19,League 2,Rochdale,Oldham,2,0,0,6,48,52
-2026-09-19,League 2,Walsall,Port Vale,2,0,7,4,64,36
-2026-09-26,League 1,Cambridge Utd,AFC Wimbledon,1,1,8,1,63,37
-2026-09-26,League 1,Plymouth,Burton,0,1,3,4,57,43
-2026-09-26,League 1,Stockport,Peterborough,1,0,6,4,54,46
-2026-09-26,League 1,Wycombe,Reading,2,2,5,7,55,45
-2026-09-26,League 2,Oldham,Salford,1,4,11,5,48,52
-2026-09-26,League 2,Bristol Rovers,Exeter,1,0,6,3,44,56
-2026-09-26,League 2,Cheltenham,Chesterfield,2,1,2,11,34,66
-2026-09-26,League 2,Fleetwood,Rochdale,1,2,5,5,54,46
-2026-09-26,League 2,Newport,Grimsby,2,1,7,3,33,67
-2026-09-26,League 2,Rotherham,Crewe,1,1,3,2,57,43
-2026-09-26,League 2,Shrewsbury,Colchester,2,2,8,4,40,60
-2026-09-26,League 2,Swindon,Accrington,1,1,6,7,58,42
-2026-09-26,League 2,Tranmere,Walsall,1,1,6,5,46,54
-2026-09-26,League 2,York City,Gillingham,3,0,4,2,66,34
+Date,League,Home,Away,HomeGoals,AwayGoals,HomeCorners,AwayCorners,HomePossession,AwayPossession,HomeCrosses,AwayCrosses,HomeYellow,AwayYellow,HomeRed,AwayRed,HomeFouls,AwayFouls,Referee
+2026-09-19,Championship,Birmingham,Middlesbrough,2,2,5,3,48,52,,,,,,,,,
+2026-09-19,Championship,Burnley,Derby,1,1,4,6,52,48,,,,,,,,,
+2026-09-19,Championship,Lincoln,Swansea,1,2,2,1,32,68,,,,,,,,,
+2026-09-19,Championship,Portsmouth,Blackburn,2,2,9,7,51,49,,,,,,,,,
+2026-09-19,Championship,QPR,Preston,2,2,10,3,61,39,,,,,,,,,
+2026-09-19,Championship,Wrexham,Southampton,2,1,2,3,34,66,,,,,,,,,
+2026-09-19,Championship,Cardiff,Charlton,3,1,6,1,62,38,,,,,,,,,
+2026-09-19,Championship,Millwall,West Ham,2,2,3,11,34,66,,,,,,,,,
+2026-09-19,Championship,Stoke,Sheffield Utd,2,1,8,1,62,38,,,,,,,,,
+2026-09-19,League 1,Blackpool,Plymouth,2,4,3,8,51,49,,,,,,,,,
+2026-09-19,League 1,Bromley,Huddersfield,2,1,4,9,31,69,,,,,,,,,
+2026-09-19,League 1,Leyton Orient,Stevenage,1,0,3,6,47,53,,,,,,,,,
+2026-09-19,League 1,Luton,Bradford City,0,1,14,3,64,36,,,,,,,,,
+2026-09-19,League 1,Oxford Utd,Cambridge Utd,1,1,5,8,66,34,,,,,,,,,
+2026-09-19,League 1,Peterborough,Doncaster,0,2,8,3,63,37,,,,,,,,,
+2026-09-19,League 1,Reading,Notts County,2,0,4,1,48,52,,,,,,,,,
+2026-09-19,League 1,Sheffield Wed,Stockport County,0,0,4,5,48,52,,,,,,,,,
+2026-09-19,League 1,Wigan,Wycombe,0,1,4,5,56,44,,,,,,,,,
+2026-09-19,League 1,Barnsley,Leicester,1,1,5,12,21,79,,,,,,,,,
+2026-09-19,League 1,Burton,Mansfield,2,2,4,5,50,50,,,,,,,,,
+2026-09-19,League 2,Accrington,Newport,0,0,4,5,58,42,,,,,,,,,
+2026-09-19,League 2,Barnet,Fleetwood,3,1,5,6,43,57,,,,,,,,,
+2026-09-19,League 2,Chesterfield,York City,2,0,7,4,48,52,,,,,,,,,
+2026-09-19,League 2,Colchester,Cheltenham,1,1,3,9,45,55,,,,,,,,,
+2026-09-19,League 2,Crewe,Shrewsbury,1,1,6,9,62,38,,,,,,,,,
+2026-09-19,League 2,Exeter,Tranmere,0,0,6,2,44,56,,,,,,,,,
+2026-09-19,League 2,Gillingham,Bristol Rovers,3,0,2,1,53,47,,,,,,,,,
+2026-09-19,League 2,Grimsby,Crawley,2,0,9,6,44,56,,,,,,,,,
+2026-09-19,League 2,Northampton,Rotherham,0,1,5,7,44,56,,,,,,,,,
+2026-09-19,League 2,Salford,Swindon,1,0,12,5,60,40,,,,,,,,,
+2026-09-19,League 2,Rochdale,Oldham,2,0,0,6,48,52,,,,,,,,,
+2026-09-19,League 2,Walsall,Port Vale,2,0,7,4,64,36,,,,,,,,,
+2026-09-26,League 1,Cambridge Utd,AFC Wimbledon,1,1,8,1,63,37,,,,,,,,,
+2026-09-26,League 1,Plymouth,Burton,0,1,3,4,57,43,,,,,,,,,
+2026-09-26,League 1,Stockport,Peterborough,1,0,6,4,54,46,,,,,,,,,
+2026-09-26,League 1,Wycombe,Reading,2,2,5,7,55,45,,,,,,,,,
+2026-09-26,League 2,Oldham,Salford,1,4,11,5,48,52,,,,,,,,,
+2026-09-26,League 2,Bristol Rovers,Exeter,1,0,6,3,44,56,,,,,,,,,
+2026-09-26,League 2,Cheltenham,Chesterfield,2,1,2,11,34,66,,,,,,,,,
+2026-09-26,League 2,Fleetwood,Rochdale,1,2,5,5,54,46,,,,,,,,,
+2026-09-26,League 2,Newport,Grimsby,2,1,7,3,33,67,,,,,,,,,
+2026-09-26,League 2,Rotherham,Crewe,1,1,3,2,57,43,,,,,,,,,
+2026-09-26,League 2,Shrewsbury,Colchester,2,2,8,4,40,60,,,,,,,,,
+2026-09-26,League 2,Swindon,Accrington,1,1,6,7,58,42,,,,,,,,,
+2026-09-26,League 2,Tranmere,Walsall,1,1,6,5,46,54,,,,,,,,,
+2026-09-26,League 2,York City,Gillingham,3,0,4,2,66,34,,,,,,,,,

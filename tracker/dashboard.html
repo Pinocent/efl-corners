@@ -215,6 +215,9 @@ dl.terms dd{margin:0;color:var(--muted);max-width:70ch}
 .minis{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--surface)}
 .minis button{border:0;background:none;padding:2px 9px;cursor:pointer;font-size:12px;font-weight:600}
 .minis button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.chip.strict{background:var(--warn-soft);color:var(--warn);font-weight:600}
+.chip.lenient{background:var(--blue-soft);color:var(--blue);font-weight:600}
+th.grp.k{box-shadow:inset 0 3px 0 var(--warn)}
 .chip.gap{background:var(--blue-soft);color:var(--blue);font-weight:600}
 .chip.low{background:var(--blue-soft);color:var(--blue);font-weight:600}
 .chip.cs{background:var(--good-soft);color:var(--good);font-weight:600}
@@ -315,6 +318,15 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
     <div class="tablebox"><table id="csTable"></table></div>
   </section>
 
+  <section id="cardsSec">
+    <div class="sechead">
+      <div><span class="tag pred">Predictions</span></div>
+      <h2>Cards and referees</h2>
+      <p id="cardsIntro"></p>
+    </div>
+    <div class="tablebox"><table id="cardsTable"></table></div>
+  </section>
+
   <section id="fxSec">
     <div class="sechead">
       <div><span class="tag pred">Predictions</span></div>
@@ -356,6 +368,8 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
         <dt>Line</dt><dd id="defLine"></dd>
         <dt>xG</dt><dd>Expected goals, from the quality of chances created. The model blends each side's xG with the goals they actually scored.</dd>
         <dt>Warning</dt><dd>Something in a side's recent matches the model can't fully account for: a red card, a freak corner count (1 in 33 or rarer), a 4+ goal margin, or a sharp three-match trend that could mean a change of manager, system or injuries. Warnings don't change the numbers; they tell you when to trust them less.</dd>
+        <dt>Cards</dt><dd>Yellow and red cards shown to each side (a red counts as one card). Predicted from each side's card and foul record, how often its opponents get booked, and the referee. The two sides' cards rise and fall together, because heated matches get both sides booked.</dd>
+        <dt>Referee: strict or lenient</dt><dd>How many cards a referee shows compared with the league average, from every match they've refereed since 2017-18, with recent matches counting more. "Strict" is 10% or more above average, "lenient" 10% or more below. Tested on seasons the ratings hadn't seen, the strictest quarter of referees saw over 3.5 cards in 57% of matches and the most lenient quarter in 42%. Appointments are published about a day before the match; until then a match assumes an average referee.</dd>
         <dt>Clean sheet</dt><dd id="defCS"></dd>
         <dt>BTTS</dt><dd>Both teams score.</dd>
         <dt>Gameweek</dt><dd>Matches played within a few days of each other, with no club playing twice. Worked out from the dates, so Thursday–Monday and Tuesday–Wednesday rounds both group correctly.</dd>
@@ -393,6 +407,13 @@ const sum = a => a.reduce((x,y)=>x+y,0);
 const atLeastP = (pmf, k) => pmf ? sum(pmf.slice(k)) : null;
 
 const TAG = DATA.meta.tag, RATES = DATA.rates;
+const CARD_LINE = DATA.meta.card_line || {}, STRICT = DATA.meta.strict || 1.1, LENIENT = DATA.meta.lenient || 0.9;
+const REFS = Object.fromEntries((DATA.referees || []).map(r => [r.ref, r]));
+const kLine = x => +x.kline || CARD_LINE[x.league] || 3.5;
+const kOver = (x, l) => +x["k" + String(l).replace(".", "")];
+const refWord = f => f >= STRICT ? "strict" : f <= LENIENT ? "lenient" : "";
+const refChip = (ref, f) => !ref ? `<span class="lean small">referee not yet announced</span>`
+  : `${esc(ref)}${refWord(f) ? ` <span class="chip ${refWord(f)}">${refWord(f) === "strict" ? "Strict" : "Lenient"}</span>` : ""}`;
 // a team name that opens the team page
 const tn = (name, bold) => `<button class="tl${bold ? " b" : ""}" data-team="${esc(name)}">${esc(name)}</button>`;
 const gap = x => Math.abs(x.eh - x.ea);
@@ -413,6 +434,7 @@ function describe(c, x){
   if (m === "Both 4+ corners") return {text: "Both teams 4+ corners", why: `Expected ${f1(x.eh)}–${f1(x.ea)}.`};
   if (m === "BTTS") return {text: p === "Yes" ? "Both teams to score" : "Not both teams to score", why: `xG ${f2(x.lh)}–${f2(x.la)}.`};
   if (m === "Goals 2.5") return {text: `${p} 2.5 goals`, why: `Model expects ${f2(+x.lh + +x.la)} goals.`};
+  if (m === "Cards total") return {text: `${p} cards`, why: `Yellow and red cards. Model expects ${f1(x.kt)}; ${x.ref ? `referee ${x.ref}${refWord(+x.ref_f) ? " (" + refWord(+x.ref_f) + ")" : ""}` : "referee not yet announced"}.`};
   return {text: `${m}: ${p}`, why: ""};
 }
 function outcome(c, x){
@@ -600,6 +622,29 @@ function renderCleanSheets(){
   $("#csTable").innerHTML = h + "</tbody>";
 }
 
+// ---- cards and referees
+function renderCardsSection(){
+  const xs = rows().filter(x => x.kt != null).sort((a,b) => b.kt - a.kt);
+  const known = xs.filter(x => x.ref).length;
+  const lines = [...new Set(Object.values(CARD_LINE))].join(" or ");
+  $("#cardsIntro").textContent = `Yellow and red cards shown to each side, with the referee. The usual line is ${lines} cards. `
+    + (xs.length ? (known === xs.length ? "Every referee has been announced." : `${known} of ${xs.length} referees announced so far; they're usually published the day before, and until then a match assumes an average referee.`) : "");
+  const played = xs.some(x => x.hk != null);
+  let h = `<thead><tr><th class="l">Match</th><th class="l">Referee</th><th>Expected cards<br>home–away</th><th>Usual line</th><th>Each side 2+<br>home / away</th><th>Red card</th>${played ? "<th>Result</th>" : ""}</tr></thead><tbody>`;
+  h += xs.map(x => {
+    const l = kLine(x), q = kOver(x, l), r = REFS[x.ref];
+    const lineTxt = q >= .5 ? `Over ${l} <b>${pc(q)}</b>` : `Under ${l} <b>${pc(1 - q)}</b>`;
+    const call = (x.calls || []).some(c => c.market === "Cards total") ? ` <span class="chip call">Call</span>` : "";
+    return `<tr><td class="l">${tn(x.home, 1)} v ${tn(x.away, 1)}<div class="lg">${new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"})} ${esc(x.time||"")} · ${esc(x.league)}</div></td>
+      <td class="l">${refChip(x.ref, +x.ref_f)}${r ? `<div class="lg">${f1(r.cpm)} cards a match over ${r.n} matches since 2017</div>` : ""}</td>
+      <td><span class="num">${f1(x.kh)}–${f1(x.ka)}</span><div class="lg">total ${f1(x.kt)}</div></td>
+      <td>${lineTxt}${call}</td><td>${pc(x.khome2)} / ${pc(x.kaway2)}</td><td>${pc(x.red)}</td>
+      ${played ? `<td>${x.hk != null ? `<span class="res">${x.hk}–${x.ak}</span>${(x.calls||[]).filter(c => c.market === "Cards total" && c.hit != null).map(c => ` <span class="chip ${c.hit ? "hit" : "miss"}">${c.hit ? "Landed" : "Missed"}</span>`).join("")}` : "–"}</td>` : ""}</tr>`;
+  }).join("");
+  if (!xs.length) h += `<tr><td class="l" colspan="7"><span class="empty">No card predictions for this filter.</span></td></tr>`;
+  $("#cardsTable").innerHTML = h + "</tbody>";
+}
+
 // ---- every match
 function renderFixtures(){
   const phone = PHONE.matches;
@@ -607,9 +652,9 @@ function renderFixtures(){
   if (phone) return renderCards();
   const xs = rows();
   const anyPlayed = xs.some(x => x.hc != null);
-  const cols = anyPlayed ? 13 : 12;
-  let h = `<thead><tr><th class="l" rowspan="2">Match</th><th class="grp c" colspan="5">Corners</th><th class="grp g" colspan="4">Goals</th>${anyPlayed?'<th rowspan="2">Result<div class="lg" style="text-transform:none;letter-spacing:0">corners (goals)</div></th>':""}<th class="l" rowspan="2">Calls</th></tr>
-    <tr><th>Expected<br>home–away</th><th>Expected<br>total</th><th>Usual line</th><th>Under 3<br>home / away</th><th>Both 4+</th><th>xG<br>home–away</th><th>Both<br>score</th><th>Over<br>2.5</th><th>Clean sheet<br>home / away</th></tr></thead><tbody>`;
+  const cols = anyPlayed ? 15 : 14;
+  let h = `<thead><tr><th class="l" rowspan="2">Match</th><th class="grp c" colspan="5">Corners</th><th class="grp g" colspan="4">Goals</th><th class="grp k" colspan="2">Cards</th>${anyPlayed?'<th rowspan="2">Result<div class="lg" style="text-transform:none;letter-spacing:0">corners (goals)</div></th>':""}<th class="l" rowspan="2">Calls</th></tr>
+    <tr><th>Expected<br>home–away</th><th>Expected<br>total</th><th>Usual line</th><th>Under 3<br>home / away</th><th>Both 4+</th><th>xG<br>home–away</th><th>Both<br>score</th><th>Over<br>2.5</th><th>Clean sheet<br>home / away</th><th>Expected<br>and referee</th><th>Usual line</th></tr></thead><tbody>`;
   for (const x of xs){
     const k = key(x), l2 = x.league === "League 2";
     const share = x.eh/(x.eh+x.ea);
@@ -624,7 +669,9 @@ function renderFixtures(){
       <td><div class="split"><span class="num">${f1(x.eh)}</span><span class="bar" aria-hidden="true"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span></div>${bigGap(x)||hiChips(x)?`<div style="text-align:right;margin-top:3px;display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap">${hiChips(x)}${gapChip(x)}</div>`:""}</td>
       <td class="num">${f1(x.et)}</td><td>${line}</td><td>${under3}</td><td>${pc(x.both4)}</td>
       <td>${f2(x.lh)}–${f2(x.la)}</td><td>${pc(x.btts)}</td><td>${pc(x.o25)}</td><td>${pc(x.cs_home)} / ${pc(x.cs_away)}${x.cs_home>=TAG.cs||x.cs_away>=TAG.cs?` <span class="chip cs">Good</span>`:""}</td>
-      ${anyPlayed?`<td class="res">${x.hc!=null?`${x.hc}–${x.ac} <span class="small muted">(${x.hg}–${x.ag})</span>`:"–"}</td>`:""}
+      <td class="wrapcell" style="min-width:150px">${x.kt!=null?`<span class="num">${f1(x.kt)}</span><div class="lg">${refChip(x.ref, +x.ref_f)}</div>`:"–"}</td>
+      <td>${x.kt!=null?(kOver(x,kLine(x))>=.5?`Over ${kLine(x)} <b>${pc(kOver(x,kLine(x)))}</b>`:`Under ${kLine(x)} <b>${pc(1-kOver(x,kLine(x)))}</b>`):"–"}</td>
+      ${anyPlayed?`<td class="res">${x.hc!=null?`${x.hc}–${x.ac} <span class="small muted">(${x.hg}–${x.ag})</span>${x.hk!=null?`<div class="lg">cards ${x.hk}–${x.ak}</div>`:""}`:"–"}</td>`:""}
       <td class="l wrapcell">${calls||'<span class="lean small">none</span>'}</td></tr>`;
     if (S.open.has(k)) h += `<tr class="detail"><td colspan="${cols}">${ladders(x)}</td></tr>`;
   }
@@ -656,7 +703,9 @@ function renderCards(){
       <div class="band">Goals</div>
       <div class="grid"><div class="kv"><span>xG</span><b>${f2(x.lh)}–${f2(x.la)}</b></div><div class="kv"><span>Both score</span><b>${pc(x.btts)}</b></div><div class="kv"><span>Over 2.5</span><b>${pc(x.o25)}</b></div>
         <div class="kv"><span>${esc(x.home)} clean sheet</span><b>${pc(x.cs_home)}</b></div><div class="kv"><span>${esc(x.away)} clean sheet</span><b>${pc(x.cs_away)}</b></div></div>
-      <button class="more" data-open="1" data-k="${esc(k)}" aria-expanded="${open}">${open?"Hide detail":"Every corners line, for the match and each side"}</button>
+      ${x.kt != null ? `<div class="band">Cards</div>
+      <div class="grid"><div class="kv"><span>Expected</span><b>${f1(x.kh)}–${f1(x.ka)}</b></div><div class="kv"><span>Usual line</span><b>${kOver(x,kLine(x))>=.5?`Over ${kLine(x)} · ${pc(kOver(x,kLine(x)))}`:`Under ${kLine(x)} · ${pc(1-kOver(x,kLine(x)))}`}</b></div><div class="kv"><span>Referee</span><b>${refChip(x.ref, +x.ref_f)}</b></div></div>` : ""}
+      <button class="more" data-open="1" data-k="${esc(k)}" aria-expanded="${open}">${open?"Hide detail":"Every corners and cards line, for the match and each side"}</button>
       ${open?ladders(x):""}
     </article>`; }).join("");
 }
@@ -701,8 +750,11 @@ function ladders(x){
   const mm = matchOf(x.home, x.away, x.date);
   const extra = mm ? [mm.hp != null ? ` Possession ${mm.hp}–${mm.ap}%.` : "", mm.hcr != null ? ` Crosses ${mm.hcr}–${mm.acr}.` : ""].join("") : "";
   const act = x.hc != null ? `<div class="callout">Result: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>.${extra} The model expected ${f1(x.eh)}–${f1(x.ea)} corners and xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
+  const rr = REFS[x.ref];
+  const cardsLadder = x.kt != null ? `<div class="ladder">${rhead("Cards · yellow + red")}${[2.5,3.5,4.5,5.5,6.5].map(l => rung(`Over ${l}`, kOver(x, l))).join("")}${rung(`${x.home} 2+`, +x.khome2)}${rung(`${x.away} 2+`, +x.kaway2)}${rung("A red card", +x.red)}
+      <p class="small muted">${x.ref ? `Referee ${esc(x.ref)}${rr ? `: ${f1(rr.cpm)} cards a match over ${rr.n} matches since 2017, ${Math.round((rr.factor - 1) * 100) >= 0 ? "+" : ""}${Math.round((rr.factor - 1) * 100)}% against the league average after allowing for the teams` : ""}.` : "Referee not yet announced; this assumes an average referee."}</p></div>` : "";
   return `<div style="display:flex;flex-direction:column;gap:14px">${warns}${act}${sides}<div class="ladders">
-    <div class="ladder">${rhead("Total corners")}${tot}</div>
+    <div class="ladder">${rhead("Total corners")}${tot}</div>${cardsLadder}
     ${l2 ? `<div class="ladder">${rhead("Each side")}${rung(`${x.home} 4+`, +x.home4)}${rung(`${x.away} 4+`, +x.away4)}${rung("Both 4+", +x.both4)}<p class="small muted">League 2 markets offer Over lines only.</p></div>`
           : `<div class="ladder">${rhead("Under")}${und}</div>`}
     <div class="ladder">${rhead("Goals")}${rung(`${x.home} win`, +x.p_home)}${rung("Draw", +x.p_draw)}${rung(`${x.away} win`, +x.p_away)}${rung("Both teams score", +x.btts)}${rung("Over 2.5 goals", +x.o25)}${rung(`${x.home} clean sheet`, +x.cs_home)}${rung(`${x.away} clean sheet`, +x.cs_away)}${!l2?rung("Both 4+ corners", +x.both4):""}</div>
@@ -720,7 +772,7 @@ function renderReview(){
   rv.forEach(r => Object.entries(r.by_market).forEach(([m,[n,h]]) => { const v = byM[m] ||= [0,0]; v[0]+=n; v[1]+=h; }));
   const tc = rv.reduce((s,r)=>s+r.calls,0), th = rv.reduce((s,r)=>s+r.hits,0);
   const mkRows = Object.entries(byM).sort((a,b)=>b[1][0]-a[1][0]).map(([m,[n,h]]) =>
-    `<span>${esc({"Corners total":"Corner totals","Both 4+ corners":"Both teams 4+ corners","BTTS":"Both teams to score","Goals 2.5":"Over/under 2.5 goals"}[m]||m)}</span><span class="pct">${h} of ${n}</span><span class="pct ${h/n>=.5?'good':'bad'}">${pc(h/n)}</span>`).join("");
+    `<span>${esc({"Corners total":"Corner totals","Both 4+ corners":"Both teams 4+ corners","BTTS":"Both teams to score","Goals 2.5":"Over/under 2.5 goals","Cards total":"Card totals"}[m]||m)}</span><span class="pct">${h} of ${n}</span><span class="pct ${h/n>=.5?'good':'bad'}">${pc(h/n)}</span>`).join("");
   const maxH = 96;
   const bars = `<div class="weeks"><div class="fifty" style="bottom:${maxH/2+2}px"><span>50%</span></div>${rv.map(r => { const p = r.calls ? r.hits/r.calls : 0;
       return `<div class="wk" title="GW${gwOf(r.round)}: ${r.hits} of ${r.calls}"><span>${r.calls?pc(p):"–"}</span><i style="height:${Math.max(p*maxH,2)}px;opacity:${r.round===S.round?1:.5}"></i></div>`; }).join("")}</div>
@@ -736,7 +788,7 @@ function renderReview(){
   const n = rv.reduce((s,r)=>s+r.matches,0);
   const mae = rv.reduce((s,r)=>s+r.corner_mae*r.matches,0)/n, bmae = rv.reduce((s,r)=>s+(r.base_mae||0)*r.matches,0)/n;
   const verdict = s => s == null ? ["–","meh"] : s > .02 ? ["Better","good"] : s < -.02 ? ["Worse","bad"] : ["About the same","meh"];
-  const names = {"Corners over 9.5":"Corners over 9.5","Corners over 10.5":"Corners over 10.5","Both 4+ corners":"Both teams 4+ corners","Who wins more corners":"Which side wins more corners","BTTS":"Both teams to score","Over 2.5 goals":"Over 2.5 goals","Home clean sheet":"Home clean sheet","Away clean sheet":"Away clean sheet"};
+  const names = {"Cards over 3.5":"Cards over 3.5","Cards over 4.5":"Cards over 4.5","Corners over 9.5":"Corners over 9.5","Corners over 10.5":"Corners over 10.5","Both 4+ corners":"Both teams 4+ corners","Who wins more corners":"Which side wins more corners","BTTS":"Both teams to score","Over 2.5 goals":"Over 2.5 goals","Home clean sheet":"Home clean sheet","Away clean sheet":"Away clean sheet"};
   const sk = (DATA.skill.v3||[]).filter(s => s.n).map(s => { const [t,c] = verdict(s.skill);
     return `<span>${esc(names[s.market]||s.market)}</span><span class="small muted">${s.skill==null?"":(s.skill>=0?"+":"")+(s.skill*100).toFixed(0)+"%"}</span><span class="verdict ${c}">${t}</span>`; }).join("");
   const total = k => rv.reduce((s,r)=>s+(r[k]||0),0);
@@ -760,8 +812,8 @@ function renderReview(){
 
 // ---- teams
 function renderTeams(){
-  const cols = [["team","Team","l"],["p","Played"],["cf","Won"],["ca","Conceded"],["h_cf","Won"],["h_ca","Conceded"],["a_cf","Won"],["a_ca","Conceded"],["f_cf","Won"],["f_ca","Conceded"],["m_h_cf","Home"],["m_a_cf","Away"],["xgf","For"],["xga","Against"]];
-  const groups = `<tr><th class="l"></th><th></th><th class="grp c" colspan="2">Corners, all</th><th class="grp c" colspan="2">At home</th><th class="grp c" colspan="2">Away</th><th class="grp c" colspan="2">Last 6</th><th class="grp c" colspan="2">Expected won</th><th class="grp g" colspan="2">xG per match</th></tr>`;
+  const cols = [["team","Team","l"],["p","Played"],["cf","Won"],["ca","Conceded"],["h_cf","Won"],["h_ca","Conceded"],["a_cf","Won"],["a_ca","Conceded"],["f_cf","Won"],["f_ca","Conceded"],["m_h_cf","Home"],["m_a_cf","Away"],["xgf","For"],["xga","Against"],["kf","For"],["ka","Against"]];
+  const groups = `<tr><th class="l"></th><th></th><th class="grp c" colspan="2">Corners, all</th><th class="grp c" colspan="2">At home</th><th class="grp c" colspan="2">Away</th><th class="grp c" colspan="2">Last 6</th><th class="grp c" colspan="2">Expected won</th><th class="grp g" colspan="2">xG per match</th><th class="grp k" colspan="2">Cards a match</th></tr>`;
   const {k, dir} = S.teamSort;
   const xs = DATA.teams.filter(inLeague).sort((a,b) => (typeof a[k]==="string" ? a[k].localeCompare(b[k]) : ((a[k]??-1)-(b[k]??-1))) * dir);
   let h = `<thead>${groups}<tr>${cols.map(([c,t,cl]) => `<th class="sortable ${cl||""}" data-sort="${c}" aria-sort="${k===c?(dir<0?'descending':'ascending'):'none'}">${t}${k===c?(dir<0?" ↓":" ↑"):""}</th>`).join("")}</tr></thead><tbody>`;
@@ -773,7 +825,7 @@ function renderTeams(){
 }
 
 // ---- jump bar
-const JUMPS = [["callsSec","Calls"],["predSec","Predictions"],["csSec","Clean sheets"],["fxSec","Matches"],
+const JUMPS = [["callsSec","Calls"],["predSec","Predictions"],["csSec","Clean sheets"],["cardsSec","Cards"],["fxSec","Matches"],
                ["reviewSec","Track record"],["teamsSec","Teams"],["helpSec","How it works"]];
 $("#jump").innerHTML = JUMPS.map(([id, t]) => `<button data-jump="${id}">${t}</button>`).join("");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -849,7 +901,10 @@ function teamMatches(team){
     return {m, home, d: m.d, opp: home ? m.a : m.h, cf: home ? m.hc : m.ac, ca: home ? m.ac : m.hc,
             gf: home ? m.hg : m.ag, ga: home ? m.ag : m.hg, xf: home ? m.hxg : m.axg, xa: home ? m.axg : m.hxg,
             poss: home ? m.hp : m.ap, cr: home ? m.hcr : m.acr, cra: home ? m.acr : m.hcr,
-            red: home ? m.hr : m.ar, redA: home ? m.ar : m.hr,
+            red: home ? m.hr : m.ar, redA: home ? m.ar : m.hr, ref: m.ref || "",
+            kf: m.hy != null ? (home ? m.hy + (m.hr || 0) : m.ay + (m.ar || 0)) : null,
+            ka: m.hy != null ? (home ? m.ay + (m.ar || 0) : m.hy + (m.hr || 0)) : null,
+            fo: home ? m.hf : m.af,
             ef: p ? (home ? p.eh : p.ea) : null, ec: p ? (home ? p.ea : p.eh) : null};
   });
 }
@@ -874,6 +929,9 @@ function showTeam(team){
     tile("Model expects", `${f1(T.m_h_cf)} / ${f1(T.m_a_cf)}`, "corners won v an average side, home / away"),
     tile("xG a match", `${f2(avg(ms.filter(x => x.xf != null).map(x => x.xf)))}–${f2(avg(ms.filter(x => x.xa != null).map(x => x.xa)))}`, "for–against"),
   ];
+  const withK = ms.filter(x => x.kf != null);
+  if (withK.length) tiles.push(tile("Cards a match", `${f1(avg(withK.map(x => x.kf)))}–${f1(avg(withK.map(x => x.ka)))}`,
+    `for–against · ${f1(avg(withK.filter(x => x.fo != null).map(x => x.fo)))} fouls a match`));
   if (withPoss.length) tiles.push(tile("Possession", Math.round(avg(withPoss.map(x => x.poss))) + "%", `average of ${withPoss.length} match${withPoss.length > 1 ? "es" : ""} from Flashscore`));
   if (withCr.length) tiles.push(tile("Crosses a match", `${f1(avg(withCr.map(x => x.cr)))}–${f1(avg(withCr.map(x => x.cra)))}`, `for–against, ${withCr.length} match${withCr.length > 1 ? "es" : ""}`));
 
@@ -894,6 +952,7 @@ function showTeam(team){
   const log = [...ms].reverse().map(x => `<tr><td class="l">${dm(x.d)}</td><td class="l">${x.home ? "v" : "at"} ${tn(x.opp)}</td>
       <td class="num">${x.cf}–${x.ca}</td><td class="muted">${x.ef != null ? `${f1(x.ef)}–${f1(x.ec)}` : "–"}</td>
       <td>${x.gf}–${x.ga}</td><td>${x.xf != null ? `${f2(x.xf)}–${f2(x.xa)}` : "–"}</td>
+      <td>${x.kf != null ? `${x.kf}–${x.ka}` : "–"}</td><td class="l small">${esc(x.ref)}</td>
       ${showPoss ? `<td>${x.poss != null ? x.poss + "%" : "–"}</td>` : ""}${showCr ? `<td>${x.cr != null ? `${x.cr}–${x.cra}` : "–"}</td>` : ""}
       <td class="l small">${x.red ? `<span class="chip warn">${x.red > 1 ? x.red + " sent off" : "Sent off"}</span>` : ""}${x.redA ? `<span class="chip">Opp. sent off</span>` : ""}</td></tr>`).join("");
 
@@ -906,9 +965,9 @@ function showTeam(team){
     <section><h3>Corners, match by match</h3>${cornerChart(ms)}</section>
     ${next.length ? `<section><h3>Next up</h3><div class="nextlist">${nextHtml}</div></section>` : ""}
     <section><h3>Every match this season</h3>
-      <div class="tablebox"><table><thead><tr><th class="l">Date</th><th class="l">Opponent</th><th>Corners</th><th>Expected</th><th>Goals</th><th>xG</th>${showPoss ? "<th>Possession</th>" : ""}${showCr ? "<th>Crosses</th>" : ""}<th class="l"></th></tr></thead>
+      <div class="tablebox"><table><thead><tr><th class="l">Date</th><th class="l">Opponent</th><th>Corners</th><th>Expected</th><th>Goals</th><th>xG</th><th>Cards</th><th class="l">Referee</th>${showPoss ? "<th>Possession</th>" : ""}${showCr ? "<th>Crosses</th>" : ""}<th class="l"></th></tr></thead>
       <tbody>${log || `<tr><td class="l" colspan="9"><span class="empty">No matches yet.</span></td></tr>`}</tbody></table></div>
-      <p class="small muted">Corners and goals are ${esc(team)}'s first. "Expected" is what the model predicted before kick-off.${showPoss || showCr ? "" : " Possession and crosses appear here for matches entered from Flashscore."}</p></section>`;
+      <p class="small muted">Corners, goals and cards are ${esc(team)}'s first. "Expected" is what the model predicted before kick-off.${showPoss || showCr ? "" : " Possession and crosses appear here for matches entered from Flashscore."}</p></section>`;
   sheet.hidden = false; $("#sheetBack").hidden = false;
   document.documentElement.style.overflow = "hidden";
   sheet.scrollTop = 0;
@@ -987,7 +1046,7 @@ function wireChart(root){
   });
 }
 
-function render(){ renderTabs(); renderLede(); renderCalls(); renderHighlights(); renderCleanSheets(); renderFixtures(); renderReview(); renderTeams(); }
+function render(){ renderTabs(); renderLede(); renderCalls(); renderHighlights(); renderCleanSheets(); renderCardsSection(); renderFixtures(); renderReview(); renderTeams(); }
 render();
 syncControls(); markJump(); route();
 </script>

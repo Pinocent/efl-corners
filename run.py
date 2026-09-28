@@ -18,6 +18,7 @@ from datetime import date, datetime, timedelta, timezone
 
 from tracker import evaluate as ev
 from tracker import sources
+from tracker.cards import CardModel, cards_of
 from tracker.flags import fixture_flags
 from tracker.legacy import independent_markets
 from tracker.model import PARAMS, Model, learn_movers
@@ -30,6 +31,8 @@ DOCS = os.path.join(HERE, "docs")
 PRED_FILE = os.path.join(DATA, "predictions.csv")
 MATCH_FILE = os.path.join(DATA, "matches.csv")
 MANUAL_FILE = os.path.join(HERE, "manual_results.csv")
+REFEREE_FILE = os.path.join(HERE, sources.REFEREE_FILE)
+STRICT, LENIENT = 1.10, 0.90   # referee factor at which the page calls a referee strict / lenient
 LEGACY_XLSX = os.path.join(HERE, "old version", "corners_tracker.xlsx")
 TEMPLATE = os.path.join(HERE, "tracker", "dashboard.html")
 LOOKAHEAD_DAYS = 10     # predict every gameweek starting within this many days
@@ -100,13 +103,16 @@ def match_rows(results):
     keys = (("d", "date"), ("lg", "league"), ("h", "home"), ("a", "away"), ("hc", "hc"),
             ("ac", "ac"), ("hg", "hg"), ("ag", "ag"), ("hxg", "hxg"), ("axg", "axg"),
             ("hs", "hs"), ("as", "as_"), ("hst", "hst"), ("ast", "ast"), ("hr", "hr"),
-            ("ar", "ar"), ("hp", "hp"), ("ap", "ap"), ("hcr", "hcr"), ("acr", "acr"))
+            ("ar", "ar"), ("hp", "hp"), ("ap", "ap"), ("hcr", "hcr"), ("acr", "acr"),
+            ("hy", "hy"), ("ay", "ay"), ("hf", "hf"), ("af", "af"), ("ref", "ref"))
     out = []
     for m in sorted(results, key=lambda m: (m["date"], m["home"])):
         r = {}
         for k, src in keys:
             v = m.get(src)
             if v is None:
+                continue
+            if v == "":
                 continue
             if isinstance(v, date):
                 v = v.isoformat()
@@ -132,7 +138,7 @@ def season_summary(matches):
                 "ga": round(v["ga"] / v["p"], 2)} for k, v in t.items()}
 
 
-def backfill(store, results, rounds, prior, last, today, movers=None):
+def backfill(store, results, rounds, prior, last, today, movers=None, hist=(), card_prior=None):
     """
     First run of a season only: replay each finished gameweek as if the model
     had been running, fitting only on matches played before it, and against
@@ -141,23 +147,27 @@ def backfill(store, results, rounds, prior, last, today, movers=None):
     """
     if any(k[0] == "v3" and k[3] >= min(r["id"] for r in rounds.values()) for k in store):
         return 0
-    saved = dict(ev.BOOK_LINE)
+    saved, saved_k = dict(ev.BOOK_LINE), dict(ev.CARD_LINE)
     n = 0
     for r in rounds.values():
         if r["end"] >= today or r["n"] < 3:
             continue
         ev.book_lines(ev.league_rates(results, r["start"], fallback=last))
         mdl = Model().fit(results, r["start"], prior, movers)
+        cmdl = CardModel().fit(results, r["start"], hist, card_prior)
         for m in results:
             if m.get("round") != r["id"]:
                 continue
             p = mdl.predict(m)
             if p:
-                row = ev.to_row(m, p, r["start"])
+                # the referee was known before kick-off (published the day before)
+                row = ev.to_row(m, p, r["start"], cards=cmdl.predict(m, m.get("ref")))
                 store[("v3", row["home"], row["away"], row["date"])] = row
                 n += 1
     ev.BOOK_LINE.clear()
     ev.BOOK_LINE.update(saved)
+    ev.CARD_LINE.clear()
+    ev.CARD_LINE.update(saved_k)
     return n
 
 
@@ -170,7 +180,12 @@ def team_table(results, model):
                 ("home", m["home"], m["hc"], m["ac"], m.get("hxg"), m.get("axg")),
                 ("away", m["away"], m["ac"], m["hc"], m.get("axg"), m.get("hxg"))):
             r = rows.setdefault(t, {"team": t, "league": m["league"], "hist": [],
-                                    "home": [0, 0, 0], "away": [0, 0, 0], "xg": [0, 0, 0]})
+                                    "home": [0, 0, 0], "away": [0, 0, 0], "xg": [0, 0, 0],
+                                    "cards": [0, 0, 0, 0]})
+            kf, ka_ = cards_of(m, "h" if side == "home" else "a"), cards_of(m, "a" if side == "home" else "h")
+            if kf is not None:
+                r["cards"][0] += 1; r["cards"][1] += kf; r["cards"][2] += ka_
+                r["cards"][3] += (m.get("hf") if side == "home" else m.get("af")) or 0
             v = r[side]
             v[0] += 1; v[1] += cf; v[2] += ca
             if xf is not None:
@@ -193,6 +208,9 @@ def team_table(results, model):
             "f_cf": sum(c for c, _ in last) / len(last), "f_ca": sum(c for _, c in last) / len(last),
             "xgf": x[1] / x[0] if x[0] else None, "xga": x[2] / x[0] if x[0] else None,
             "m_h_cf": eh, "m_a_cf": ea,
+            "kf": r["cards"][1] / r["cards"][0] if r["cards"][0] else None,
+            "ka": r["cards"][2] / r["cards"][0] if r["cards"][0] else None,
+            "ff": r["cards"][3] / r["cards"][0] if r["cards"][0] else None,
         })
     return sorted(out, key=lambda r: (r["league"], -r["cf"]))
 
@@ -259,6 +277,15 @@ def main():
         prior = Model().fit(last, max(m["date"] for m in last) + timedelta(days=1)).priors()
     # how clubs arriving by promotion or relegation have done, from the history
     movers = learn_movers(past)
+    # cards: every earlier season for the referees, last season for team priors
+    hist = [m for _, ms in past for m in ms]
+    card_prior = None
+    if last:
+        card_prior = CardModel().fit(last, max(m["date"] for m in last) + timedelta(days=1),
+                                     [m for _, ms in past[:-1] for m in ms]).priors()
+    # referee appointments: the Cowork file first, football-data's (official, later) wins
+    refs_up = sources.get_manual_referees(REFEREE_FILE)
+    refs_up.update(sources.get_upcoming_referees())
 
     # the usual corners line, as things stand today (last season's until this
     # season has enough matches)
@@ -270,6 +297,7 @@ def main():
             and f["date"] >= today - timedelta(days=3)]
     rounds = detect_rounds(results + todo)
     model = Model().fit(results, today + timedelta(days=1), prior, movers)
+    card_model = CardModel().fit(results, today + timedelta(days=1), hist, card_prior)
 
     # ---- predict every gameweek starting soon (and any in progress)
     upcoming = [r for r in rounds.values()
@@ -285,7 +313,8 @@ def main():
                 continue                  # kicked off: its prediction is frozen
             p = model.predict(f)
             if p:
-                new_rows.append(ev.to_row(f, p, today))
+                ref = refs_up.get((f["home"], f["away"]))
+                new_rows.append(ev.to_row(f, p, today, cards=card_model.predict(f, ref)))
 
     store = load_store()
     n = import_legacy(store)
@@ -295,7 +324,7 @@ def main():
     if n:
         print(f"  Stored calls for {n} older predictions")
     if rounds:
-        n = backfill(store, results, rounds, prior, last, today, movers)
+        n = backfill(store, results, rounds, prior, last, today, movers, hist, card_prior)
         if n:
             print(f"  Replayed {n} predictions for this season's earlier gameweeks")
     ev.upsert(store, new_rows, now)
@@ -337,18 +366,18 @@ def main():
                       "start": r["start"].isoformat(), "end": r["end"].isoformat(),
                       "status": status})
 
-    text_keys = {"model", "made", "round", "date", "time", "league", "home", "away", "calls"}
+    text_keys = {"model", "made", "round", "date", "time", "league", "home", "away", "calls", "ref"}
 
     def clean(r):
         out = {}
         for k, v in r.items():
-            if k in ("ph", "pa"):
+            if k in ("ph", "pa", "kph", "kpa"):
                 out[k] = [float(x) for x in v.split(";")] if v else None
             elif k in text_keys:
                 out[k] = v
             else:
                 fv = ev.f(v)
-                out[k] = (int(fv) if k in ("hc", "ac", "hg", "ag") else round(fv, 4)) if fv is not None else None
+                out[k] = (int(fv) if k in ("hc", "ac", "hg", "ag", "hk", "ak", "hred") else round(fv, 4)) if fv is not None else None
         return out
 
     fixtures = [clean(r) for r in rows if r["round"] in shown]
@@ -359,6 +388,21 @@ def main():
             fx = {"home": x["home"], "away": x["away"], "league": x["league"],
                   "date": date.fromisoformat(x["date"])}
             x["flags"] = fixture_flags(fx, results, model, PARAMS["nb_size"], cache)
+    # referees on the page: this season's and anyone appointed to an upcoming match
+    shown_refs = {x["ref"] for x in fixtures if x.get("ref")} | {m.get("ref") for m in results if m.get("ref")}
+    ref_rows = []
+    everything = hist + results
+    for r in sorted(r for r in shown_refs if r):
+        ms = [m for m in everything if m.get("ref") == r and cards_of(m, "h") is not None]
+        if not ms:
+            continue
+        tot = [cards_of(m, "h") + cards_of(m, "a") for m in ms]
+        ref_rows.append({"ref": r, "factor": round(card_model.refs.get(r), 3), "n": len(ms),
+                         "cpm": round(sum(tot) / len(ms), 2),
+                         "o35": round(sum(t > 3.5 for t in tot) / len(ms), 3),
+                         "red": round(sum(((m.get("hr") or 0) + (m.get("ar") or 0)) > 0 for m in ms) / len(ms), 3),
+                         "fpm": round(sum((m.get("hf") or 0) + (m.get("af") or 0) for m in ms) / len(ms), 1),
+                         "season": sum(1 for m in results if m.get("ref") == r)})
     latest = {}
     for m in official:
         latest[m["league"]] = max(latest.get(m["league"], date.min), m["date"])
@@ -368,10 +412,12 @@ def main():
                  "today": today.isoformat(), "season": f"20{season[:2]}-{season[2:]}",
                  "latest": {k: v.isoformat() for k, v in latest.items()},
                  "manual": n_manual, "skipped": skipped, "matches": len(results),
-                 "call": ev.CALL, "tag": ev.TAG, "book_line": ev.BOOK_LINE},
+                 "call": ev.CALL, "tag": ev.TAG, "book_line": ev.BOOK_LINE,
+                 "card_line": ev.CARD_LINE, "strict": STRICT, "lenient": LENIENT},
         "rounds": rinfo, "fixtures": fixtures, "reviews": reviews, "skill": skill,
         "rates": rates_now, "teams": team_table(results, model),
         "matches": match_rows(results), "last_season": season_summary(last),
+        "referees": ref_rows,
     }
     with open(os.path.join(DOCS, "data.json"), "w") as fh:
         json.dump(payload, fh, default=str)

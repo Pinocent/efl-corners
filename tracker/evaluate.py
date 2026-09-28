@@ -26,7 +26,7 @@ except Exception:                        # very old Python: treat times as UTC
     UK = None
 
 # how sure the model must be before a prediction becomes a call
-CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60}
+CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60, "cards": 0.60}
 
 # Prediction tags - not calls. Each marks where the model says something
 # clearly different from the norm (rates from replaying 2024-25 and 2025-26).
@@ -41,8 +41,11 @@ FIELDS = (["model", "made", "round", "date", "time", "league", "home", "away",
           [f"o{str(l).replace('.', '')}" for l in TOTAL_LINES] +
           ["home4", "away4", "both4", "home_u3", "away_u3", "home_more",
            "ph", "pa", "lh", "la", "p_home", "p_draw", "p_away", "btts", "o25",
-           "cs_home", "cs_away", "sample", "line", "calls",
-           "hc", "ac", "hg", "ag"])
+           "cs_home", "cs_away", "sample",
+           "ref", "ref_f", "kh", "ka", "kt", "k25", "k35", "k45", "k55", "k65",
+           "khome2", "kaway2", "red", "kph", "kpa", "kline",
+           "line", "calls", "hc", "ac", "hg", "ag", "hk", "ak", "hred"])
+CARD_LINES = (2.5, 3.5, 4.5, 5.5, 6.5)
 
 
 def _k(line):
@@ -76,14 +79,19 @@ def started(row, now):
 # call is only interesting against that line - "over 7.5" lands most weeks
 # and pays next to nothing. run.py sets these from this season's matches.
 BOOK_LINE = {"Championship": 10.5, "League 1": 10.5, "League 2": 10.5}
+CARD_LINE = {"Championship": 3.5, "League 1": 3.5, "League 2": 3.5}
 
 
 def book_lines(rates):
     for lg, r in rates.items():
         BOOK_LINE[lg] = math.floor(r["avg_corners"]) + 0.5
+        # the cards line bookmakers lead with sits where matches go over about
+        # half the time: 3.5 or 4.5, whichever is nearer a coin flip this season
+        if r.get("k35") is not None and r.get("k45") is not None:
+            CARD_LINE[lg] = 3.5 if abs(r["k35"] - 0.5) <= abs(r["k45"] - 0.5) else 4.5
 
 
-def to_row(fx, pred, made, model="v3"):
+def to_row(fx, pred, made, model="v3", cards=None):
     c, g = pred["corners"], pred["goals"]
     row = {"model": model, "made": made.isoformat(), "round": fx.get("round", ""),
            "date": fx["date"].isoformat(), "time": fx.get("time", ""),
@@ -99,13 +107,25 @@ def to_row(fx, pred, made, model="v3"):
            "sample": pred.get("sample", "")}
     for l in TOTAL_LINES:
         row[_k(l)] = c["totals"][l]
+    if cards:
+        row.update(ref=cards["ref"], ref_f=cards["ref_factor"], kh=cards["kh"], ka=cards["ka"],
+                   kt=cards["kt"], khome2=cards["home2"], kaway2=cards["away2"], red=cards["red"],
+                   kph=";".join(f"{x:.4f}" for x in cards["kph"]),
+                   kpa=";".join(f"{x:.4f}" for x in cards["kpa"]))
+        for l in CARD_LINES:
+            row[_kk(l)] = cards["ktotals"][l]
     freeze_calls(row)
     return row
+
+
+def _kk(line):
+    return f"k{str(line).replace('.', '')}"
 
 
 def freeze_calls(row):
     """Work out the row's calls now and store them with the line used."""
     row["line"] = BOOK_LINE.get(row["league"], 10.5)
+    row["kline"] = CARD_LINE.get(row["league"], 3.5) if row.get("kt") not in (None, "") else ""
     row["calls"] = json.dumps(calls_for(row))
 
 
@@ -121,6 +141,14 @@ def calls_for(p):
         out.append(("Corners total", f"Over {l}", q))
     elif q is not None and lg != "League 2" and 1 - q >= CALL["total"]:
         out.append(("Corners total", f"Under {l}", 1 - q))
+
+    # cards, against the league's usual cards line (over and under both offered)
+    kl = f(p.get("kline"))
+    kq = f(p.get(_kk(kl))) if kl else None
+    if kq is not None and kq >= CALL["cards"]:
+        out.append(("Cards total", f"Over {kl}", kq))
+    elif kq is not None and 1 - kq >= CALL["cards"]:
+        out.append(("Cards total", f"Under {kl}", 1 - kq))
 
     b4 = f(p.get("both4"))
     if b4 is not None and b4 >= CALL["both4"]:
@@ -141,9 +169,14 @@ def calls_for(p):
     return [{"market": m, "pick": k, "p": round(v, 3)} for m, k, v in out]
 
 
-def landed(call, hc, ac, hg, ag):
-    """Did a stored call come off?"""
+def landed(call, hc, ac, hg, ag, hk=None, ak=None):
+    """Did a stored call come off? (None if it can't be marked yet)"""
     m, pick = call["market"], call["pick"]
+    if m == "Cards total":
+        if hk is None or ak is None:
+            return None
+        side, line = pick.split()
+        return hk + ak > float(line) if side == "Over" else hk + ak < float(line)
     if m == "Corners total":
         side, line = pick.split()
         return hc + ac > float(line) if side == "Over" else hc + ac < float(line)
@@ -186,6 +219,9 @@ def settle(store, results):
                   if abs((m["date"] - d).days) <= 7), None)
         if m and m.get("hc") is not None and m.get("hg") is not None:
             p.update(hc=int(m["hc"]), ac=int(m["ac"]), hg=int(m["hg"]), ag=int(m["ag"]))
+            if m.get("hy") is not None and m.get("ay") is not None:
+                p.update(hk=int(m["hy"] + (m.get("hr") or 0)), ak=int(m["ay"] + (m.get("ar") or 0)),
+                         hred=int(((m.get("hr") or 0) + (m.get("ar") or 0)) > 0))
 
 
 def result(p):
@@ -194,13 +230,21 @@ def result(p):
     return None if None in v else tuple(int(x) for x in v)
 
 
+def cards_result(p):
+    v = [f(p.get(k)) for k in ("hk", "ak")]
+    return None if None in v else tuple(int(x) for x in v)
+
+
 def mark(p):
     """Stored calls, each with hit/miss once the result is in."""
     calls = json.loads(p["calls"]) if p.get("calls") else []
     res = result(p)
     if res:
+        kr = cards_result(p) or (None, None)
         for c in calls:
-            c["hit"] = bool(landed(c, *res))
+            hit = landed(c, *res, *kr)
+            if hit is not None:
+                c["hit"] = bool(hit)
     return calls
 
 
@@ -236,6 +280,10 @@ def brier_block(rows, rates_for):
         add("Over 2.5 goals", f(r.get("o25")), lr.get("o25"), hg + ag > 2)
         add("Home clean sheet", f(r.get("cs_home")), lr.get("cs_home"), ag == 0)
         add("Away clean sheet", f(r.get("cs_away")), lr.get("cs_away"), hg == 0)
+        kr = cards_result(r)
+        if kr:
+            add("Cards over 3.5", f(r.get("k35")), lr.get("k35"), kr[0] + kr[1] > 3.5)
+            add("Cards over 4.5", f(r.get("k45")), lr.get("k45"), kr[0] + kr[1] > 4.5)
     return [{"market": k, "n": v[0], "brier": v[1] / v[0], "base": v[2] / v[0],
              "skill": 1 - v[1] / v[2] if v[2] else None} for k, v in acc.items()]
 
@@ -270,4 +318,10 @@ def league_rates(results, before, fallback=None, min_matches=30):
             "u3": sum((m["hc"] < 3) + (m["ac"] < 3) for m in ms) / (2 * n),
             "avg_corners": sum(m["hc"] + m["ac"] for m in ms) / n,
         }
+        ks = [m for m in ms if m.get("hy") is not None and m.get("ay") is not None]
+        if ks:
+            tk = [m["hy"] + m["ay"] + (m.get("hr") or 0) + (m.get("ar") or 0) for m in ks]
+            out[lg].update(avg_cards=sum(tk) / len(ks), k35=sum(t > 3.5 for t in tk) / len(ks),
+                           k45=sum(t > 4.5 for t in tk) / len(ks),
+                           red=sum(((m.get("hr") or 0) + (m.get("ar") or 0)) > 0 for m in ks) / len(ks))
     return out

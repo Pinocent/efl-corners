@@ -10,7 +10,8 @@ on:
   workflow_dispatch: {}        # "Run workflow" button on GitHub
   push:
     paths:
-      - manual_results.csv     # adding Flashscore numbers triggers a refresh
+      - manual_results.csv     # Flashscore results from the scheduled task
+      - referees.csv           # referee appointments from the scheduled task
 
 permissions:
   contents: write

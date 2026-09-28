@@ -8,6 +8,8 @@ happened. Every season since 2018-19 is available.
   python3 backtest.py 2526            # one season
   python3 backtest.py tune            # search the settings on TRAIN, check on TEST
   python3 backtest.py early           # the first 8 gameweeks only (tests starting ratings)
+  python3 backtest.py cards           # the cards model: league average vs teams vs teams + referee
+  python3 backtest.py cards-tune      # search the cards settings on TRAIN, check on TEST
 
 Settings are chosen on TRAIN seasons and only then checked on TEST seasons,
 so the test numbers are honest. 2019-20 (cut short by Covid) and 2020-21
@@ -26,6 +28,7 @@ from datetime import timedelta
 from multiprocessing import Pool
 
 from tracker import markets
+from tracker.cards import CARD_PARAMS, CardModel, card_markets, cards_of
 from tracker.legacy import predict_v2
 from tracker.model import PARAMS, Model, learn_movers
 from tracker.rounds import detect_rounds
@@ -208,8 +211,134 @@ def tune():
     return best
 
 
+# ---- cards
+
+def card_context(season, cp):
+    earlier = ALL[:ALL.index(season)] if season in ALL else ALL
+    hist = [m for s in earlier for m in load(s)]
+    prior = None
+    if earlier:
+        prev = load(earlier[-1])
+        before_prev = [m for s in earlier[:-1] for m in load(s)]
+        prior = CardModel(cp).fit(prev, max(m["date"] for m in prev) + timedelta(days=1), before_prev).priors()
+    return hist, prior
+
+
+def evaluate_cards(season, cp=CARD_PARAMS, mode="ref", first=3, last=999):
+    """mode: 'ref' (teams + referee), 'teams' (no referee), 'league' (league average only)."""
+    matches = load(season)
+    hist, prior = card_context(season, cp)
+    rounds = detect_rounds(matches)
+    s = {k: 0.0 for k in ("n", "ll", "mae", "b35", "b45", "bteam", "bred", "n35h", "h35h")}
+    for rid in list(rounds)[first:last]:
+        batch = [m for m in matches if m["round"] == rid and cards_of(m, "h") is not None]
+        if not batch:
+            continue
+        start = rounds[rid]["start"]
+        if mode == "league":
+            past = [m for m in matches if m["date"] < start and cards_of(m, "h") is not None]
+            if len(past) < 30:
+                continue
+        else:
+            mdl = CardModel(cp).fit(matches, start, hist, prior)
+        for m in batch:
+            if mode == "league":
+                lp = [x for x in past if x["league"] == m["league"]]
+                if len(lp) < 10:
+                    continue
+                kh = sum(cards_of(x, "h") for x in lp) / len(lp); ka = sum(cards_of(x, "a") for x in lp) / len(lp)
+                c = card_markets(kh, ka, cp["total_size"], cp["split_kappa"])
+                red = sum(((x.get("hr") or 0) + (x.get("ar") or 0)) > 0 for x in lp) / len(lp)
+            else:
+                c = mdl.predict(m, m.get("ref") if mode == "ref" else None)
+                if not c:
+                    continue
+                red = c["red"]
+            h, a = int(cards_of(m, "h")), int(cards_of(m, "a"))
+            t = h + a
+            s["n"] += 1
+            s["ll"] += -math.log(max(c["ktot"][min(t, 15)], 1e-9))
+            s["mae"] += abs(c["kt"] - t)
+            s["b35"] += (c["ktotals"][3.5] - (t > 3.5)) ** 2
+            s["b45"] += (c["ktotals"][4.5] - (t > 4.5)) ** 2
+            s["bteam"] += ((c["home2"] - (h >= 2)) ** 2 + (c["away2"] - (a >= 2)) ** 2) / 2
+            s["bred"] += (red - (((m.get("hr") or 0) + (m.get("ar") or 0)) > 0)) ** 2
+            if c["ktotals"][3.5] >= 0.6 or c["ktotals"][3.5] <= 0.4:
+                s["n35h"] += 1; s["h35h"] += (c["ktotals"][3.5] >= 0.5) == (t > 3.5)
+    return s
+
+
+def summarise_cards(parts):
+    t = {}
+    for s in parts:
+        for k, v in s.items():
+            t[k] = t.get(k, 0) + v
+    n = t["n"] or 1
+    return {"n": int(t["n"]), "LL total": t["ll"] / n, "MAE": t["mae"] / n, "Brier O3.5": t["b35"] / n,
+            "Brier O4.5": t["b45"] / n, "Brier team 2+": t["bteam"] / n, "Brier red": t["bred"] / n,
+            "60%+ calls": int(t["n35h"]), "hit%": 100 * t["h35h"] / (t["n35h"] or 1)}
+
+
+CKEYS = ["n", "LL total", "MAE", "Brier O3.5", "Brier O4.5", "Brier team 2+", "Brier red", "60%+ calls", "hit%"]
+
+
+def show_cards(name, r=None):
+    if r is None:
+        print(f'{name:30}' + "".join(f"{k:>14}" for k in CKEYS)); return
+    print(f"{name:30}" + "".join(f"{r[k]:>14.0f}" if k in ("n", "60%+ calls") else f"{r[k]:>14.4f}" for k in CKEYS))
+
+
+def _cjob(args):
+    cp, season, mode = args
+    return evaluate_cards(season, cp, mode)
+
+
+def run_cards(configs, seasons, mode="ref"):
+    jobs = [(c, s, mode) for c in configs for s in seasons]
+    with Pool(max(1, (os.cpu_count() or 2) - 1)) as pool:
+        out = pool.map(_cjob, jobs)
+    k = len(seasons)
+    return [summarise_cards(out[i * k:(i + 1) * k]) for i in range(len(configs))]
+
+
+CARD_GRID = {"ref_k": [6.0, 12.0, 24.0], "ref_half_life": [365, 730, 1460], "k_team": [8.0, 12.0, 20.0],
+             "half_life": [60, 120, 240], "foul_blend": [0.0, 0.3, 0.6], "prior_regress": [0.3, 0.5, 0.7],
+             "total_size": [15.0, 25.0, 50.0], "split_kappa": [30.0, 60.0, 150.0], "red_k": [20.0, 40.0, 80.0]}
+
+
+def card_score(r):
+    return r["LL total"] + r["Brier O3.5"] + r["Brier O4.5"] + r["Brier team 2+"] + r["Brier red"]
+
+
+def tune_cards():
+    best = dict(CARD_PARAMS)
+    for rnd in (1, 2):
+        for key, values in CARD_GRID.items():
+            res = run_cards([dict(best, **{key: v}) for v in values], TRAIN)
+            pick = min(range(len(values)), key=lambda i: card_score(res[i]))
+            print(f"  pass {rnd}  {key:14} " + "  ".join(f"{v}{'*' if i == pick else ''}: {card_score(res[i]):.4f}"
+                                                        for i, v in enumerate(values)), flush=True)
+            best[key] = values[pick]
+    print("\nChosen on", ", ".join(TRAIN), ":", {k: v for k, v in best.items() if v != CARD_PARAMS[k]})
+    print("\nChecked on", ", ".join(TEST), "(not used for choosing):")
+    show_cards("")
+    show_cards("league average only", run_cards([CARD_PARAMS], TEST, "league")[0])
+    show_cards("current, teams only", run_cards([CARD_PARAMS], TEST, "teams")[0])
+    show_cards("current, teams + referee", run_cards([CARD_PARAMS], TEST, "ref")[0])
+    show_cards("tuned, teams + referee", run_cards([best], TEST, "ref")[0])
+
+
 def main():
     arg = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if arg == "cards-tune":
+        tune_cards()
+        return
+    if arg == "cards":
+        seasons = TRAIN + TEST
+        show_cards("")
+        for name, mode in (("league average only", "league"), ("teams only", "teams"), ("teams + referee", "ref")):
+            show_cards(name, run_cards([CARD_PARAMS], seasons, mode)[0])
+        return
     if arg == "tune":
         tune()
         return
