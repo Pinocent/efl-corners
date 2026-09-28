@@ -27,6 +27,8 @@
   --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A; --warn-soft:#352A14;
 }
 *{box-sizing:border-box}
+/* hidden always wins over a component's own display (the team page, phone cards, tooltips) */
+[hidden]{display:none!important}
 body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.5 var(--body);font-variant-numeric:tabular-nums}
 .wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:32px}
 h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:.01em;margin:0;text-wrap:balance}
