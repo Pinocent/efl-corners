@@ -13,32 +13,40 @@ and League 2, logs every prediction, and marks it against the result.
 
 No packages to install. Python 3.9+ standard library only.
 
-## Adding Flashscore results early (and possession and crosses)
+## Nightly collection (Claude scheduled task)
 
-1. In Claude's Cowork tab, with this folder selected, ask: "Run the Midweek
-   Corners Check for Saturday 3 October, and include each side's crosses as
-   HomeCrosses and AwayCrosses" (any date). It adds rows to
-   `manual_results.csv`. Possession and crosses are optional columns
-   (`HomePossession, AwayPossession, HomeCrosses, AwayCrosses`); "64%" and
-   Flashscore's "7/22" crosses format are both understood.
-2. Double-click `Send Flashscore Results.command`. It uploads the file to
-   GitHub, and the online dashboard refreshes about 2 minutes later.
+A scheduled task in the Claude desktop app, **EFL board: collect results,
+cards and referees**, runs every evening at 22:30 while the app is open (if
+the app is closed then, it runs the next time the app opens):
 
-The official feed replaces the corners and goals when it publishes them,
-but possession and crosses (which the feed doesn't have) are kept. They show
-on the team pages and match details; they don't feed the predictions yet,
-because there isn't enough of them to test whether they help.
+1. `python3 collect_todo.py` lists EFL matches from the last 4 days that the
+   board has no result for, and matches in the next 6 days with no referee.
+   If both lists are empty, the task stops without opening a website.
+2. It reads each finished match on Flashscore (goals, corners, yellow and red
+   cards, fouls, possession, crosses, referee) into `manual_results.csv`, and
+   announced referee appointments into `referees.csv`.
+3. `./sync_to_github.sh` uploads both files. The push starts the cloud
+   update, and the online board refreshes about two minutes later.
+
+The official results feed replaces the Flashscore corners, goals and cards
+when it publishes them, usually a day or two later. Possession, crosses and
+referees are kept.
+
+To run it by hand: "Run now" on the task in the Claude app's Scheduled list,
+or double-click `Send Flashscore Results.command` after editing the CSVs
+yourself.
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `data/matches.csv` | Every result this season, with gameweek, corners, goals, xG, shots and odds |
+| `data/matches.csv` | Every result this season: gameweek, corners, goals, xG, shots, cards, fouls, referee |
 | `data/predictions.csv` | Every prediction and its calls, frozen at kick-off, with the result once known (`v3` = this model, `v2` = the old spreadsheet's) |
-| `manual_results.csv` | Flashscore numbers for matches the feed hasn't published yet. The official feed replaces them once it has them |
+| `manual_results.csv` | Flashscore numbers for matches the feed hasn't published yet (filled nightly by the scheduled task) |
+| `referees.csv` | Referee appointments for upcoming matches (filled nightly by the scheduled task) |
 | `docs/index.html` | The dashboard |
-| `backtest.py` | Replays every season since 2018-19 to test the model: `python3 backtest.py`, or `tune` to re-tune the settings |
-| `tracker/` | The code: `rounds.py` gameweeks, `model.py` ratings, `markets.py` probabilities, `evaluate.py` calls and marking, `flags.py` warnings |
+| `backtest.py` | Replays every season since 2018-19: `python3 backtest.py` (corners and goals), `cards`, or `tune` / `cards-tune` to re-tune |
+| `tracker/` | The code: `rounds.py` gameweeks, `model.py` corners and goals, `cards.py` cards and referees, `markets.py` probabilities, `evaluate.py` calls and marking, `flags.py` warnings |
 
 The old spreadsheet version is in `old version/`, untouched.
 
