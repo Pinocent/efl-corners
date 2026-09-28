@@ -20,7 +20,7 @@ from tracker import evaluate as ev
 from tracker import sources
 from tracker.flags import fixture_flags
 from tracker.legacy import independent_markets
-from tracker.model import PARAMS, Model
+from tracker.model import PARAMS, Model, learn_movers
 from tracker.rounds import detect_rounds
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +33,7 @@ MANUAL_FILE = os.path.join(HERE, "manual_results.csv")
 LEGACY_XLSX = os.path.join(HERE, "old version", "corners_tracker.xlsx")
 TEMPLATE = os.path.join(HERE, "tracker", "dashboard.html")
 LOOKAHEAD_DAYS = 10     # predict every gameweek starting within this many days
+FIRST_SEASON = "1718"   # history goes back to here (cached after the first download)
 
 
 def load_store():
@@ -84,7 +85,54 @@ def upgrade_rows(store):
     return n
 
 
-def backfill(store, results, rounds, prior, last, today):
+def history(season):
+    """Every season from FIRST_SEASON up to (not including) `season`, oldest first."""
+    out, s = [], FIRST_SEASON
+    while s != season:
+        out.append((s, sources.get_results(s, CACHE, log=lambda *_: None)))
+        a = int(s[:2]) + 1
+        s = f"{a:02d}{a + 1:02d}"
+    return out
+
+
+def match_rows(results):
+    """This season's results, compact, for the team pages."""
+    keys = (("d", "date"), ("lg", "league"), ("h", "home"), ("a", "away"), ("hc", "hc"),
+            ("ac", "ac"), ("hg", "hg"), ("ag", "ag"), ("hxg", "hxg"), ("axg", "axg"),
+            ("hs", "hs"), ("as", "as_"), ("hst", "hst"), ("ast", "ast"), ("hr", "hr"),
+            ("ar", "ar"), ("hp", "hp"), ("ap", "ap"), ("hcr", "hcr"), ("acr", "acr"))
+    out = []
+    for m in sorted(results, key=lambda m: (m["date"], m["home"])):
+        r = {}
+        for k, src in keys:
+            v = m.get(src)
+            if v is None:
+                continue
+            if isinstance(v, date):
+                v = v.isoformat()
+            elif isinstance(v, float):
+                v = int(v) if v.is_integer() else round(v, 2)
+            r[k] = v
+        out.append(r)
+    return out
+
+
+def season_summary(matches):
+    """Per club: division and corners/goals per match over a season."""
+    t = {}
+    for m in matches:
+        if m.get("hc") is None:
+            continue
+        for team, cf, ca, gf, ga in ((m["home"], m["hc"], m["ac"], m["hg"], m["ag"]),
+                                     (m["away"], m["ac"], m["hc"], m["ag"], m["hg"])):
+            v = t.setdefault(team, {"league": m["league"], "p": 0, "cf": 0, "ca": 0, "gf": 0, "ga": 0})
+            v["p"] += 1; v["cf"] += cf; v["ca"] += ca; v["gf"] += gf or 0; v["ga"] += ga or 0
+    return {k: {"league": v["league"], "p": v["p"], "cf": round(v["cf"] / v["p"], 2),
+                "ca": round(v["ca"] / v["p"], 2), "gf": round(v["gf"] / v["p"], 2),
+                "ga": round(v["ga"] / v["p"], 2)} for k, v in t.items()}
+
+
+def backfill(store, results, rounds, prior, last, today, movers=None):
     """
     First run of a season only: replay each finished gameweek as if the model
     had been running, fitting only on matches played before it, and against
@@ -99,7 +147,7 @@ def backfill(store, results, rounds, prior, last, today):
         if r["end"] >= today or r["n"] < 3:
             continue
         ev.book_lines(ev.league_rates(results, r["start"], fallback=last))
-        mdl = Model().fit(results, r["start"], prior)
+        mdl = Model().fit(results, r["start"], prior, movers)
         for m in results:
             if m.get("round") != r["id"]:
                 continue
@@ -204,10 +252,13 @@ def main():
     for s in skipped:
         print(f"  ! Flashscore row not used - {s}")
 
-    last = sources.get_results(sources.prev_season(season), CACHE, log=lambda *_: None)
+    past = history(season)
+    last = past[-1][1] if past else []
     prior = None
     if last:
         prior = Model().fit(last, max(m["date"] for m in last) + timedelta(days=1)).priors()
+    # how clubs arriving by promotion or relegation have done, from the history
+    movers = learn_movers(past)
 
     # the usual corners line, as things stand today (last season's until this
     # season has enough matches)
@@ -218,7 +269,7 @@ def main():
     todo = [f for f in schedule if (f["home"], f["away"]) not in played
             and f["date"] >= today - timedelta(days=3)]
     rounds = detect_rounds(results + todo)
-    model = Model().fit(results, today + timedelta(days=1), prior)
+    model = Model().fit(results, today + timedelta(days=1), prior, movers)
 
     # ---- predict every gameweek starting soon (and any in progress)
     upcoming = [r for r in rounds.values()
@@ -244,7 +295,7 @@ def main():
     if n:
         print(f"  Stored calls for {n} older predictions")
     if rounds:
-        n = backfill(store, results, rounds, prior, last, today)
+        n = backfill(store, results, rounds, prior, last, today, movers)
         if n:
             print(f"  Replayed {n} predictions for this season's earlier gameweeks")
     ev.upsert(store, new_rows, now)
@@ -320,6 +371,7 @@ def main():
                  "call": ev.CALL, "tag": ev.TAG, "book_line": ev.BOOK_LINE},
         "rounds": rinfo, "fixtures": fixtures, "reviews": reviews, "skill": skill,
         "rates": rates_now, "teams": team_table(results, model),
+        "matches": match_rows(results), "last_season": season_summary(last),
     }
     with open(os.path.join(DOCS, "data.json"), "w") as fh:
         json.dump(payload, fh, default=str)

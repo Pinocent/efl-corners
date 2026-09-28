@@ -15,40 +15,70 @@ This version fits team ratings the way bookmakers' base models do:
   * each team gets a home and an away adjustment, shrunk towards its overall
     level until there's enough evidence the venue really matters for them
   * ratings start from last season's (regressed halfway to average), so the
-    first few weeks aren't guesswork, and fade as this season's data arrives
+    first few weeks aren't guesswork, and fade as this season's data arrives.
+    A club new to the division starts from how clubs arriving the same way
+    have done in past seasons (e.g. sides relegated into League 1 have won
+    about 7% more corners than average) - learned from the history at run time
   * recent matches weigh more (half-life in days)
   * corner ratings are blended with shot-volume ratings - shots are a steadier
     read on territorial pressure, which is what produces corners
   * goals use the same rating structure on a blend of goals, xG and shots on
     target, with heavier pulling towards average than corners need. Goals
-    alone swing too much: replaying the last two seasons, "60%+" goals calls
-    landed only 52-57% of the time; with shots on target and more shrinkage
-    they land 61-67%, and every goals market scores better.
+    alone swing too much: "60%+" goals calls used to land only 52-57% of the
+    time; with shots on target in the mix, over six seasons the model said
+    62% on average and 62% landed.
 
 Bookmaker odds are deliberately not used: every number is the model's own,
 from match statistics alone.
 
-All the blend weights live in PARAMS and were chosen by backtest.py on the
-whole of last season, then checked on this season without re-tuning.
+All the settings live in PARAMS. They were chosen by `backtest.py tune` on
+2018-19 and 2021-22 to 2023-24, then checked on 2024-25 and 2025-26, which
+played no part in choosing them.
 """
 
 import math
+from datetime import timedelta
 
 from . import markets
 
 PARAMS = {
     "half_life": 60,        # days; a match 2 months ago counts half
     "k_team": 12.0,           # prior strength, in matches, for team ratings
-    "k_venue": 40.0,         # prior strength for home/away adjustments
-    "prior_regress": 0.5,    # last season's rating kept at this fraction
+    "k_venue": 80.0,         # prior strength for home/away adjustments
+    "prior_regress": 0.7,    # last season's rating kept at this fraction
     "shot_blend": 0.4,       # weight of shot ratings in corner ratings
     "nb_size": 10.0,         # per-side corner spread, used by the warnings
-    "dc_rho": -0.08,         # Dixon-Coles low-score correction
+    "dc_rho": -0.03,         # Dixon-Coles low-score correction
+    "total_size": 40.0,      # joint corner model: spread of the match total
+    "split_kappa": 18.0,     # joint corner model: spread of the split
     # goals
-    "goal_mix": (0.2, 0.4, 0.4),  # goals, xG, shots on target x conversion
-    "goal_k_team": 25.0,     # goals need more pulling towards average
+    "goal_mix": (0.1, 0.45, 0.45),  # goals, xG, shots on target x conversion
+    "goal_k_team": 15.0,     # goals need more pulling towards average
     "goal_half_life": 120,
 }
+
+
+LEAGUE_ORDER = {"Championship": 0, "League 1": 1, "League 2": 2}
+
+
+def arrival(team, league, priors):
+    """
+    How a club came to be in this division, judged from last season's
+    ratings: 'stayed', 'promoted', 'relegated', or None if unknown. A club
+    missing from last season's data entirely came from outside these three
+    divisions: relegated from the Premier League (into the Championship) or
+    promoted from the National League (into League 2).
+    """
+    if not priors:
+        return None
+    if team in priors:
+        plg = priors[team][2]
+        if plg == league:
+            return "stayed"
+        if plg in LEAGUE_ORDER and league in LEAGUE_ORDER:
+            return "promoted" if LEAGUE_ORDER[plg] > LEAGUE_ORDER[league] else "relegated"
+        return None
+    return {"Championship": "relegated", "League 2": "promoted"}.get(league)
 
 
 def _w(age, half_life):
@@ -60,14 +90,25 @@ class Ratings:
 
     def __init__(self, hkey, akey, p=PARAMS):
         self.hkey, self.akey, self.p = hkey, akey, p
+        self.priors, self.movers = {}, {}
         self.mu = {}                 # league -> (home mean, away mean)
         self.att, self.dfn = {}, {}  # team -> rating
         self.ah, self.aa, self.dh, self.da = {}, {}, {}, {}  # venue adjustments
         self.n = {}                  # team -> matches used
         self.league_of = {}
 
-    def fit(self, matches, asof, priors=None, league_prior=None):
+    def start(self, team, league):
+        """Where a club's rating starts before this season's matches pull it."""
+        cls = arrival(team, league, self.priors)
+        if cls == "stayed":
+            pa_, pd_, _ = self.priors[team]
+            rg = self.p["prior_regress"]
+            return 1 + rg * (pa_ - 1), 1 + rg * (pd_ - 1)
+        return self.movers.get((league, cls), (1.0, 1.0))
+
+    def fit(self, matches, asof, priors=None, league_prior=None, movers=None):
         p = self.p
+        self.priors, self.movers = priors or {}, movers or {}
         rows = []
         for m in matches:
             x, y = m.get(self.hkey), m.get(self.akey)
@@ -99,15 +140,8 @@ class Ratings:
 
         # a club only inherits last season's rating if it's in the same
         # division - a promoted side's League 1 numbers mean little in the
-        # Championship
-        rg = p["prior_regress"]
-        self.prior = {}
-        for t, (pa_, pd_, plg) in (priors or {}).items():
-            self.prior[t] = (plg, (1 + rg * (pa_ - 1), 1 + rg * (pd_ - 1)))
-        prior = {}
-        for t in teams:
-            plg, v = self.prior.get(t, (None, (1.0, 1.0)))
-            prior[t] = v if plg == teams[t] else (1.0, 1.0)
+        # Championship; it starts from how promoted sides usually do instead
+        prior = {t: self.start(t, teams[t]) for t in teams}
         att = {t: prior[t][0] for t in teams}
         dfn = {t: prior[t][1] for t in teams}
         ah = {t: 1.0 for t in teams}
@@ -166,13 +200,9 @@ class Ratings:
         if mh is None:
             return None, None
 
-        def base(t, i):
-            # a club with no matches yet: last season's rating if same division
-            plg, v = getattr(self, "prior", {}).get(t, (None, (1.0, 1.0)))
-            return v[i] if plg == league else 1.0
-
         def g(d, t, i=None):
-            return d[t] if t in d else (base(t, i) if i is not None else 1.0)
+            # a club with no matches yet this season: its starting rating
+            return d[t] if t in d else (self.start(t, league)[i] if i is not None else 1.0)
         eh = mh * g(self.att, home, 0) * g(self.ah, home) * g(self.dfn, away, 1) * g(self.da, away)
         ea = ma * g(self.att, away, 0) * g(self.aa, away) * g(self.dfn, home, 1) * g(self.dh, home)
         return eh, ea
@@ -188,6 +218,36 @@ def season_priors(rat):
     """Final ratings from last season, keyed by team, for next season's start."""
     return ({t: (rat.att[t], rat.dfn[t], rat.league_of[t]) for t in rat.att},
             dict(rat.mu))
+
+
+def learn_movers(history, p=PARAMS):
+    """
+    history: [(season_code, matches)] in date order. For each pair of
+    consecutive seasons, rate every club over the later season and average
+    the ratings of clubs that arrived by promotion or relegation. Returns
+    {stat: {(league, 'promoted'|'relegated'): (attack, defence)}}.
+    """
+    gp = dict(p, k_team=p["goal_k_team"], half_life=p["goal_half_life"])
+    sums = {}
+    for (_, prev), (_, cur) in zip(history, history[1:]):
+        if not prev or not cur:
+            continue
+        before = {}
+        for m in prev:
+            before[m["home"]] = (1.0, 1.0, m["league"])
+            before[m["away"]] = (1.0, 1.0, m["league"])
+        end = max(m["date"] for m in cur) + timedelta(days=1)
+        fits = {"corners": Ratings("hc", "ac", p).fit(cur, end),
+                "shots": Ratings("hs", "as_", p).fit(cur, end),
+                "goals": Ratings("gsh", "gsa", gp).fit(_goal_signal(cur, p["goal_mix"]), end)}
+        for stat, r in fits.items():
+            for t, lg in r.league_of.items():
+                cls = arrival(t, lg, before)
+                if cls in ("promoted", "relegated"):
+                    v = sums.setdefault(stat, {}).setdefault((lg, cls), [0, 0.0, 0.0])
+                    v[0] += 1; v[1] += r.att[t]; v[2] += r.dfn[t]
+    return {stat: {k: (v[1] / v[0], v[2] / v[0]) for k, v in d.items() if v[0] >= 5}
+            for stat, d in sums.items()}
 
 
 def _goal_signal(matches, mix):
@@ -225,16 +285,17 @@ class Model:
     def __init__(self, p=PARAMS):
         self.p = p
 
-    def fit(self, matches, asof, prior_model=None):
+    def fit(self, matches, asof, prior_model=None, movers=None):
         p = self.p
-        pri = prior_model or {}
+        pri, mv = prior_model or {}, movers or {}
         self.corners = Ratings("hc", "ac", p).fit(
-            matches, asof, *pri.get("corners", (None, None)))
+            matches, asof, *pri.get("corners", (None, None)), movers=mv.get("corners"))
         self.shots = Ratings("hs", "as_", p).fit(
-            matches, asof, *pri.get("shots", (None, None)))
+            matches, asof, *pri.get("shots", (None, None)), movers=mv.get("shots"))
         gp = dict(p, k_team=p["goal_k_team"], half_life=p["goal_half_life"])
         self.goals = Ratings("gsh", "gsa", gp).fit(
-            _goal_signal(matches, p["goal_mix"]), asof, *pri.get("goals", (None, None)))
+            _goal_signal(matches, p["goal_mix"]), asof, *pri.get("goals", (None, None)),
+            movers=mv.get("goals"))
         return self
 
     def priors(self):
@@ -249,7 +310,7 @@ class Model:
         ch, ca = self.expect_corners(fx)
         if ch is None:
             return None
-        corners = markets.corner_markets(ch, ca, lg)
+        corners = markets.corner_markets(ch, ca, lg, p["total_size"], p["split_kappa"])
         return self._with_goals(fx, corners)
 
     def expect_corners(self, fx):

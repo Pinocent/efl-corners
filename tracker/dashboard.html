@@ -7,7 +7,7 @@
 <style>
 :root{
   --ground:#F1F4F1; --surface:#FFFFFF; --sunk:#E8ECE8; --ink:#15201A; --muted:#5B6860;
-  --line:#D6DDD8; --accent:#9B1B42; --accent-soft:#F6E3E9; --blue:#2C5F8D; --blue-soft:#E1EBF4;
+  --line:#D6DDD8; --accent:#9B1B42; --accent-soft:#F6E3E9; --blue:#2A64B0; --blue-soft:#E1EBF4;
   --good:#2D7A4B; --good-soft:#DFF0E5; --bad:#B0402C; --bad-soft:#F7E2DC; --warn:#946000; --warn-soft:#F6ECD6;
   --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -16,14 +16,14 @@
   :root:not([data-theme="light"]){
     color-scheme:dark;
     --ground:#0E1411; --surface:#161F1A; --sunk:#1D2822; --ink:#E6ECE8; --muted:#98A69E;
-    --line:#2B3731; --accent:#E2729A; --accent-soft:#3A1E29; --blue:#86B4DE; --blue-soft:#1C2B39;
+    --line:#2B3731; --accent:#D45A86; --accent-soft:#3A1E29; --blue:#5A97D6; --blue-soft:#1C2B39;
     --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A; --warn-soft:#352A14;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
   --ground:#0E1411; --surface:#161F1A; --sunk:#1D2822; --ink:#E6ECE8; --muted:#98A69E;
-  --line:#2B3731; --accent:#E2729A; --accent-soft:#3A1E29; --blue:#86B4DE; --blue-soft:#1C2B39;
+  --line:#2B3731; --accent:#D45A86; --accent-soft:#3A1E29; --blue:#5A97D6; --blue-soft:#1C2B39;
   --good:#72C293; --good-soft:#18301F; --bad:#E88C77; --bad-soft:#3A211B; --warn:#E0B25A; --warn-soft:#352A14;
 }
 *{box-sizing:border-box}
@@ -48,8 +48,52 @@ header.top .meta{display:flex;flex-direction:column;gap:4px;text-align:right}
 .freshness{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .fresh{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--muted)}
 
-.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);padding-block:10px;
-  display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--ground);padding-block:10px 4px;
+  display:flex;flex-direction:column;gap:10px}
+/* jump bar: sticks under the controls on wide screens, on its own on phones */
+.jump{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--ctrl-h,0px));z-index:5;background:var(--ground);
+  display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding-block:6px;margin-top:-30px;border-bottom:1px solid var(--line)}
+.jump::-webkit-scrollbar{display:none}
+.jump button{border:0;background:none;padding:6px 11px;border-radius:99px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap;cursor:pointer}
+.jump button:hover{color:var(--ink)}
+.jump button[aria-current="true"]{background:var(--ink);color:var(--ground)}
+section{scroll-margin-top:calc(var(--ctrl-h,0px) + 60px)}
+/* team names open the team page */
+.tl{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:inherit;
+  text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px}
+.tl:hover,.tl:focus-visible{text-decoration-color:var(--accent)}
+.tl.b{font-weight:600}
+/* team page: a sheet over the board */
+.sheet-back{position:fixed;inset:0;background:rgba(8,14,11,.5);z-index:30}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(800px,100%);z-index:31;background:var(--ground);overflow-y:auto;
+  overscroll-behavior:contain;box-shadow:-12px 0 32px rgba(0,0,0,.25);padding-inline:20px;
+  padding-block:calc(env(safe-area-inset-top,0px) + 18px) calc(env(safe-area-inset-bottom,0px) + 40px);
+  display:flex;flex-direction:column;gap:22px}
+.sheet .shead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sheet .shead h2{font-size:34px}
+.sheet .x{border:1px solid var(--line);background:var(--surface);border-radius:99px;width:38px;height:38px;font-size:20px;line-height:1;cursor:pointer;flex:none;color:var(--ink)}
+.sheet section{gap:10px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.tile .k{font-size:12px;color:var(--muted)}
+.tile .v{font-family:var(--display);font-size:28px;font-weight:600;line-height:1.05;font-variant-numeric:proportional-nums}
+.tile .s{font-size:12px;color:var(--muted)}
+.chartbox{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 10px 8px;position:relative;display:flex;flex-direction:column;gap:8px}
+.chartbox .scroll{overflow-x:auto}
+.chartbox svg{display:block}
+.chartbox svg text{font-family:var(--body);font-size:10.5px;fill:var(--muted)}
+.chartbox .slot{cursor:default;outline:none}
+.chartbox .slot rect.hit{fill:transparent}
+.chartbox .slot:hover rect.hl,.chartbox .slot:focus rect.hl{fill:var(--sunk)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);padding-inline:4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.legend i.ln{height:2px;width:14px;border-radius:1px;vertical-align:3px;background:var(--ink)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--ground);font-size:12px;line-height:1.45;
+  padding:8px 10px;border-radius:8px;white-space:nowrap;z-index:3;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.tip strong{font-size:14px}
+.nextlist{display:flex;flex-direction:column;gap:8px}
+.next{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+.next .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 #roundTabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
 .pill{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 12px;cursor:pointer;font-size:13px;white-space:nowrap}
@@ -238,6 +282,8 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
     </div>
   </div>
 
+  <nav class="jump" id="jump" aria-label="Jump to a section"></nav>
+
   <section class="lede" id="lede"></section>
 
   <section id="callsSec">
@@ -249,7 +295,7 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
     <div class="tablebox calllist" id="calls"></div>
   </section>
 
-  <section>
+  <section id="predSec">
     <div class="sechead">
       <div><span class="tag pred">Predictions</span></div>
       <h2>Predictions worth a look</h2>
@@ -258,7 +304,7 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
     <div class="hl" id="highlights"></div>
   </section>
 
-  <section>
+  <section id="csSec">
     <div class="sechead">
       <div><span class="tag pred">Predictions</span></div>
       <h2>Clean sheets</h2>
@@ -267,11 +313,11 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
     <div class="tablebox"><table id="csTable"></table></div>
   </section>
 
-  <section>
+  <section id="fxSec">
     <div class="sechead">
       <div><span class="tag pred">Predictions</span></div>
       <h2 id="fxTitle">Every match</h2>
-      <p>Tap a match for the chance of every corners line, for the match and for each side, plus goals. Matches with a call have a claret edge. <span class="chip warn">Warning</span> means something in a recent match could throw the prediction.</p>
+      <p>Tap a match for the chance of every corners line, for the match and for each side, plus goals. Tap a team name for its page. Matches with a call have a claret edge. <span class="chip warn">Warning</span> means something in a recent match could throw the prediction.</p>
     </div>
     <div class="tablebox" id="fxBox"><table id="fxTable"></table></div>
     <div class="cards" id="fxCards" hidden></div>
@@ -285,15 +331,15 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
     <div class="score" id="review"></div>
   </section>
 
-  <section>
+  <section id="teamsSec">
     <div class="sechead">
       <h2>Teams</h2>
-      <p>Corners per match this season. “Expected” is what the model rates each side at against an average opponent, after allowing for who they've played.</p>
+      <p>Corners per match this season. “Expected” is what the model rates each side at against an average opponent, after allowing for who they've played. Tap a team for its own page.</p>
     </div>
     <div class="tablebox"><table id="teamTable"></table></div>
   </section>
 
-  <section>
+  <section id="helpSec">
     <details class="glossary" id="glossary">
       <summary>How this works, and what the terms mean</summary>
       <dl class="terms">
@@ -303,7 +349,7 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
         <dt>Chance</dt><dd>How likely the model thinks something is. 60% means it should happen about 6 times in 10.</dd>
         <dt>Fair odds</dt><dd>The chance written as decimal odds (1 ÷ chance). 60% is 1.67. A price higher than this would be good value if the model is right.</dd>
         <dt>Big gap</dt><dd id="defGap"></dd>
-        <dt>High corners</dt><dd>A side the model expects to take at least the chosen number of corners (5+, 6+ or 7+; switch it on the High-corner sides panel). 6+ is the default. In the last two seasons about 1 side in 8 was tagged 6+, and 59% of them reached it, against 38% of all sides. At 5+ half of all sides qualify, so the tag picks out much less. A prediction, not a call.</dd>
+        <dt>High corners</dt><dd>A side the model expects to take at least the chosen number of corners (5+, 6+ or 7+; switch it on the High-corner sides panel). 6+ is the default. Over six seasons about 1 side in 8 was tagged 6+, and 60% of them reached it, against 40% of all sides. At 5+ half of all sides qualify, so the tag picks out much less. A prediction, not a call.</dd>
         <dt>Under 3 corners</dt><dd id="defU3"></dd>
         <dt>Line</dt><dd id="defLine"></dd>
         <dt>xG</dt><dd>Expected goals, from the quality of chances created. The model blends each side's xG with the goals they actually scored.</dd>
@@ -313,14 +359,17 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
         <dt>Gameweek</dt><dd>Matches played within a few days of each other, with no club playing twice. Worked out from the dates, so Thursday–Monday and Tuesday–Wednesday rounds both group correctly.</dd>
       </dl>
       <div class="notes">
-        <p><b>Where the model is strongest.</b> Telling which side will dominate the corner count: in big-gap matches over the last two seasons, the side expected to win more corners did so 75% of the time. Corner totals are harder, but its confident totals (65%+ either way on 9.5) came off 73% of the time in 2025-26.</p>
-        <p><b>How corners are predicted.</b> Team ratings for corners won and conceded, and for shots, each with a home and away adjustment. Recent matches count more. The match total is predicted first and then split between the sides, because one side's corners come partly at the other's expense. Match statistics only: no bookmaker prices go in.</p>
+        <p><b>Where the model is strongest.</b> Telling which side will dominate the corner count: in big-gap matches over six seasons, the side expected to win more corners did so 72% of the time. Corner totals are harder. Goals calls are well calibrated: over six seasons the model said 62% on average and 62% landed.</p>
+        <p><b>How corners are predicted.</b> Team ratings for corners won and conceded, and for shots, each with a home and away adjustment. Recent matches count more. Promoted and relegated clubs start from how clubs arriving the same way have done since 2017. Settings are tuned on four past seasons and checked on two others. The match total is predicted first and then split between the sides, because one side's corners come partly at the other's expense. Match statistics only: no bookmaker prices go in.</p>
         <p><b>How goals are predicted.</b> The same rating method applied to a blend of goals, xG and shots on target, pulled harder towards average because goals are noisier. A score grid corrects for the extra 0–0 and 1–1 draws a simpler model misses.</p>
         <p><b>League 2</b> markets only offer Over lines, so League 2 shows no Under calls and no under-3 corners.</p>
       </div>
     </details>
   </section>
 </div>
+
+<div class="sheet-back" id="sheetBack" hidden></div>
+<aside class="sheet" id="teamSheet" hidden role="dialog" aria-modal="true" aria-labelledby="teamName"></aside>
 
 <script>
 const DATA = /*__DATA__*/null;
@@ -342,6 +391,8 @@ const sum = a => a.reduce((x,y)=>x+y,0);
 const atLeastP = (pmf, k) => pmf ? sum(pmf.slice(k)) : null;
 
 const TAG = DATA.meta.tag, RATES = DATA.rates;
+// a team name that opens the team page
+const tn = (name, bold) => `<button class="tl${bold ? " b" : ""}" data-team="${esc(name)}">${esc(name)}</button>`;
 const gap = x => Math.abs(x.eh - x.ea);
 const isHigh = mu => +mu >= S.hi;
 const hiChips = x => [[x.home, x.eh], [x.away, x.ea]].filter(([,mu]) => isHigh(mu))
@@ -390,9 +441,9 @@ $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
   + ((DATA.meta.skipped||[]).length ? `<span class="fresh chip warn" title="${esc(DATA.meta.skipped.join("\n"))}">${DATA.meta.skipped.length} Flashscore row${DATA.meta.skipped.length>1?"s":""} not used: team name not recognised</span>` : "");
 const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
 $("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
-$("#defGap").textContent = `The model expects one side to win at least ${TAG.big_gap} more corners than the other. In the last two seasons that side won more corners 75% of the time, and by 2 or more 67% of the time. A prediction, not a call.`;
-$("#defU3").textContent = `A side taking 0, 1 or 2 corners. It happens to about ${pc(avgRate("u3"))} of sides this season. "Low corners" marks sides the model gives ${pc(TAG.low_u3)} or more. In the last two seasons those sides took under 3 about 36% of the time, twice the usual rate. The chance rarely goes above 45%, so it's never a call. Not offered in League 2.`;
-$("#defCS").textContent = `The side concedes no goals. About ${pc(avgRate("cs"))} of sides keep one this season. "Good chance" marks ${pc(TAG.cs)} or more; in the last two seasons those sides kept a clean sheet 40% of the time, against 27% for all sides.`;
+$("#defGap").textContent = `The model expects one side to win at least ${TAG.big_gap} more corners than the other. Over six seasons that side won more corners 72% of the time, and by 2 or more 64% of the time. A prediction, not a call.`;
+$("#defU3").textContent = `A side taking 0, 1 or 2 corners. It happens to about ${pc(avgRate("u3"))} of sides this season. "Low corners" marks sides the model gives ${pc(TAG.low_u3)} or more. Over six seasons those sides took under 3 about 33% of the time, nearly twice the usual rate. The chance rarely goes above 45%, so it's never a call. Not offered in League 2.`;
+$("#defCS").textContent = `The side concedes no goals. About ${pc(avgRate("cs"))} of sides keep one this season. "Good chance" marks ${pc(TAG.cs)} or more; over six seasons those sides kept a clean sheet 40% of the time, against 28% for all sides.`;
 $("#defLine").textContent = `The league's typical corner total this season, rounded to the nearest .5: ${lines}. It's roughly where bookmakers set their main line. Corner total calls are made against it.`;
 
 function renderTabs(){
@@ -407,13 +458,19 @@ function renderTabs(){
   $("#leagueSeg").innerHTML = LEAGUES.map(l => `<button aria-pressed="${l===S.league}" data-l="${l}">${l==="All"?"All leagues":l}</button>`).join("");
 }
 document.addEventListener("click", e => {
+  const tb = e.target.closest("[data-team]"); if (tb){ e.stopPropagation(); openTeam(tb.dataset.team); return; }
+  const jb = e.target.closest("[data-jump]"); if (jb){ jumpTo(jb.dataset.jump); return; }
+  if (e.target.closest("[data-close]") || e.target === $("#sheetBack")){ closeTeam(); return; }
   const r = e.target.closest("[data-r]"); if (r){ S.round = r.dataset.r; S.open.clear(); render(); return; }
   const hb = e.target.closest("[data-hi]"); if (hb){ S.hi = +hb.dataset.hi; store.set("hi", S.hi); render(); return; }
   const l = e.target.closest("[data-l]"); if (l){ S.league = l.dataset.l; store.set("league", S.league); render(); return; }
   const fx = e.target.closest("tr.fx, [data-open]"); if (fx){ const k = fx.dataset.k; S.open.has(k) ? S.open.delete(k) : S.open.add(k); renderFixtures(); return; }
   const th = e.target.closest("th[data-sort]"); if (th){ const k = th.dataset.sort; S.teamSort = {k, dir: S.teamSort.k===k ? -S.teamSort.dir : -1}; renderTeams(); }
 });
-document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("tr.fx")) e.target.click(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.matches("tr.fx")) e.target.click();
+  if (e.key === "Escape" && !$("#teamSheet").hidden) closeTeam();
+});
 
 function rows(){ return v3.filter(x => x.round === S.round && inLeague(x)).sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time) || a.league.localeCompare(b.league) || a.home.localeCompare(b.home)); }
 const key = x => x.home + "|" + x.away;
@@ -471,7 +528,7 @@ function renderCalls(){
   $("#calls").innerHTML = `<div class="callrow head"><span>Match</span><span>Call</span><span class="r">Chance</span><span class="r fairc">Fair odds</span><span class="r">Result</span></div>` +
     calls.map(c => { const d = describe(c, c.x);
       return `<div class="callrow">
-        <span class="m"><b>${esc(c.x.home)} v ${esc(c.x.away)}</b><div class="lg">${new Date(c.x.date).toLocaleDateString("en-GB",{weekday:"short"})} ${esc(c.x.time||"")} · ${esc(c.x.league)}</div></span>
+        <span class="m">${tn(c.x.home, 1)} v ${tn(c.x.away, 1)}<div class="lg">${new Date(c.x.date).toLocaleDateString("en-GB",{weekday:"short"})} ${esc(c.x.time||"")} · ${esc(c.x.league)}</div></span>
         <span class="pick">${esc(d.text)}<div class="why">${esc(d.why)}</div></span>
         <span class="r big">${pc(c.p)}</span><span class="r fairc muted">${fair(c.p)}</span>
         <span class="r">${outcome(c, c.x)}${c.x.hc!=null?`<div class="lg">corners ${c.x.hc}–${c.x.ac} · goals ${c.x.hg}–${c.x.ag}</div>`:""}</span></div>`; }).join("");
@@ -487,31 +544,31 @@ function renderHighlights(){
   const gaps = [...xs].sort((a,b)=>gap(b)-gap(a)).slice(0,5).map(x => {
     const homeFav = x.eh >= x.ea, fav = homeFav ? x.home : x.away, dog = homeFav ? x.away : x.home;
     const ok = x.hc == null || x.hc === x.ac ? null : (x.hc > x.ac) === homeFav;
-    return li(`<b>${esc(fav)}</b> v ${esc(dog)} ${gapChip(x)}`, `+${f1(gap(x))}`,
+    return li(`${tn(fav, 1)} v ${tn(dog)} ${gapChip(x)}`, `+${f1(gap(x))}`,
       `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))} corners${actual(ok, x.hc!=null?`${homeFav?x.hc:x.ac}–${homeFav?x.ac:x.hc}`:"")}`);
   }).join("");
   const his = xs.flatMap(x => [
       {team:x.home, opp:x.away, where:"v", mu:+x.eh, pmf:x.ph, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, pmf:x.pa, x, n:x.ac}])
     .map(o => ({...o, p: atLeastP(o.pmf, S.hi)})).sort((a,b)=>b.p-a.p);
   const hiN = his.filter(o => isHigh(o.mu)).length;
-  const hiList = his.slice(0, Math.max(6, Math.min(hiN, 10))).map(o => li(`<b>${esc(o.team)}</b> ${o.where} ${esc(o.opp)}${isHigh(o.mu)?` <span class="chip hi">High</span>`:""}`, pc(o.p),
+  const hiList = his.slice(0, Math.max(6, Math.min(hiN, 10))).map(o => li(`${tn(o.team, 1)} ${o.where} ${tn(o.opp)}${isHigh(o.mu)?` <span class="chip hi">High</span>`:""}`, pc(o.p),
       `Expected ${f1(o.mu)} corners · chance of ${S.hi}+ · fair odds ${fair(o.p)}${actual(o.n==null?null:o.n>=S.hi, o.n!=null?`took ${o.n}`:"")}`)).join("");
   const lows = xs.filter(x => x.league !== "League 2").flatMap(x => [
       {team:x.home, opp:x.away, where:"v", mu:+x.eh, p:+x.home_u3, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, p:+x.away_u3, x, n:x.ac}])
     .sort((a,b)=>b.p-a.p).slice(0,5)
-    .map(o => li(`<b>${esc(o.team)}</b> ${o.where} ${esc(o.opp)}${lowChip(o.p)}`, pc(o.p),
+    .map(o => li(`${tn(o.team, 1)} ${o.where} ${tn(o.opp)}${lowChip(o.p)}`, pc(o.p),
       `Expected ${f1(o.mu)} corners · fair odds ${fair(o.p)}${actual(o.n==null?null:o.n<3, o.n!=null?`took ${o.n}`:"")}`)).join("");
-  const both = [...xs].sort((a,b)=>b.both4-a.both4).slice(0,5).map(x => li(`${esc(x.home)} v ${esc(x.away)}${callBadge(x,"Both 4+ corners")}`, pc(x.both4),
+  const both = [...xs].sort((a,b)=>b.both4-a.both4).slice(0,5).map(x => li(`${tn(x.home)} v ${tn(x.away)}${callBadge(x,"Both 4+ corners")}`, pc(x.both4),
       `Expected ${f1(x.eh)}–${f1(x.ea)} · fair odds ${fair(x.both4)}${actual(x.hc==null?null:x.hc>=4&&x.ac>=4, x.hc!=null?`${x.hc}–${x.ac}`:"")}`)).join("");
   const totals = [...xs].map(x => { const l = BOOK[x.league] || 10.5, po = +x["o"+String(l).replace(".","")];
       return {x, l, po, lean: Math.abs(po - .5)}; }).sort((a,b)=>b.lean-a.lean).slice(0,5).map(({x,l,po}) => {
       const over = po >= .5, t = x.hc!=null ? x.hc + x.ac : null;
-      return li(`${esc(x.home)} v ${esc(x.away)}${callBadge(x,"Corners total")}`, pc(over?po:1-po),
+      return li(`${tn(x.home)} v ${tn(x.away)}${callBadge(x,"Corners total")}`, pc(over?po:1-po),
         `${over?"Over":"Under"} ${l} · expected ${f1(x.et)}${x.league==="League 2"&&!over?" · unders not offered in League 2":""}${actual(t==null?null:(over?t>l:t<l), t!=null?`${t} corners`:"")}`); }).join("");
-  const goals = [...xs].sort((a,b)=>b.btts-a.btts).slice(0,5).map(x => li(`${esc(x.home)} v ${esc(x.away)}${callBadge(x,"BTTS")}`, pc(x.btts),
+  const goals = [...xs].sort((a,b)=>b.btts-a.btts).slice(0,5).map(x => li(`${tn(x.home)} v ${tn(x.away)}${callBadge(x,"BTTS")}`, pc(x.btts),
       `xG ${f2(x.lh)}–${f2(x.la)} · fair odds ${fair(x.btts)}${actual(x.hg==null?null:x.hg>0&&x.ag>0, x.hg!=null?`${x.hg}–${x.ag}`:"")}`)).join("");
   const wl = xs.flatMap(x => flagsOf(x).map(f => ({...f, x}))).slice(0, 8).map(f =>
-      `<li><span><b>${esc(f.team)}</b> <span class="chip warn">${esc(f.kind)}</span></span><span></span><span class="sub">${esc(f.text)} Next: ${esc(f.x.home)} v ${esc(f.x.away)}.</span></li>`).join("");
+      `<li><span>${tn(f.team, 1)} <span class="chip warn">${esc(f.kind)}</span></span><span></span><span class="sub">${esc(f.text)} Next: ${esc(f.x.home)} v ${esc(f.x.away)}.</span></li>`).join("");
   const wn = xs.reduce((s,x)=>s+flagsOf(x).length,0);
   $("#highlights").innerHTML = `
     <div class="panel"><h3>Warnings <span class="eyebrow">${wn} this gameweek</span></h3><p class="intro">Recent matches that could throw the predictions. Trust the affected matches a little less.</p><ol>${wl||'<p class="empty">Nothing unusual in recent matches.</p>'}</ol>${wn>8?`<p class="small muted">${wn-8} more in the match list below.</p>`:""}</div>
@@ -533,7 +590,7 @@ function renderCleanSheets(){
   const played = xs.some(x => x.hg != null);
   const show = list.slice(0, 12);
   let h = `<thead><tr><th class="l">Side</th><th>Chance</th><th>Fair odds</th><th>Opponent's<br>expected goals</th>${played?"<th>Result</th>":""}</tr></thead><tbody>`;
-  h += show.map(o => `<tr><td class="l"><b>${esc(o.team)}</b>${csChip(o.p)}<div class="lg">${o.venue} ${o.venue==="Home"?"v":"at"} ${esc(o.opp)} · ${esc(o.x.league)}</div></td>
+  h += show.map(o => `<tr><td class="l">${tn(o.team, 1)}${csChip(o.p)}<div class="lg">${o.venue} ${o.venue==="Home"?"v":"at"} ${tn(o.opp)} · ${esc(o.x.league)}</div></td>
       <td class="num">${pc(o.p)}</td><td class="muted">${fair(o.p)}</td><td>${f2(o.oppxg)}</td>
       ${played?`<td>${o.conceded==null?"–":`<span class="chip ${o.conceded===0?'hit':'miss'}">${o.conceded===0?"Kept":"Conceded "+o.conceded}</span>`}</td>`:""}</tr>`).join("");
   if (!show.length) h += `<tr><td class="l" colspan="5"><span class="empty">No matches for this filter.</span></td></tr>`;
@@ -561,7 +618,7 @@ function renderFixtures(){
     const calls = (x.calls||[]).map(c => `<span class="chip ${c.hit==null?'call':c.hit?'hit':'miss'}" title="${pc(c.p)} chance">${esc(describe(c,x).text)}</span>`).join(" ");
     const day = new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"});
     h += `<tr class="fx ${x.calls&&x.calls.length?'has-call':''}" data-k="${esc(k)}" tabindex="0" aria-expanded="${S.open.has(k)}">
-      <td class="l match"><b>${esc(x.home)}</b> v <b>${esc(x.away)}</b><div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · few matches yet":""}</div>${warnChip(x)}</td>
+      <td class="l match">${tn(x.home, 1)} v ${tn(x.away, 1)}<div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · few matches yet":""}</div>${warnChip(x)}</td>
       <td><div class="split"><span class="num">${f1(x.eh)}</span><span class="bar" aria-hidden="true"><i class="h" style="width:${share*100}%"></i><i class="a" style="width:${(1-share)*100}%"></i></span><span class="num">${f1(x.ea)}</span></div>${bigGap(x)||hiChips(x)?`<div style="text-align:right;margin-top:3px;display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap">${hiChips(x)}${gapChip(x)}</div>`:""}</td>
       <td class="num">${f1(x.et)}</td><td>${line}</td><td>${under3}</td><td>${pc(x.both4)}</td>
       <td>${f2(x.lh)}–${f2(x.la)}</td><td>${pc(x.btts)}</td><td>${pc(x.o25)}</td><td>${pc(x.cs_home)} / ${pc(x.cs_away)}${x.cs_home>=TAG.cs||x.cs_away>=TAG.cs?` <span class="chip cs">Good</span>`:""}</td>
@@ -588,7 +645,7 @@ function renderCards(){
     const day = new Date(x.date).toLocaleDateString("en-GB",{weekday:"short"});
     const open = S.open.has(k);
     return `<article class="card ${x.calls&&x.calls.length?'has-call':''}">
-      <div class="top"><div><b>${esc(x.home)}</b> v <b>${esc(x.away)}</b><div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · few matches yet":""}</div></div>
+      <div class="top"><div>${tn(x.home, 1)} v ${tn(x.away, 1)}<div class="lg">${day} ${esc(x.time||"")} · ${esc(x.league)}${+x.sample<3?" · few matches yet":""}</div></div>
         ${x.hc!=null?`<div class="res" style="text-align:right">${x.hc}–${x.ac}<div class="lg">corners · goals ${x.hg}–${x.ag}</div></div>`:""}</div>
       ${calls||flagsOf(x).length||bigGap(x)||hiChips(x)?`<div class="chips">${calls}${hiChips(x)}${gapChip(x)}${warnChip(x)}</div>`:""}
       <div class="band">Corners</div>
@@ -639,7 +696,9 @@ function ladders(x){
   const und = LINES.map(l => rung(`Under ${l}`, 1 - o(l), "u")).join("");
   const warns = flagsOf(x).length ? `<div class="warns">${flagsOf(x).map(f => `<div class="w"><span class="chip warn">${esc(f.kind)}</span> <b>${esc(f.team)}:</b> ${esc(f.text)}</div>`).join("")}</div>` : "";
   const sides = x.ph && x.pa ? sidesChart(x, l2) : "";
-  const act = x.hc != null ? `<div class="callout">Result: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>. The model expected ${f1(x.eh)}–${f1(x.ea)} corners and xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
+  const mm = matchOf(x.home, x.away, x.date);
+  const extra = mm ? [mm.hp != null ? ` Possession ${mm.hp}–${mm.ap}%.` : "", mm.hcr != null ? ` Crosses ${mm.hcr}–${mm.acr}.` : ""].join("") : "";
+  const act = x.hc != null ? `<div class="callout">Result: corners <b>${x.hc}–${x.ac}</b> (total ${x.hc+x.ac}), goals <b>${x.hg}–${x.ag}</b>.${extra} The model expected ${f1(x.eh)}–${f1(x.ea)} corners and xG ${f2(x.lh)}–${f2(x.la)}.</div>` : "";
   return `<div style="display:flex;flex-direction:column;gap:14px">${warns}${act}${sides}<div class="ladders">
     <div class="ladder">${rhead("Total corners")}${tot}</div>
     ${l2 ? `<div class="ladder">${rhead("Each side")}${rung(`${x.home} 4+`, +x.home4)}${rung(`${x.away} 4+`, +x.away4)}${rung("Both 4+", +x.both4)}<p class="small muted">League 2 markets offer Over lines only.</p></div>`
@@ -705,12 +764,228 @@ function renderTeams(){
   const xs = DATA.teams.filter(inLeague).sort((a,b) => (typeof a[k]==="string" ? a[k].localeCompare(b[k]) : ((a[k]??-1)-(b[k]??-1))) * dir);
   let h = `<thead>${groups}<tr>${cols.map(([c,t,cl]) => `<th class="sortable ${cl||""}" data-sort="${c}" aria-sort="${k===c?(dir<0?'descending':'ascending'):'none'}">${t}${k===c?(dir<0?" ↓":" ↑"):""}</th>`).join("")}</tr></thead><tbody>`;
   for (const t of xs){
-    h += `<tr>${cols.map(([c,,cl]) => c==="team" ? `<td class="l"><b>${esc(t.team)}</b><div class="lg">${esc(t.league)}</div></td>`
+    h += `<tr>${cols.map(([c,,cl]) => c==="team" ? `<td class="l">${tn(t.team, 1)}<div class="lg">${esc(t.league)}</div></td>`
       : `<td>${c==="p"?t.p:(c.startsWith("xg")?f2(t[c]):f1(t[c]))}</td>`).join("")}</tr>`;
   }
   $("#teamTable").innerHTML = h + `</tbody>`;
 }
 
+// ---- jump bar
+const JUMPS = [["callsSec","Calls"],["predSec","Predictions"],["csSec","Clean sheets"],["fxSec","Matches"],
+               ["reviewSec","Track record"],["teamsSec","Teams"],["helpSec","How it works"]];
+$("#jump").innerHTML = JUMPS.map(([id, t]) => `<button data-jump="${id}">${t}</button>`).join("");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function jumpTo(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (id === "helpSec") $("#glossary").open = true;
+  el.scrollIntoView({behavior: reduceMotion ? "auto" : "smooth", block: "start"});
+}
+function syncControls(){
+  // the jump bar sits under the controls while they stick (wide screens), at the top on phones
+  const ctrl = $(".controls");
+  const h = getComputedStyle(ctrl).position === "sticky" ? ctrl.offsetHeight : 0;
+  document.documentElement.style.setProperty("--ctrl-h", h + "px");
+}
+let lastJump = null;
+function markJump(){
+  const off = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--ctrl-h")) || 0) + 90;
+  let cur = null;
+  for (const [id] of JUMPS){ const el = document.getElementById(id); if (el && el.getBoundingClientRect().top - off <= 0) cur = id; }
+  if (cur === lastJump) return;
+  lastJump = cur;
+  $("#jump").querySelectorAll("button").forEach(b => {
+    const on = b.dataset.jump === cur;
+    b.setAttribute("aria-current", on ? "true" : "false");
+    if (on) $("#jump").scrollLeft = b.offsetLeft - 16;
+  });
+}
+let ticking = false;
+window.addEventListener("scroll", () => { if (!ticking){ ticking = true; requestAnimationFrame(() => { ticking = false; markJump(); }); } }, {passive: true});
+window.addEventListener("resize", syncControls);
+if (window.ResizeObserver) new ResizeObserver(syncControls).observe($(".controls"));
+
+// ---- team pages
+const MATCHES = DATA.matches || [];
+const matchOf = (h, a, d) => MATCHES.find(m => m.h === h && m.a === a && Math.abs(new Date(m.d) - new Date(d)) <= 7*864e5);
+const predOf = (h, a, d) => v3.find(x => x.home === h && x.away === a && Math.abs(new Date(x.date) - new Date(d)) <= 7*864e5);
+const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const ALL_TEAMS = [...new Set([...DATA.teams.map(t => t.team), ...v3.flatMap(x => [x.home, x.away])])];
+const TEAM_BY_SLUG = Object.fromEntries(ALL_TEAMS.map(t => [slug(t), t]));
+let depth = 0, lastFocus = null;       // team pages opened on top of the board
+
+function openTeam(name){
+  // add a history entry so the back button closes the page; some viewers
+  // don't allow that, and the page still opens without it
+  try { history.pushState({team: name}, "", "#team-" + slug(name)); depth++; } catch(e){}
+  showTeam(name);
+}
+function closeTeam(){
+  if (depth > 0){
+    const d = depth; depth = 0;
+    try { history.go(-d); return; } catch(e){}
+  }
+  hideTeam();
+}
+function route(){
+  const h = location.hash.slice(1);
+  if (h.startsWith("team-") && TEAM_BY_SLUG[h.slice(5)]) showTeam(TEAM_BY_SLUG[h.slice(5)]);
+  else hideTeam();
+}
+window.addEventListener("popstate", () => { depth = Math.max(0, depth - 1); route(); });
+window.addEventListener("hashchange", route);
+function hideTeam(){
+  if ($("#teamSheet").hidden) return;
+  $("#teamSheet").hidden = true; $("#sheetBack").hidden = true;
+  document.documentElement.style.overflow = "";
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+}
+
+function teamMatches(team){
+  return MATCHES.filter(m => (m.h === team || m.a === team) && m.hc != null).map(m => {
+    const home = m.h === team, p = predOf(m.h, m.a, m.d);
+    return {m, home, d: m.d, opp: home ? m.a : m.h, cf: home ? m.hc : m.ac, ca: home ? m.ac : m.hc,
+            gf: home ? m.hg : m.ag, ga: home ? m.ag : m.hg, xf: home ? m.hxg : m.axg, xa: home ? m.axg : m.hxg,
+            poss: home ? m.hp : m.ap, cr: home ? m.hcr : m.acr, cra: home ? m.acr : m.hcr,
+            red: home ? m.hr : m.ar, redA: home ? m.ar : m.hr,
+            ef: p ? (home ? p.eh : p.ea) : null, ec: p ? (home ? p.ea : p.eh) : null};
+  });
+}
+const avg = xs => xs.length ? xs.reduce((a,b)=>a+b,0) / xs.length : null;
+const dm = d => new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+
+function showTeam(team){
+  const sheet = $("#teamSheet");
+  if (sheet.hidden) lastFocus = document.activeElement;
+  const T = DATA.teams.find(t => t.team === team) || {};
+  const L = (DATA.last_season || {})[team];
+  const ms = teamMatches(team);
+  const home = ms.filter(x => x.home), away = ms.filter(x => !x.home);
+  const last6 = ms.slice(-6);
+  const withPoss = ms.filter(x => x.poss != null), withCr = ms.filter(x => x.cr != null);
+  const league = T.league || (v3.find(x => x.home === team || x.away === team) || {}).league || "";
+  const tile = (k, v, sub) => `<div class="tile"><span class="k">${k}</span><span class="v">${v}</span>${sub ? `<span class="s">${sub}</span>` : ""}</div>`;
+  const tiles = [
+    tile("Corners won a match", f1(avg(ms.map(x => x.cf))), `home ${f1(avg(home.map(x => x.cf)))} · away ${f1(avg(away.map(x => x.cf)))}`),
+    tile("Corners conceded a match", f1(avg(ms.map(x => x.ca))), `home ${f1(avg(home.map(x => x.ca)))} · away ${f1(avg(away.map(x => x.ca)))}`),
+    tile("Last 6 matches", `${f1(avg(last6.map(x => x.cf)))}–${f1(avg(last6.map(x => x.ca)))}`, "corners won–conceded a match"),
+    tile("Model expects", `${f1(T.m_h_cf)} / ${f1(T.m_a_cf)}`, "corners won v an average side, home / away"),
+    tile("xG a match", `${f2(avg(ms.filter(x => x.xf != null).map(x => x.xf)))}–${f2(avg(ms.filter(x => x.xa != null).map(x => x.xa)))}`, "for–against"),
+  ];
+  if (withPoss.length) tiles.push(tile("Possession", Math.round(avg(withPoss.map(x => x.poss))) + "%", `average of ${withPoss.length} match${withPoss.length > 1 ? "es" : ""} from Flashscore`));
+  if (withCr.length) tiles.push(tile("Crosses a match", `${f1(avg(withCr.map(x => x.cr)))}–${f1(avg(withCr.map(x => x.cra)))}`, `for–against, ${withCr.length} match${withCr.length > 1 ? "es" : ""}`));
+
+  const next = v3.filter(x => (x.home === team || x.away === team) && x.hc == null)
+    .sort((a,b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 3);
+  const nextHtml = next.map(x => {
+    const h = x.home === team, e1 = h ? x.eh : x.ea, e2 = h ? x.ea : x.eh, pmf = h ? x.ph : x.pa;
+    const flags = flagsOf(x).filter(f => f.team === team);
+    const calls = (x.calls||[]).map(c => `<span class="chip call">${esc(describe(c,x).text)} · ${pc(c.p)}</span>`).join(" ");
+    return `<div class="next"><div class="top"><span><b>${new Date(x.date).toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}</b> ${esc(x.time||"")} · ${h ? "v" : "at"} ${tn(h ? x.away : x.home, 1)}</span>
+      <span class="small muted">${esc(x.league)}</span></div>
+      <div>Expected corners <b>${f1(e1)}–${f1(e2)}</b> · chance of ${S.hi}+ <b>${pc(atLeastP(pmf, S.hi))}</b> · clean sheet <b>${pc(h ? x.cs_home : x.cs_away)}</b> · xG ${f2(h ? x.lh : x.la)}–${f2(h ? x.la : x.lh)}</div>
+      ${calls || flags.length ? `<div class="chips" style="display:flex;flex-wrap:wrap;gap:6px">${calls}${flags.map(f => `<span class="chip warn" title="${esc(f.text)}">${esc(f.kind)}</span>`).join("")}</div>` : ""}
+      ${flags.length ? `<div class="small muted">${flags.map(f => esc(f.text)).join(" ")}</div>` : ""}</div>`;
+  }).join("");
+
+  const showPoss = withPoss.length > 0, showCr = withCr.length > 0;
+  const log = [...ms].reverse().map(x => `<tr><td class="l">${dm(x.d)}</td><td class="l">${x.home ? "v" : "at"} ${tn(x.opp)}</td>
+      <td class="num">${x.cf}–${x.ca}</td><td class="muted">${x.ef != null ? `${f1(x.ef)}–${f1(x.ec)}` : "–"}</td>
+      <td>${x.gf}–${x.ga}</td><td>${x.xf != null ? `${f2(x.xf)}–${f2(x.xa)}` : "–"}</td>
+      ${showPoss ? `<td>${x.poss != null ? x.poss + "%" : "–"}</td>` : ""}${showCr ? `<td>${x.cr != null ? `${x.cr}–${x.cra}` : "–"}</td>` : ""}
+      <td class="l small">${x.red ? `<span class="chip warn">${x.red > 1 ? x.red + " sent off" : "Sent off"}</span>` : ""}${x.redA ? `<span class="chip">Opp. sent off</span>` : ""}</td></tr>`).join("");
+
+  sheet.innerHTML = `
+    <div class="shead"><div><div class="eyebrow">${esc(league)} · ${ms.length} match${ms.length === 1 ? "" : "es"} this season</div>
+      <h2 id="teamName">${esc(team)}</h2>
+      ${L ? `<div class="small muted">Last season (${esc(L.league)}): won ${f1(L.cf)}, conceded ${f1(L.ca)} corners a match over ${L.p} matches.</div>` : `<div class="small muted">New to these three divisions this season.</div>`}</div>
+      <button class="x" data-close="1" aria-label="Close team page">×</button></div>
+    <div class="tiles">${tiles.join("")}</div>
+    <section><h3>Corners, match by match</h3>${cornerChart(ms)}</section>
+    ${next.length ? `<section><h3>Next up</h3><div class="nextlist">${nextHtml}</div></section>` : ""}
+    <section><h3>Every match this season</h3>
+      <div class="tablebox"><table><thead><tr><th class="l">Date</th><th class="l">Opponent</th><th>Corners</th><th>Expected</th><th>Goals</th><th>xG</th>${showPoss ? "<th>Possession</th>" : ""}${showCr ? "<th>Crosses</th>" : ""}<th class="l"></th></tr></thead>
+      <tbody>${log || `<tr><td class="l" colspan="9"><span class="empty">No matches yet.</span></td></tr>`}</tbody></table></div>
+      <p class="small muted">Corners and goals are ${esc(team)}'s first. "Expected" is what the model predicted before kick-off.${showPoss || showCr ? "" : " Possession and crosses appear here for matches entered from Flashscore."}</p></section>`;
+  sheet.hidden = false; $("#sheetBack").hidden = false;
+  document.documentElement.style.overflow = "hidden";
+  sheet.scrollTop = 0;
+  wireChart(sheet);
+  sheet.querySelector(".x").focus({preventScroll: true});
+}
+
+// mirrored columns: corners won up (claret), conceded down (blue), expected as a tick
+function cornerChart(ms){
+  if (!ms.length) return `<p class="empty">No matches yet this season.</p>`;
+  const n = ms.length;
+  const avail = Math.max(300, Math.min(760, ($("#teamSheet").clientWidth || window.innerWidth) - 90));
+  const slot = Math.max(20, Math.min(80, avail / n)), bw = Math.min(20, slot - 6);
+  const left = 30, top = 8, half = 76, labelH = 30;
+  const maxV = Math.max(10, ...ms.map(x => Math.max(x.cf, x.ca, x.ef || 0, x.ec || 0)));
+  const ymax = Math.ceil(maxV / 5) * 5;
+  const W = left + n * slot + 6, H = top + half * 2 + labelH, base = top + half;
+  const y = v => v / ymax * (half - 2);
+  let g = "";
+  for (let v = 5; v <= ymax; v += 5){
+    for (const sgn of [-1, 1]){
+      const yy = base + sgn * (y(v) + 1);
+      g += `<line x1="${left}" x2="${W}" y1="${yy}" y2="${yy}" stroke="var(--line)" stroke-width="1"/>
+            <text x="${left - 6}" y="${yy + 3.5}" text-anchor="end">${v}</text>`;
+    }
+  }
+  g += `<line x1="${left}" x2="${W}" y1="${base}" y2="${base}" stroke="var(--line)" stroke-width="1"/>`;
+  const up = (x, h) => { const r = Math.min(4, h), t = base - 1 - h;
+    return `M${x},${base - 1}V${t + r}Q${x},${t} ${x + r},${t}H${x + bw - r}Q${x + bw},${t} ${x + bw},${t + r}V${base - 1}Z`; };
+  const down = (x, h) => { const r = Math.min(4, h), b = base + 1 + h;
+    return `M${x},${base + 1}V${b - r}Q${x},${b} ${x + r},${b}H${x + bw - r}Q${x + bw},${b} ${x + bw},${b - r}V${base + 1}Z`; };
+  ms.forEach((m, i) => {
+    const sx = left + i * slot, bx = sx + (slot - bw) / 2;
+    g += `<g class="slot" tabindex="0" data-i="${i}" role="img" aria-label="${esc(`${dm(m.d)} ${m.home ? "v" : "at"} ${m.opp}: won ${m.cf}, conceded ${m.ca}`)}">
+      <rect class="hl" x="${sx}" y="${top}" width="${slot}" height="${half * 2}" rx="4" fill="transparent"/>
+      ${m.cf > 0 ? `<path d="${up(bx, y(m.cf))}" fill="var(--accent)"/>` : ""}
+      ${m.ca > 0 ? `<path d="${down(bx, y(m.ca))}" fill="var(--blue)"/>` : ""}
+      ${m.ef != null ? `<line x1="${bx - 2}" x2="${bx + bw + 2}" y1="${base - 1 - y(m.ef)}" y2="${base - 1 - y(m.ef)}" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>` : ""}
+      ${m.ec != null ? `<line x1="${bx - 2}" x2="${bx + bw + 2}" y1="${base + 1 + y(m.ec)}" y2="${base + 1 + y(m.ec)}" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>` : ""}
+      <text x="${sx + slot / 2}" y="${top + half * 2 + 13}" text-anchor="middle">${esc(m.opp.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase())}</text>
+      <text x="${sx + slot / 2}" y="${top + half * 2 + 25}" text-anchor="middle">${m.home ? "H" : "A"}</text>
+      <rect class="hit" x="${sx}" y="${top}" width="${slot}" height="${half * 2 + labelH}"/></g>`;
+  });
+  return `<div class="chartbox" data-chart="1">
+    <div class="legend"><span><i style="background:var(--accent)"></i>Corners won</span><span><i style="background:var(--blue)"></i>Corners conceded</span><span><i class="ln"></i>Expected before kick-off</span></div>
+    <div class="scroll"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Corners won and conceded in each match this season">${g}</svg></div>
+    <div class="tip" hidden></div></div>`;
+}
+function wireChart(root){
+  const box = root.querySelector("[data-chart]");
+  if (!box) return;
+  const tip = box.querySelector(".tip"), team = $("#teamName").textContent, ms = teamMatches(team);
+  const show = el => {
+    const m = ms[+el.dataset.i]; if (!m) return;
+    tip.replaceChildren();
+    const line = (strong, rest) => { const d = document.createElement("div");
+      if (strong){ const b = document.createElement("strong"); b.textContent = strong; d.append(b, " "); }
+      d.append(rest); tip.append(d); };
+    line(null, `${dm(m.d)} · ${m.home ? "v" : "at"} ${m.opp}`);
+    line(`${m.cf}–${m.ca}`, "corners won–conceded");
+    if (m.ef != null) line(`${f1(m.ef)}–${f1(m.ec)}`, "expected");
+    line(`${m.gf}–${m.ga}`, "goals");
+    tip.hidden = false;
+    // beside the column, never on top of it: to its right unless that runs off the edge
+    const br = box.getBoundingClientRect(), r = el.getBoundingClientRect();
+    const colL = r.left - br.left, colR = r.right - br.left, w = tip.offsetWidth;
+    const x = colR + 8 + w <= br.width - 4 ? colR + 8 : Math.max(4, colL - 8 - w);
+    tip.style.left = x + "px";
+    tip.style.top = Math.max(4, r.top - br.top + r.height * 0.28 - tip.offsetHeight / 2) + "px";
+  };
+  box.querySelectorAll(".slot").forEach(el => {
+    el.addEventListener("pointerenter", () => show(el));
+    el.addEventListener("focus", () => show(el));
+    el.addEventListener("pointerleave", () => { tip.hidden = true; });
+    el.addEventListener("blur", () => { tip.hidden = true; });
+  });
+}
+
 function render(){ renderTabs(); renderLede(); renderCalls(); renderHighlights(); renderCleanSheets(); renderFixtures(); renderReview(); renderTeams(); }
 render();
+syncControls(); markJump(); route();
 </script>

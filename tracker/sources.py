@@ -25,7 +25,7 @@ FIXTURE_URLS = {
 }
 
 NUM_FIELDS = ["hg", "ag", "hc", "ac", "hxg", "axg", "hs", "as_", "hst", "ast",
-              "hr", "ar"]
+              "hr", "ar", "hp", "ap", "hcr", "acr"]    # hp/ap possession %, hcr/acr crosses
 FIELDS = ["date", "time", "league", "home", "away"] + NUM_FIELDS + ["source"]
 
 # football-data column -> our field
@@ -153,7 +153,9 @@ def get_fixtures(season, log=print):
 def get_manual(path, log=print):
     """
     manual_results.csv - header row required:
-    Date,League,Home,Away,HomeGoals,AwayGoals,HomeCorners,AwayCorners[,HomePossession,AwayPossession]
+    Date,League,Home,Away,HomeGoals,AwayGoals,HomeCorners,AwayCorners
+    optional: HomePossession,AwayPossession,HomeCrosses,AwayCrosses
+    (crosses as attempted crosses; "7/22" or "22" both read as 22)
     """
     if not os.path.exists(path):
         return []
@@ -173,11 +175,29 @@ def get_manual(path, log=print):
         m = {k: None for k in NUM_FIELDS}
         m.update({"date": d, "time": "", "league": league, "home": h, "away": a,
                   "hg": fnum(g.get("homegoals")), "ag": fnum(g.get("awaygoals")),
-                  "hc": hc, "ac": ac, "source": "manual"})
+                  "hc": hc, "ac": ac, "source": "manual",
+                  "hp": _stat(g, "homepossession", "home possession", "hp"),
+                  "ap": _stat(g, "awaypossession", "away possession", "ap"),
+                  "hcr": _stat(g, "homecrosses", "home crosses", "hcr"),
+                  "acr": _stat(g, "awaycrosses", "away crosses", "acr")})
         out.append(m)
     if out:
         log(f"  Manual results: {len(out)} rows")
     return out
+
+
+def _stat(g, *names):
+    """A number from a manual column: '64', '64%', '7/22' (-> 22 attempted)."""
+    for n in names:
+        v = (g.get(n) or "").strip().rstrip("%")
+        if not v:
+            continue
+        if "/" in v:
+            v = v.split("/")[-1]
+        x = fnum(v.split("(")[0].strip())
+        if x is not None:
+            return x
+    return None
 
 
 def merge_results(official, manual, known):
@@ -194,6 +214,9 @@ def merge_results(official, manual, known):
     have = {}
     for m in official:
         have.setdefault((m["home"], m["away"]), []).append(m["date"])
+    by_key = {}
+    for m in official:
+        by_key.setdefault((m["home"], m["away"]), []).append(m)
     extra, skipped = [], []
     for m in manual:
         bad = [t for t in (m["home"], m["away"]) if (m["league"], t) not in known]
@@ -201,7 +224,14 @@ def merge_results(official, manual, known):
             skipped.append(f'{m["date"]:%-d %b} {m["home"]} v {m["away"]}: '
                            f'{" and ".join(bad)} not recognised in {m["league"]}')
             continue
-        if not any(abs((d - m["date"]).days) <= 3 for d in have.get((m["home"], m["away"]), [])):
+        same = [o for o in by_key.get((m["home"], m["away"]), []) if abs((o["date"] - m["date"]).days) <= 3]
+        if same:
+            # the feed's numbers win, but it has no possession or crosses:
+            # keep Flashscore's
+            for k in ("hp", "ap", "hcr", "acr"):
+                if m.get(k) is not None and same[0].get(k) is None:
+                    same[0][k] = m[k]
+        else:
             extra.append(m)
     return official + extra, len(extra), skipped
 

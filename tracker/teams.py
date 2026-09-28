@@ -102,6 +102,11 @@ TEAMS = {
     "Hartlepool": ["Hartlepool United"],
     "Wealdstone": [],
     "Barrow": ["Barrow AFC"],
+    # clubs in the history (2017-18 on) that have since left these divisions
+    "Aston Villa": [], "Bournemouth": ["AFC Bournemouth"], "Brentford": [],
+    "Fulham": [], "Bury": [], "Macclesfield": ["Macclesfield Town"],
+    "Scunthorpe": ["Scunthorpe United", "Scunthorpe Utd"],
+    "Southend": ["Southend United", "Southend Utd"], "Yeovil": ["Yeovil Town"],
 }
 
 _FILLER = {"fc", "afc", "utd", "united", "town", "city", "rovers", "athletic",

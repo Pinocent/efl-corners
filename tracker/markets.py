@@ -11,10 +11,10 @@ Treating the two sides as independent (the obvious approach, and what this
 file used to do) gets two things wrong. The sides' counts pull against each
 other (when one dominates, the other wins fewer; correlation about -0.2 in
 every EFL division), so the total is much less spread out than two
-independent counts would suggest. Replaying 2025-26 with parameters fitted
-on 2024-25, independence said "over 7.5" 72% of the time when it happened
-77%, and "over 13.5" 18% when it happened 15%; the joint model says 76% and
-15%. The two spread parameters below were fitted the same way.
+independent counts would suggest - independence overstated its spread by
+about a third. Replaying six seasons, the joint model puts "over 7.5" at
+76% (it happened 77.5%) and "over 13.5" at 17.5% (16.4%). The two spread parameters are tuned with the rest of the model
+(PARAMS in model.py); the defaults here match.
 
 Goals: Poisson with the Dixon-Coles low-score correction, which fixes the
 well-known under-count of 0-0 and 1-1 draws - and so directly affects both
@@ -29,7 +29,7 @@ MAX_GOALS = 10
 TOTAL_LINES = (7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5)
 SIDE_KEEP = 16        # per-side chances kept for the dashboard (0..15 corners)
 
-TOTAL_SIZE = 80.0     # spread of the match total (higher = closer to Poisson)
+TOTAL_SIZE = 40.0     # spread of the match total (higher = closer to Poisson)
 SPLIT_KAPPA = 18.0    # spread of the split (lower = more lopsided matches)
 
 
