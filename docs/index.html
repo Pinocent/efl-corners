@@ -266,6 +266,29 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
 #teamTable th:first-child{background:var(--sunk)}
 @media (max-width:700px){ .ladders{grid-template-columns:1fr} .seg button{padding:5px 9px} }
 @media (max-width:560px){ h1{font-size:28px} .lede h2{font-size:26px} header.top .meta{text-align:left} .freshness{justify-content:flex-start} dl.terms{grid-template-columns:1fr} }
+/* referees: a dropdown list, then that referee's season */
+.refdrop{position:relative;width:min(520px,100%)}
+.refdrop summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-weight:600}
+.refdrop summary::-webkit-details-marker{display:none}
+.refdrop summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);
+  transform:translateY(-2px) rotate(45deg);flex:none;transition:transform .15s}
+.refdrop[open] summary::after{transform:translateY(2px) rotate(-135deg)}
+.refdrop[open] summary{border-color:var(--accent)}
+.refpanel{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:4;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.2);display:flex;flex-direction:column;overflow:hidden}
+.reftools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;border-bottom:1px solid var(--line)}
+.reftools input{flex:1 1 150px;min-width:0;font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--ground);color:var(--ink)}
+.reflist{max-height:340px;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column}
+.refrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:2px 12px;align-items:center;text-align:left;border:0;
+  border-bottom:1px solid var(--line);background:none;padding:9px 14px;cursor:pointer}
+.refrow:last-child{border-bottom:0}
+.refrow:hover,.refrow:focus-visible{background:var(--sunk)}
+.refrow[aria-current="true"]{box-shadow:inset 3px 0 0 var(--accent);background:var(--accent-soft)}
+.refrow .nm{font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.refrow .ri{font-size:12.5px;color:var(--muted);text-align:right;white-space:nowrap}
+.refhead{display:flex;flex-direction:column;gap:4px}
+.refhead h3{font-size:34px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -353,6 +376,24 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
       <p>Corners per match this season. “Expected” is what the model rates each side at against an average opponent, after allowing for who they've played. Tap a team for its own page.</p>
     </div>
     <div class="tablebox"><table id="teamTable"></table></div>
+  </section>
+
+  <section id="refSec">
+    <div class="sechead">
+      <h2>Referees</h2>
+      <p id="refIntro"></p>
+    </div>
+    <details class="refdrop" id="refDrop">
+      <summary id="refSum"></summary>
+      <div class="refpanel">
+        <div class="reftools">
+          <input id="refQ" type="search" placeholder="Search referees" aria-label="Search referees" autocomplete="off">
+          <span class="seg" id="refSort" role="group" aria-label="Sort referees"></span>
+        </div>
+        <div class="reflist" id="refList"></div>
+      </div>
+    </details>
+    <div id="refDetail" aria-live="polite"></div>
   </section>
 
   <section id="helpSec">
@@ -484,6 +525,9 @@ function renderTabs(){
   $("#leagueSeg").innerHTML = LEAGUES.map(l => `<button aria-pressed="${l===S.league}" data-l="${l}">${l==="All"?"All leagues":l}</button>`).join("");
 }
 document.addEventListener("click", e => {
+  if (!e.target.closest("#refDrop")) $("#refDrop").open = false;
+  const rp = e.target.closest("[data-refpick]"); if (rp){ RS.sel = rp.dataset.refpick; $("#refDrop").open = false; renderRefs(); $("#refDrop summary").focus(); return; }
+  const rs = e.target.closest("[data-refsort]"); if (rs){ RS.sort = rs.dataset.refsort; renderRefList(); return; }
   const tb = e.target.closest("[data-team]"); if (tb){ e.stopPropagation(); openTeam(tb.dataset.team); return; }
   const jb = e.target.closest("[data-jump]"); if (jb){ jumpTo(jb.dataset.jump); return; }
   if (e.target.closest("[data-close]") || e.target === $("#sheetBack")){ closeTeam(); return; }
@@ -496,6 +540,7 @@ document.addEventListener("click", e => {
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.matches("tr.fx")) e.target.click();
   if (e.key === "Escape" && !$("#teamSheet").hidden) closeTeam();
+  else if (e.key === "Escape" && $("#refDrop").open){ $("#refDrop").open = false; $("#refDrop summary").focus(); }
 });
 
 function rows(){ return v3.filter(x => x.round === S.round && inLeague(x)).sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time) || a.league.localeCompare(b.league) || a.home.localeCompare(b.home)); }
@@ -828,7 +873,7 @@ function renderTeams(){
 
 // ---- jump bar
 const JUMPS = [["callsSec","Calls"],["predSec","Predictions"],["csSec","Clean sheets"],["cardsSec","Cards"],["fxSec","Matches"],
-               ["reviewSec","Track record"],["teamsSec","Teams"],["helpSec","How it works"]];
+               ["reviewSec","Track record"],["teamsSec","Teams"],["refSec","Referees"],["helpSec","How it works"]];
 $("#jump").innerHTML = JUMPS.map(([id, t]) => `<button data-jump="${id}">${t}</button>`).join("");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function jumpTo(id){
@@ -1048,8 +1093,155 @@ function wireChart(root){
   });
 }
 
+// ---- referees: this season, match by match
+const RS = {sel: null, sort: "name", q: ""};
+const YC = "#E3B341";   // yellow card
+const hasCards = m => m.hy != null && m.ay != null;
+const hasFouls = m => m.hf != null && m.af != null;
+const hasCorners = m => m.hc != null && m.ac != null;
+const hasGoals = m => m.hg != null && m.ag != null;
+const yel = m => (m.hy || 0) + (m.ay || 0), red = m => (m.hr || 0) + (m.ar || 0), tot = m => yel(m) + red(m);
+const hCards = m => (m.hy || 0) + (m.hr || 0), aCards = m => (m.ay || 0) + (m.ar || 0);   // a red counts as one card, as in the model
+const refLine = m => CARD_LINE[m.lg] || 3.5;
+const surname = n => n.split(" ").slice(1).join(" ") || n;
+const REF_MS = MATCHES.filter(m => m.ref);
+
+// what an average referee shows in each division this season, to compare against
+const LGM = {};
+for (const lg of new Set(MATCHES.map(m => m.lg))){
+  const ms = MATCHES.filter(m => m.lg === lg), c = ms.filter(hasCards);
+  LGM[lg] = {cards: avg(c.map(tot)), y: avg(c.map(yel)), h: avg(c.map(hCards)), a: avg(c.map(aCards)),
+    over: c.length ? c.filter(m => tot(m) > refLine(m)).length / c.length : null,
+    fouls: avg(ms.filter(hasFouls).map(m => m.hf + m.af)),
+    corners: avg(ms.filter(hasCorners).map(m => m.hc + m.ac)),
+    goals: avg(ms.filter(hasGoals).map(m => m.hg + m.ag))};
+}
+// the league average for the divisions this referee actually worked in
+const lgBase = (ms, k) => avg(ms.map(m => (LGM[m.lg] || {})[k]).filter(v => v != null));
+const vs = (x, b) => x == null || b == null ? "" : ` · ${x >= b ? "+" : "−"}${Math.abs(x - b).toFixed(1)}`;
+
+const REF_LIST = (() => {
+  const by = {};
+  for (const m of REF_MS) (by[m.ref] = by[m.ref] || []).push(m);
+  return Object.entries(by).map(([name, ms]) => ({name, n: ms.length, cpm: avg(ms.filter(hasCards).map(tot)), f: (REFS[name] || {}).factor}));
+})();
+const refChip2 = f => refWord(f) ? ` <span class="chip ${refWord(f)}">${refWord(f) === "strict" ? "Strict" : "Lenient"}</span>` : "";
+
+function renderRefList(){
+  const q = RS.q.trim().toLowerCase();
+  const bySurname = (a, b) => surname(a.name).localeCompare(surname(b.name)) || a.name.localeCompare(b.name);
+  const order = {name: bySurname,
+                 n: (a, b) => b.n - a.n || bySurname(a, b),
+                 cards: (a, b) => (b.cpm == null ? -1 : b.cpm) - (a.cpm == null ? -1 : a.cpm) || b.n - a.n || bySurname(a, b)}[RS.sort];
+  $("#refSort").innerHTML = [["name", "A–Z"], ["n", "Most matches"], ["cards", "Most cards"]]
+    .map(([k, t]) => `<button data-refsort="${k}" aria-pressed="${RS.sort === k}">${t}</button>`).join("");
+  $("#refList").innerHTML = REF_LIST.filter(r => r.name.toLowerCase().includes(q)).sort(order).map(r =>
+    `<button class="refrow" data-refpick="${esc(r.name)}" aria-current="${r.name === RS.sel}">
+      <span class="nm">${esc(r.name)}${refChip2(r.f)}</span>
+      <span class="ri">${r.n} match${r.n === 1 ? "" : "es"}</span><span class="ri">${r.cpm != null ? f1(r.cpm) + " cards" : "–"}</span></button>`).join("")
+    || `<p class="empty" style="padding:12px 14px">No referee matches “${esc(RS.q)}”.</p>`;
+}
+
+function refChart(ms){
+  const n = ms.length;
+  if (!n) return "";
+  const slot = Math.max(62, Math.min(90, 640 / n)), bw = Math.min(28, slot - 22);
+  const left = 28, top = 22, ph = 110, lab = 36, base = top + ph;
+  const avgOf = m => (LGM[m.lg] || {}).cards || 0;
+  const ymax = Math.max(6, Math.ceil(Math.max(...ms.map(tot), ...ms.map(avgOf)) / 2) * 2);
+  const y = v => v / ymax * ph, W = left + n * slot + 6, H = base + lab;
+  let g = "";
+  for (let v = 0; v <= ymax; v += 2){
+    const yy = base - y(v);
+    g += `<line x1="${left}" x2="${W}" y1="${yy}" y2="${yy}" stroke="var(--line)" stroke-width="1"/><text x="${left - 6}" y="${yy + 3.5}" text-anchor="end">${v}</text>`;
+  }
+  ms.forEach((m, i) => {
+    const sx = left + i * slot, bx = sx + (slot - bw) / 2, yh = y(yel(m)), rh = y(red(m)), t = tot(m);
+    const say = `${dm(m.d)} ${m.h} v ${m.a}: ${yel(m)} yellow, ${red(m)} red, ${t} cards. League average ${f1(avgOf(m))}.`;
+    g += `<g role="img" aria-label="${esc(say)}"><title>${esc(say)}</title>
+      ${yh > 0 ? `<rect x="${bx}" y="${base - yh}" width="${bw}" height="${yh}" rx="2" fill="${YC}"/>` : ""}
+      ${rh > 0 ? `<rect x="${bx}" y="${base - yh - rh - (yh > 0 ? 1 : 0)}" width="${bw}" height="${rh}" rx="2" fill="var(--bad)"/>` : ""}
+      <text x="${sx + slot / 2}" y="${base - y(t) - 6}" text-anchor="middle" style="fill:var(--ink);font-weight:600">${t}</text>
+      <line x1="${bx - 3}" x2="${bx + bw + 3}" y1="${base - y(avgOf(m))}" y2="${base - y(avgOf(m))}" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
+      <text x="${sx + slot / 2}" y="${base + 14}" text-anchor="middle">${dm(m.d)}</text>
+      <text x="${sx + slot / 2}" y="${base + 27}" text-anchor="middle">${esc(m.h.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase())} v ${esc(m.a.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase())}</text></g>`;
+  });
+  return `<div class="chartbox">
+    <div class="legend"><span><i style="background:${YC}"></i>Yellow cards</span><span><i style="background:var(--bad)"></i>Red cards</span><span><i class="ln"></i>League average for that division</span></div>
+    <div class="scroll"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Cards shown in each match this season">${g}</svg></div></div>`;
+}
+
+function renderRefDetail(){
+  const box = $("#refDetail"), name = RS.sel;
+  if (!name){ box.innerHTML = `<p class="empty">Nobody chosen yet. Open the list above and pick a referee.</p>`; return; }
+  const all = REF_MS.filter(m => m.ref === name).sort((a, b) => a.d.localeCompare(b.d));
+  const cm = all.filter(hasCards), fm = all.filter(hasFouls), km = all.filter(hasCorners), gm = all.filter(hasGoals);
+  const R = REFS[name];
+  const mix = Object.entries(all.reduce((o, m) => (o[m.lg] = (o[m.lg] || 0) + 1, o), {})).map(([l, c]) => `${c} ${l}`).join(" · ");
+  const lineTxt = [...new Set(cm.map(refLine))].join("/") || "3.5";
+  const over = cm.filter(m => tot(m) > refLine(m)).length;
+  const reds = cm.reduce((s, m) => s + red(m), 0), redGames = cm.filter(m => red(m) > 0).length;
+  const fc = all.filter(m => hasFouls(m) && hasCards(m) && tot(m) > 0);
+  const fpc = fc.length ? fc.reduce((s, m) => s + m.hf + m.af, 0) / fc.reduce((s, m) => s + tot(m), 0) : null;
+  const cpm = avg(cm.map(tot));
+  const hw = gm.filter(m => m.hg > m.ag).length, dr = gm.filter(m => m.hg === m.ag).length, aw = gm.filter(m => m.hg < m.ag).length;
+  const tile = (k, v, s) => `<div class="tile"><span class="k">${k}</span><span class="v">${v}</span>${s ? `<span class="s">${s}</span>` : ""}</div>`;
+  const tiles = [
+    tile("Matches", all.length, esc(mix)),
+    tile("Cards a match", f1(cpm), `league average ${f1(lgBase(cm, "cards"))}${vs(cpm, lgBase(cm, "cards"))}`),
+    tile("Yellow cards a match", f1(avg(cm.map(yel))), `${cm.reduce((s, m) => s + yel(m), 0)} in total · league ${f1(lgBase(cm, "y"))}`),
+    tile("Red cards", reds, reds ? `in ${redGames} of ${cm.length} match${cm.length === 1 ? "" : "es"}` : "none yet"),
+    tile("Fouls a match", f1(avg(fm.map(m => m.hf + m.af))), `league ${f1(lgBase(fm, "fouls"))}${fpc != null ? ` · ${f1(fpc)} fouls a card` : ""}`),
+    tile(`Over ${lineTxt} cards`, pc(cm.length ? over / cm.length : null), `${over} of ${cm.length} · league ${pc(lgBase(cm, "over"))}`),
+    tile("Cards to each side", `${f1(avg(cm.map(hCards)))}–${f1(avg(cm.map(aCards)))}`, `home–away side · league ${f1(lgBase(cm, "h"))}–${f1(lgBase(cm, "a"))}`),
+    tile("Home sides' results", gm.length ? `${hw}–${dr}–${aw}` : "–", "home wins–draws–away wins"),
+    tile("Corners a match", f1(avg(km.map(m => m.hc + m.ac))), `league ${f1(lgBase(km, "corners"))}`),
+    tile("Goals a match", f1(avg(gm.map(m => m.hg + m.ag))), `league ${f1(lgBase(gm, "goals"))}`),
+  ];
+  const pf = R ? Math.round((R.factor - 1) * 100) : 0;
+  const career = R ? `Since 2017-18, ${f1(R.cpm)} cards a match over ${R.n} matches: ${pf >= 0 ? "+" : "−"}${Math.abs(pf)}% against the league average after allowing for the teams${refWord(R.factor) ? `, so rated ${refWord(R.factor)}` : ""}. This is the rating the card predictions use.`
+    : "Too few earlier matches for a career rating.";
+  const next = v3.filter(x => x.ref === name && x.hc == null).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 4);
+  const nextH = next.map(x => `<div class="next"><div class="top"><span><b>${new Date(x.date).toLocaleDateString("en-GB", {weekday: "short", day: "numeric", month: "short"})}</b> ${esc(x.time || "")} · ${tn(x.home, 1)} v ${tn(x.away, 1)}</span>
+      <span class="small muted">${esc(x.league)}</span></div>${x.kt != null ? `<div class="small">Model expects <b>${f1(x.kt)}</b> cards (usual line ${kLine(x)}).</div>` : ""}</div>`).join("");
+  const rows = [...all].reverse().map(m => {
+    const c = hasCards(m), t = c ? tot(m) : null;
+    return `<tr><td class="l">${dm(m.d)}</td><td class="l small">${esc(m.lg)}</td><td class="l">${tn(m.h)} v ${tn(m.a)}</td>
+      <td>${hasGoals(m) ? `${m.hg}–${m.ag}` : "–"}</td><td>${c ? `${m.hy}–${m.ay}` : "–"}</td>
+      <td>${c ? (red(m) ? `<span class="chip warn">${m.hr || 0}–${m.ar || 0}</span>` : "0") : "–"}</td>
+      <td>${c ? `<b>${t}</b>${t > refLine(m) ? ` <span class="chip">over ${refLine(m)}</span>` : ""}` : "–"}</td>
+      <td>${hasFouls(m) ? `${m.hf}–${m.af}` : "–"}</td><td>${hasCorners(m) ? `${m.hc}–${m.ac}` : "–"}</td></tr>`;
+  }).join("");
+  box.innerHTML = `
+    <div class="refhead"><div class="eyebrow">This season · ${all.length} match${all.length === 1 ? "" : "es"}</div>
+      <h3>${esc(name)}${R ? refChip2(R.factor) : ""}</h3><div class="small muted">${career}</div></div>
+    <div class="tiles">${tiles.join("")}</div>
+    ${cm.length ? `<section><h3>Cards, match by match</h3>${refChart(cm)}</section>` : ""}
+    ${next.length ? `<section><h3>Next appointments</h3><div class="nextlist">${nextH}</div></section>` : ""}
+    <section><h3>Every match this season</h3>
+      <div class="tablebox"><table><thead><tr><th class="l">Date</th><th class="l">Division</th><th class="l">Match</th><th>Score</th><th>Yellows</th><th>Reds</th><th>Cards</th><th>Fouls</th><th>Corners</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+      <p class="small muted">Yellows, reds, fouls and corners are home–away. A red counts as one card, as in the predictions. “League” figures are this season's average for the same divisions, so a referee who works mostly in one division is compared fairly.</p></section>`;
+}
+
+function renderRefs(){
+  const N = REF_LIST.length;
+  $("#refDrop").hidden = !N;
+  $("#refIntro").textContent = N
+    ? `${N} referees have taken a match this season. Open the list and pick one to see every match they've done: results, cards, fouls, and how they compare with the league average. Only this season counts here; the Strict and Lenient tags use every season since 2017-18.`
+    : "No referee has been named in this season's results yet.";
+  const cur = REF_LIST.find(r => r.name === RS.sel);
+  $("#refSum").innerHTML = cur
+    ? `<span>${esc(cur.name)} <span class="muted small" style="font-weight:400">· ${cur.n} match${cur.n === 1 ? "" : "es"}</span></span>`
+    : `<span>Choose a referee <span class="muted small" style="font-weight:400">· ${N} this season</span></span>`;
+  renderRefList();
+  renderRefDetail();
+}
+$("#refQ").addEventListener("input", e => { RS.q = e.target.value; renderRefList(); });
+
 function render(){ renderTabs(); renderLede(); renderCalls(); renderHighlights(); renderCleanSheets(); renderCardsSection(); renderFixtures(); renderReview(); renderTeams(); }
 render();
+renderRefs();
 syncControls(); markJump(); route();
 </script>
 
