@@ -103,6 +103,8 @@ def corner_markets(eh, ea, league=None, total_size=TOTAL_SIZE, kappa=SPLIT_KAPPA
         "main_line": min(totals, key=lambda l: abs(totals[l] - 0.5)),
         "home4": sum(ph[4:]), "away4": sum(pa[4:]), "both4": both4,
         "home_more": win / (win + lose),           # ignoring level counts
+        # chance each side takes strictly more corners; a level count is neither
+        "dom_home": win, "dom_away": lose,
         "home_u3": sum(ph[:3]), "away_u3": sum(pa[:3]),
         # each side's own count, 0..15 (anything higher folded into 15)
         "ph": ph[:SIDE_KEEP - 1] + [sum(ph[SIDE_KEEP - 1:])],

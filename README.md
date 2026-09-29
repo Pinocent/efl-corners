@@ -8,8 +8,12 @@ and League 2, logs every prediction, and marks it against the result.
 - **On the Mac:** double-click `Update Dashboard.command`. It opens `docs/index.html`.
 - **In the cloud:** push this folder to a GitHub repo and turn on Pages
   (Settings → Pages → Deploy from branch → `main` / `docs`). The workflow in
-  `.github/workflows/update.yml` then runs at 07:00 and 19:00 UTC every day and
-  republishes the dashboard, with no terminal involved.
+  `.github/workflows/update.yml` then runs at 09:17 and 21:17 UTC every day (about
+  10am and 10pm UK summer time) and republishes the dashboard, with no terminal
+  involved. GitHub starts scheduled runs when it has capacity, and one has
+  started hours late, so the "Updated" time on the page is when the build
+  actually ran. Pushing `manual_results.csv`, `referees.csv`, `run.py` or
+  anything in `tracker/` starts a run straight away.
 
 No packages to install. Python 3.9+ standard library only.
 
@@ -44,7 +48,7 @@ yourself.
 | `data/predictions.csv` | Every prediction and its calls, frozen at kick-off, with the result once known (`v3` = this model, `v2` = the old spreadsheet's) |
 | `manual_results.csv` | Flashscore numbers for matches the feed hasn't published yet (filled nightly by the scheduled task) |
 | `referees.csv` | Referee appointments for upcoming matches (filled nightly by the scheduled task) |
-| `docs/index.html` | The dashboard |
+| `docs/index.html` | The dashboard: Gameweek, Track record, Teams and Referees views, every section a dropdown |
 | `backtest.py` | Replays every season since 2018-19: `python3 backtest.py` (corners and goals), `cards`, or `tune` / `cards-tune` to re-tune |
 | `tracker/` | The code: `rounds.py` gameweeks, `model.py` corners and goals, `cards.py` cards and referees, `markets.py` probabilities, `evaluate.py` calls and marking, `flags.py` warnings |
 

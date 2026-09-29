@@ -50,13 +50,13 @@ header.top .meta{display:flex;flex-direction:column;gap:4px;text-align:right}
 .freshness{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .fresh{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--muted)}
 
-.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--ground);padding-block:10px 4px;
+.controls{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--nav-h,0px));z-index:6;background:var(--ground);padding-block:10px 4px;
   display:flex;flex-direction:column;gap:10px}
-/* jump bar: sticks under the controls on wide screens, on its own on phones */
-.jump{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--ctrl-h,0px));z-index:5;background:var(--ground);
-  display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding-block:6px;margin-top:-30px;border-bottom:1px solid var(--line)}
+/* view bar: Gameweek, Track record, Teams, Referees. Sticks to the top; the gameweek controls stick under it */
+.jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:7;background:var(--ground);
+  display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding-block:6px;margin-top:-14px;border-bottom:1px solid var(--line)}
 .jump::-webkit-scrollbar{display:none}
-.jump button{border:0;background:none;padding:6px 11px;border-radius:99px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap;cursor:pointer}
+.jump button{border:0;background:none;padding:7px 14px;border-radius:99px;font-size:14px;font-weight:500;color:var(--muted);white-space:nowrap;cursor:pointer}
 .jump button:hover{color:var(--ink)}
 .jump button[aria-current="true"]{background:var(--ink);color:var(--ground)}
 section{scroll-margin-top:calc(var(--ctrl-h,0px) + 60px)}
@@ -264,6 +264,25 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
 #teamTable th:first-child{background:var(--sunk)}
 @media (max-width:700px){ .ladders{grid-template-columns:1fr} .seg button{padding:5px 9px} }
 @media (max-width:560px){ h1{font-size:28px} .lede h2{font-size:26px} header.top .meta{text-align:left} .freshness{justify-content:flex-start} dl.terms{grid-template-columns:1fr} }
+/* every section is a dropdown: a bar with a one-line summary, the content opens under it */
+.view{display:flex;flex-direction:column;gap:14px}
+details.dd{scroll-margin-top:calc(var(--ctrl-h,0px) + 12px)}
+details.dd>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+details.dd>summary::-webkit-details-marker{display:none}
+details.dd>summary::after{content:"";flex:none;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);
+  transform:translateY(-2px) rotate(45deg);transition:transform .15s}
+details.dd[open]>summary::after{transform:translateY(2px) rotate(-135deg)}
+details.dd>summary:hover{border-color:var(--muted)}
+.dd-t{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;min-width:0;flex:1 1 auto}
+.dd-t h2{font-size:22px}
+.dd-s{font-size:13px;color:var(--muted);text-align:right;min-width:0}
+.dd-b{display:flex;flex-direction:column;gap:12px;padding-top:12px}
+.dd-i{max-width:70ch;color:var(--muted)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.viewhead{display:flex;flex-direction:column;gap:4px}
+.viewhead p{max-width:70ch;color:var(--muted)}
+@media (max-width:560px){ .dd-s{order:3;flex-basis:100%;text-align:left} details.dd>summary{padding:11px 14px} .dd-t h2{font-size:20px} }
 /* referees: a dropdown list, then that referee's season */
 .refdrop{position:relative;width:min(520px,100%)}
 .refdrop summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;
@@ -303,96 +322,119 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
     </div>
   </header>
 
-  <div class="controls">
-    <div class="row" id="roundTabs" role="group" aria-label="Gameweek"></div>
-    <div class="row">
-      <div class="seg" id="leagueSeg" role="group" aria-label="League"></div>
+  <nav class="jump" id="jump" aria-label="Views"></nav>
+
+  <div class="view" id="v-board">
+    <div class="controls">
+      <div class="row" id="roundTabs" role="group" aria-label="Gameweek"></div>
+      <div class="row">
+        <div class="seg" id="leagueSeg" role="group" aria-label="League"></div>
+      </div>
     </div>
-  </div>
 
-  <nav class="jump" id="jump" aria-label="Jump to a section"></nav>
+    <section class="lede" id="lede"></section>
 
-  <section class="lede" id="lede"></section>
-
-  <section id="callsSec">
-    <div class="sechead">
-      <div><span class="tag call">Calls</span></div>
-      <h2>Calls for this gameweek</h2>
-      <p id="callsIntro"></p>
-    </div>
-    <div class="tablebox calllist" id="calls"></div>
-  </section>
-
-  <section id="predSec">
-    <div class="sechead">
-      <div><span class="tag pred">Predictions</span></div>
-      <h2>Predictions worth a look</h2>
-      <p>The model's view of every match, sorted to surface the standouts. These are not recommendations unless marked <span class="chip call">Call</span>.</p>
-    </div>
-    <div class="hl" id="highlights"></div>
-  </section>
-
-  <section id="csSec">
-    <div class="sechead">
-      <div><span class="tag pred">Predictions</span></div>
-      <h2>Clean sheets</h2>
-      <p id="csIntro"></p>
-    </div>
-    <div class="tablebox"><table id="csTable"></table></div>
-  </section>
-
-  <section id="cardsSec">
-    <div class="sechead">
-      <div><span class="tag pred">Predictions</span></div>
-      <h2>Cards and referees</h2>
-      <p id="cardsIntro"></p>
-    </div>
-    <div class="tablebox"><table id="cardsTable"></table></div>
-  </section>
-
-  <section id="fxSec">
-    <div class="sechead">
-      <div><span class="tag pred">Predictions</span></div>
-      <h2 id="fxTitle">Every match</h2>
-      <p>Tap a match for the chance of every corners line, for the match and for each side, plus goals. Tap a team name for its page. Matches with a call have a claret edge. <span class="chip warn">Warning</span> means something in a recent match could throw the prediction.</p>
-    </div>
-    <div class="tablebox" id="fxBox"><table id="fxTable"></table></div>
-    <div class="cards" id="fxCards" hidden></div>
-  </section>
-
-  <section id="reviewSec">
-    <div class="sechead">
-      <h2>Track record</h2>
-      <p>Calls and predictions are marked separately. Calls are judged on whether they landed. Predictions are judged on whether they beat simply using the league average.</p>
-    </div>
-    <div class="score" id="review"></div>
-  </section>
-
-  <section id="teamsSec">
-    <div class="sechead">
-      <h2>Teams</h2>
-      <p>Corners per match this season. “Expected” is what the model rates each side at against an average opponent, after allowing for who they've played. Tap a team for its own page.</p>
-    </div>
-    <div class="tablebox"><table id="teamTable"></table></div>
-  </section>
-
-  <section id="refSec">
-    <div class="sechead">
-      <h2>Referees</h2>
-      <p id="refIntro"></p>
-    </div>
-    <details class="refdrop" id="refDrop">
-      <summary id="refSum"></summary>
-      <div class="refpanel">
-        <div class="reftools">
-          <input id="refQ" type="search" placeholder="Search referees" aria-label="Search referees" autocomplete="off">
-          <span class="seg" id="refSort" role="group" aria-label="Sort referees"></span>
-        </div>
-        <div class="reflist" id="refList"></div>
+    <details class="dd" id="callsSec" open>
+      <summary><span class="dd-t"><span class="tag call">Calls</span><h2>Calls for this gameweek</h2></span><span class="dd-s" id="callsSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i" id="callsIntro"></p>
+        <div class="tablebox calllist" id="calls"></div>
       </div>
     </details>
-    <div id="refDetail" aria-live="polite"></div>
-  </section>
+
+    <details class="dd" id="predSec">
+      <summary><span class="dd-t"><span class="tag pred">Predictions</span><h2>Predictions worth a look</h2></span><span class="dd-s" id="predSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i">The model's view of every match, sorted to surface the standouts. These are not recommendations unless marked <span class="chip call">Call</span>.</p>
+        <div class="hl" id="highlights"></div>
+      </div>
+    </details>
+
+    <details class="dd" id="csSec">
+      <summary><span class="dd-t"><span class="tag pred">Predictions</span><h2>Clean sheets</h2></span><span class="dd-s" id="csSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i" id="csIntro"></p>
+        <div class="tablebox"><table id="csTable"></table></div>
+      </div>
+    </details>
+
+    <details class="dd" id="cardsSec">
+      <summary><span class="dd-t"><span class="tag pred">Predictions</span><h2>Cards and referees</h2></span><span class="dd-s" id="cardsSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i" id="cardsIntro"></p>
+        <div class="tablebox"><table id="cardsTable"></table></div>
+      </div>
+    </details>
+
+    <details class="dd" id="warnSec">
+      <summary><span class="dd-t"><span class="tag warn">Warnings</span><h2>Recent matches that could throw the predictions</h2></span><span class="dd-s" id="warnSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i">A red card, a freak corner count, a heavy defeat or a sharp change of form in a side's recent matches. The numbers aren't changed; trust the affected matches a little less.</p>
+        <div class="hl" id="warnings"></div>
+      </div>
+    </details>
+
+    <details class="dd" id="fxSec">
+      <summary><span class="dd-t"><span class="tag pred">Predictions</span><h2 id="fxTitle">Every match</h2></span><span class="dd-s" id="fxSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i">Tap a match for the chance of every corners line, for the match and for each side, plus goals. Tap a team name for its page. Matches with a call have a claret edge. <span class="chip warn">Warning</span> means something in a side's recent matches could throw the numbers.</p>
+        <div class="tablebox" id="fxBox"><table id="fxTable"></table></div>
+        <div class="cards" id="fxCards" hidden></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="view" id="v-track" hidden>
+    <div class="viewhead">
+      <h2>Track record</h2>
+      <p>Calls and predictions are marked separately, across the whole season and every division. Calls are judged on whether they landed. Predictions are judged on whether they beat simply using the league average.</p>
+    </div>
+
+    <details class="dd" id="trCallsSec" open>
+      <summary><span class="dd-t"><span class="tag call">Calls</span><h2>Did they land?</h2></span><span class="dd-s" id="trCallsSum"></span></summary>
+      <div class="dd-b" id="trCalls"></div>
+    </details>
+
+    <details class="dd" id="trLogSec">
+      <summary><span class="dd-t"><span class="tag call">Calls</span><h2>Every call this season</h2></span><span class="dd-s" id="trLogSum"></span></summary>
+      <div class="dd-b" id="trLog"></div>
+    </details>
+
+    <details class="dd" id="trPredSec">
+      <summary><span class="dd-t"><span class="tag pred">Predictions</span><h2>Better than the league average?</h2></span><span class="dd-s" id="trPredSum"></span></summary>
+      <div class="dd-b" id="trPred"></div>
+    </details>
+  </div>
+
+  <div class="view" id="v-teams" hidden>
+    <details class="dd" id="teamsSec" open>
+      <summary><span class="dd-t"><h2>Teams</h2></span><span class="dd-s" id="teamsSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i">Corners per match this season. “Expected” is what the model rates each side at against an average opponent, after allowing for who they've played. Tap a team for its own page.</p>
+        <div class="tablebox"><table id="teamTable"></table></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="view" id="v-refs" hidden>
+    <details class="dd" id="refSec" open>
+      <summary><span class="dd-t"><h2>Referees</h2></span><span class="dd-s" id="refSecSum"></span></summary>
+      <div class="dd-b">
+        <p class="dd-i" id="refIntro"></p>
+        <details class="refdrop" id="refDrop">
+          <summary id="refSum"></summary>
+          <div class="refpanel">
+            <div class="reftools">
+              <input id="refQ" type="search" placeholder="Search referees" aria-label="Search referees" autocomplete="off">
+              <span class="seg" id="refSort" role="group" aria-label="Sort referees"></span>
+            </div>
+            <div class="reflist" id="refList"></div>
+          </div>
+        </details>
+        <div id="refDetail" aria-live="polite"></div>
+      </div>
+    </details>
+  </div>
 
   <section id="helpSec">
     <details class="glossary" id="glossary">
@@ -403,6 +445,7 @@ table.bf td.un.h{text-align:right} table.bf td.un.a{text-align:left}
         <dt>Landed / missed</dt><dd>Whether a call came off once the result was in. A call is made together with its prediction, against the corners line of the day, and both freeze at kick-off. Changing a threshold later never rewrites a past call.</dd>
         <dt>Chance</dt><dd>How likely the model thinks something is. 60% means it should happen about 6 times in 10.</dd>
         <dt>Fair odds</dt><dd>The chance written as decimal odds (1 ÷ chance). 60% is 1.67. A price higher than this would be good value if the model is right.</dd>
+        <dt>Corner dominance</dt><dd id="defDom"></dd>
         <dt>Big gap</dt><dd id="defGap"></dd>
         <dt>High corners</dt><dd>A side the model expects to take at least the chosen number of corners (5+, 6+ or 7+; switch it on the High-corner sides panel). 6+ is the default. Over six seasons about 1 side in 8 was tagged 6+, and 60% of them reached it, against 40% of all sides. At 5+ half of all sides qualify, so the tag picks out much less. A prediction, not a call.</dd>
         <dt>Under 3 corners</dt><dd id="defU3"></dd>
@@ -472,12 +515,23 @@ const avgRate = k => { const v = Object.values(RATES).map(r => r[k]).filter(x =>
 function describe(c, x){
   const m = c.market, p = c.pick;
   if (m === "Corners total") return {text: `${p} corners`, why: `Total corners in the match. Model expects ${f1(x.et)}.`};
+  if (m === "Corner dominance") return {text: `${p === "Home" ? x.home : x.away} to win more corners`, why: `Model expects ${f1(x.eh)}–${f1(x.ea)}. A level count is a miss.`};
   if (m === "Both 4+ corners") return {text: "Both teams 4+ corners", why: `Expected ${f1(x.eh)}–${f1(x.ea)}.`};
   if (m === "BTTS") return {text: p === "Yes" ? "Both teams to score" : "Not both teams to score", why: `xG ${f2(x.lh)}–${f2(x.la)}.`};
   if (m === "Goals 2.5") return {text: `${p} 2.5 goals`, why: `Model expects ${f2(+x.lh + +x.la)} goals.`};
   if (m === "Cards total") return {text: `${p} cards`, why: `Yellow and red cards. Model expects ${f1(x.kt)}; ${x.ref ? `referee ${x.ref}${refWord(+x.ref_f) ? " (" + refWord(+x.ref_f) + ")" : ""}` : "referee not yet announced"}.`};
   return {text: `${m}: ${p}`, why: ""};
 }
+// the figure a call is judged on, so a cards call shows cards and a corners call shows corners
+function callResult(c, x){
+  if (x.hc == null) return "";
+  const m = c.market;
+  if (m === "Cards total") return x.hk != null ? `cards ${x.hk}–${x.ak} (${x.hk + x.ak})` : "cards not recorded";
+  if (m === "Corners total") return `corners ${x.hc}–${x.ac} (${x.hc + x.ac})`;
+  if (m === "Corner dominance" || m === "Both 4+ corners") return `corners ${x.hc}–${x.ac}`;
+  return x.hg != null ? `goals ${x.hg}–${x.ag}` : "";
+}
+const setSum = (id, t) => { const el = $("#" + id); if (el) el.textContent = t; };
 function outcome(c, x){
   if (c.hit === true) return `<span class="chip hit">Landed</span>`;
   if (c.hit === false) return `<span class="chip miss">Missed</span>`;
@@ -505,8 +559,9 @@ $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
   + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "")
   + ((DATA.meta.skipped||[]).length ? `<span class="fresh chip warn" title="${esc(DATA.meta.skipped.join("\n"))}">${DATA.meta.skipped.length} Flashscore row${DATA.meta.skipped.length>1?"s":""} not used: team name not recognised</span>` : "");
 const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
-$("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
-$("#defGap").textContent = `The model expects one side to win at least ${TAG.big_gap} more corners than the other. Over six seasons that side won more corners 72% of the time, and by 2 or more 64% of the time. A prediction, not a call.`;
+$("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.dom)} for one side to win more corners, ${pc(CALL.cards)} for cards, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
+$("#defDom").textContent = `A call that one side will take more corners than the other; a level count is a miss. Made when the model is ${pc(CALL.dom)} or more sure. The bar was chosen on six earlier seasons, where about 12% of matches qualified and the favoured side won more corners 72% of the time. On the two seasons held back it was 17% and 75%. Calls for gameweeks before 29 Sep were worked out afterwards from each match's expected corners, frozen before kick-off.`;
+$("#defGap").textContent = `The model expects one side to win at least ${TAG.big_gap} more corners than the other. Over six seasons that side won more corners 72% of the time, and by 2 or more 64% of the time. A prediction; the Corner dominance call is made separately, when the model is surer.`;
 $("#defU3").textContent = `A side taking 0, 1 or 2 corners. It happens to about ${pc(avgRate("u3"))} of sides this season. "Low corners" marks sides the model gives ${pc(TAG.low_u3)} or more. Over six seasons those sides took under 3 about 33% of the time, nearly twice the usual rate. The chance rarely goes above 45%, so it's never a call. Not offered in League 2.`;
 $("#defCS").textContent = `The side concedes no goals. About ${pc(avgRate("cs"))} of sides keep one this season. "Good chance" marks ${pc(TAG.cs)} or more; over six seasons those sides kept a clean sheet 40% of the time, against 28% for all sides.`;
 $("#defLine").textContent = `The league's typical corner total this season, rounded to the nearest .5: ${lines}. It's roughly where bookmakers set their main line. Corner total calls are made against it.`;
@@ -527,7 +582,8 @@ document.addEventListener("click", e => {
   const rp = e.target.closest("[data-refpick]"); if (rp){ RS.sel = rp.dataset.refpick; $("#refDrop").open = false; renderRefs(); $("#refDrop summary").focus(); return; }
   const rs = e.target.closest("[data-refsort]"); if (rs){ RS.sort = rs.dataset.refsort; renderRefList(); return; }
   const tb = e.target.closest("[data-team]"); if (tb){ e.stopPropagation(); openTeam(tb.dataset.team); return; }
-  const jb = e.target.closest("[data-jump]"); if (jb){ jumpTo(jb.dataset.jump); return; }
+  const vb = e.target.closest("[data-view]"); if (vb){ showView(vb.dataset.view, true); return; }
+  const tm = e.target.closest("[data-trm]"); if (tm){ TS.market = tm.dataset.trm; renderTrack(); return; }
   if (e.target.closest("[data-close]") || e.target === $("#sheetBack")){ closeTeam(); return; }
   const r = e.target.closest("[data-r]"); if (r){ S.round = r.dataset.r; S.open.clear(); render(); return; }
   const hb = e.target.closest("[data-hi]"); if (hb){ S.hi = +hb.dataset.hi; store.set("hi", S.hi); render(); return; }
@@ -581,6 +637,7 @@ function renderLede(){
       <div class="stat preds"><div><span class="tag pred">Predictions</span></div>${predCard}</div>
     </div>`;
   $("#fxTitle").textContent = S.league === "All" ? "Every match" : `Every ${S.league} match`;
+  setSum("fxSum", `${xs.length} match${xs.length === 1 ? "" : "es"}${played.length ? ` · ${played.length} played` : ""}`);
 }
 
 // ---- the calls list
@@ -590,6 +647,8 @@ function renderCalls(){
   $("#callsIntro").textContent = r.status === "completed"
     ? "What the model recommended before kick-off, and whether each one came off."
     : "The model's recommended picks: predictions confident enough to act on.";
+  const done = calls.filter(c => c.hit != null), won = done.filter(c => c.hit).length;
+  setSum("callsSum", !calls.length ? "None" : `${calls.length} call${calls.length === 1 ? "" : "s"}${done.length ? ` · ${won} of ${done.length} landed` : ""}`);
   if (!calls.length){
     $("#calls").innerHTML = `<div class="callrow"><span class="empty" style="grid-column:1/-1">No calls this gameweek. Nothing reached the confidence bar, which is common for corner totals. See the predictions below for the closest cases.</span></div>`;
     return;
@@ -600,7 +659,7 @@ function renderCalls(){
         <span class="m">${tn(c.x.home, 1)} v ${tn(c.x.away, 1)}<div class="lg">${new Date(c.x.date).toLocaleDateString("en-GB",{weekday:"short"})} ${esc(c.x.time||"")} · ${esc(c.x.league)}</div></span>
         <span class="pick">${esc(d.text)}<div class="why">${esc(d.why)}</div></span>
         <span class="r big">${pc(c.p)}</span><span class="r fairc muted">${fair(c.p)}</span>
-        <span class="r">${outcome(c, c.x)}${c.x.hc!=null?`<div class="lg">corners ${c.x.hc}–${c.x.ac} · goals ${c.x.hg}–${c.x.ag}</div>`:""}</span></div>`; }).join("");
+        <span class="r">${outcome(c, c.x)}${c.x.hc!=null?`<div class="lg">${esc(callResult(c, c.x))}</div>`:""}</span></div>`; }).join("");
 }
 
 // ---- prediction highlights (never presented as calls)
@@ -613,8 +672,9 @@ function renderHighlights(){
   const gaps = [...xs].sort((a,b)=>gap(b)-gap(a)).slice(0,5).map(x => {
     const homeFav = x.eh >= x.ea, fav = homeFav ? x.home : x.away, dog = homeFav ? x.away : x.home;
     const ok = x.hc == null || x.hc === x.ac ? null : (x.hc > x.ac) === homeFav;
-    return li(`${tn(fav, 1)} v ${tn(dog)} ${gapChip(x)}`, `+${f1(gap(x))}`,
-      `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))} corners${actual(ok, x.hc!=null?`${homeFav?x.hc:x.ac}–${homeFav?x.ac:x.hc}`:"")}`);
+    const dp = homeFav ? x.dom_home : x.dom_away;
+    return li(`${tn(fav, 1)} v ${tn(dog)} ${gapChip(x)}${callBadge(x, "Corner dominance")}`, `+${f1(gap(x))}`,
+      `Expected ${f1(Math.max(x.eh,x.ea))}–${f1(Math.min(x.eh,x.ea))} corners${dp != null ? ` · wins more ${pc(dp)}` : ""}${actual(ok, x.hc!=null?`${homeFav?x.hc:x.ac}–${homeFav?x.ac:x.hc}`:"")}`);
   }).join("");
   const his = xs.flatMap(x => [
       {team:x.home, opp:x.away, where:"v", mu:+x.eh, pmf:x.ph, x, n:x.hc}, {team:x.away, opp:x.home, where:"at", mu:+x.ea, pmf:x.pa, x, n:x.ac}])
@@ -636,17 +696,24 @@ function renderHighlights(){
         `${over?"Over":"Under"} ${l} · expected ${f1(x.et)}${x.league==="League 2"&&!over?" · unders not offered in League 2":""}${actual(t==null?null:(over?t>l:t<l), t!=null?`${t} corners`:"")}`); }).join("");
   const goals = [...xs].sort((a,b)=>b.btts-a.btts).slice(0,5).map(x => li(`${tn(x.home)} v ${tn(x.away)}${callBadge(x,"BTTS")}`, pc(x.btts),
       `xG ${f2(x.lh)}–${f2(x.la)} · fair odds ${fair(x.btts)}${actual(x.hg==null?null:x.hg>0&&x.ag>0, x.hg!=null?`${x.hg}–${x.ag}`:"")}`)).join("");
-  const wl = xs.flatMap(x => flagsOf(x).map(f => ({...f, x}))).slice(0, 8).map(f =>
-      `<li><span>${tn(f.team, 1)} <span class="chip warn">${esc(f.kind)}</span></span><span></span><span class="sub">${esc(f.text)} Next: ${esc(f.x.home)} v ${esc(f.x.away)}.</span></li>`).join("");
-  const wn = xs.reduce((s,x)=>s+flagsOf(x).length,0);
+  const gapN = xs.filter(bigGap).length;
+  setSum("predSum", xs.length ? `${gapN} big gap${gapN === 1 ? "" : "s"} · ${hiN} high-corner side${hiN === 1 ? "" : "s"}` : "");
   $("#highlights").innerHTML = `
-    <div class="panel"><h3>Warnings <span class="eyebrow">${wn} this gameweek</span></h3><p class="intro">Recent matches that could throw the predictions. Trust the affected matches a little less.</p><ol>${wl||'<p class="empty">Nothing unusual in recent matches.</p>'}</ol>${wn>8?`<p class="small muted">${wn-8} more in the match list below.</p>`:""}</div>
-    <div class="panel"><h3>Biggest corner gaps</h3><p class="intro">Where one side is expected to win clearly more corners. "Big gap" means ${TAG.big_gap}+ apart. Green when that side did win more.</p><ol>${gaps||e}</ol></div>
+    <div class="panel"><h3>Biggest corner gaps</h3><p class="intro">Where one side is expected to win clearly more corners. "Big gap" means ${TAG.big_gap}+ apart. A <span class="chip call">Call</span> means the model is ${pc(CALL.dom)} or more sure that side wins more corners. Green when that side did win more.</p><ol>${gaps||e}</ol></div>
     <div class="panel"><h3>High-corner sides ${hiSwitch()}</h3><p class="intro">Each side's chance of taking ${S.hi} or more corners. "High" marks sides expected to reach ${S.hi}+. ${hiN ? `${hiN} this gameweek.` : `None this gameweek, so the closest are shown.`}</p><ol>${hiList||e}</ol></div>
     <div class="panel"><h3>Clearest corner totals</h3><p class="intro">Furthest from 50/50 against the usual line. Totals rarely get far from even.</p><ol>${totals||e}</ol></div>
     <div class="panel"><h3>Both teams 4+ corners</h3><p class="intro">Most likely matches for both sides to reach 4 corners.</p><ol>${both||e}</ol></div>
     <div class="panel"><h3>Under 3 corners</h3><p class="intro">Sides most likely to take 0–2 corners. Usually about ${pc(avgRate("u3"))} of sides do. League 2 left out: no under markets.</p><ol>${lows||e}</ol></div>
     <div class="panel"><h3>Both teams to score</h3><p class="intro">Highest chances of both sides scoring.</p><ol>${goals||e}</ol></div>`;
+}
+
+// ---- warnings: recent matches that could throw the predictions, out of the way in their own dropdown
+function renderWarnings(){
+  const fl = rows().flatMap(x => flagsOf(x).map(f => ({...f, x})));
+  setSum("warnSum", fl.length ? `${fl.length} this gameweek` : "None");
+  $("#warnings").innerHTML = fl.length
+    ? `<div class="panel"><ol>${fl.map(f => `<li><span>${tn(f.team, 1)} <span class="chip warn">${esc(f.kind)}</span></span><span></span><span class="sub">${esc(f.text)} Next: ${esc(f.x.home)} v ${esc(f.x.away)}.</span></li>`).join("")}</ol></div>`
+    : `<p class="empty">Nothing unusual in recent matches.</p>`;
 }
 
 // ---- clean sheets: every side this gameweek, most likely first
@@ -657,6 +724,7 @@ function renderCleanSheets(){
       {team:x.home, opp:x.away, venue:"Home", p:+x.cs_home, oppxg:+x.la, x, conceded:x.ag},
       {team:x.away, opp:x.home, venue:"Away", p:+x.cs_away, oppxg:+x.lh, x, conceded:x.hg}]).sort((a,b)=>b.p-a.p);
   const played = xs.some(x => x.hg != null);
+  setSum("csSum", list.length ? `${list.length} sides · likeliest ${pc(list[0].p)}` : "");
   const show = list.slice(0, 12);
   let h = `<thead><tr><th class="l">Side</th><th>Chance</th><th>Fair odds</th><th>Opponent's<br>expected goals</th>${played?"<th>Result</th>":""}</tr></thead><tbody>`;
   h += show.map(o => `<tr><td class="l">${tn(o.team, 1)}${csChip(o.p)}<div class="lg">${o.venue} ${o.venue==="Home"?"v":"at"} ${tn(o.opp)} · ${esc(o.x.league)}</div></td>
@@ -674,6 +742,7 @@ function renderCardsSection(){
   const lines = [...new Set(Object.values(CARD_LINE))].join(" or ");
   $("#cardsIntro").textContent = `Yellow and red cards shown to each side, with the referee. The usual line is ${lines} cards. `
     + (xs.length ? (known === xs.length ? "Every referee has been announced." : `${known} of ${xs.length} referees announced so far; they're usually published the day before, and until then a match assumes an average referee.`) : "");
+  setSum("cardsSum", xs.length ? `${known} of ${xs.length} referees announced` : "");
   const played = xs.some(x => x.hk != null);
   let h = `<thead><tr><th class="l">Match</th><th class="l">Referee</th><th>Expected cards<br>home–away</th><th>Usual line</th><th>Each side 2+<br>home / away</th><th>Red card</th>${played ? "<th>Result</th>" : ""}</tr></thead><tbody>`;
   h += xs.map(x => {
@@ -806,53 +875,98 @@ function ladders(x){
   </div></div>`;
 }
 
-// ---- track record: calls and predictions judged separately
-function renderReview(){
-  const rv = DATA.reviews.filter(r => r.model === "v3").sort((a,b)=>a.round.localeCompare(b.round));
-  const box = $("#review");
-  if (!rv.length){ box.innerHTML = `<div class="panel"><p class="empty">Nothing marked yet. Rounds are marked once results arrive, usually a day or two after the games.</p></div>`; return; }
+// ---- track record: its own view. Calls and predictions are judged separately
+const MARKET_NAME = {"Corners total": "Corner totals", "Corner dominance": "Corner dominance", "Both 4+ corners": "Both teams 4+ corners",
+  "BTTS": "Both teams to score", "Goals 2.5": "Over/under 2.5 goals", "Cards total": "Card totals"};
+const mName = m => MARKET_NAME[m] || m;
+const TS = {market: "All"};
+const settledCalls = () => v3.flatMap(x => (x.calls || []).filter(c => c.hit != null).map(c => ({...c, x})));
+const trTile = (k, v, sub) => `<div class="tile"><span class="k">${k}</span><span class="v">${v}</span>${sub ? `<span class="s">${sub}</span>` : ""}</div>`;
+// green when a market lands at (or near) the chance the model gave it, amber when it's above a coin flip but short of that, red below
+const rateClass = (rate, said) => rate >= said - 0.05 ? "good" : rate >= 0.5 ? "meh" : "bad";
 
-  // calls, season to date, by market
-  const byM = {};
-  rv.forEach(r => Object.entries(r.by_market).forEach(([m,[n,h]]) => { const v = byM[m] ||= [0,0]; v[0]+=n; v[1]+=h; }));
-  const tc = rv.reduce((s,r)=>s+r.calls,0), th = rv.reduce((s,r)=>s+r.hits,0);
-  const mkRows = Object.entries(byM).sort((a,b)=>b[1][0]-a[1][0]).map(([m,[n,h]]) =>
-    `<span>${esc({"Corners total":"Corner totals","Both 4+ corners":"Both teams 4+ corners","BTTS":"Both teams to score","Goals 2.5":"Over/under 2.5 goals","Cards total":"Card totals"}[m]||m)}</span><span class="pct">${h} of ${n}</span><span class="pct ${h/n>=.5?'good':'bad'}">${pc(h/n)}</span>`).join("");
-  const maxH = 96;
-  const bars = `<div class="weeks"><div class="fifty" style="bottom:${maxH/2+2}px"><span>50%</span></div>${rv.map(r => { const p = r.calls ? r.hits/r.calls : 0;
-      return `<div class="wk" title="GW${gwOf(r.round)}: ${r.hits} of ${r.calls}"><span>${r.calls?pc(p):"–"}</span><i style="height:${Math.max(p*maxH,2)}px;opacity:${r.round===S.round?1:.5}"></i></div>`; }).join("")}</div>
-    <div class="wklabels">${rv.map(r => `<span>GW${gwOf(r.round)}<br>${r.calls} call${r.calls===1?"":"s"}</span>`).join("")}</div>`;
-  let html = `<div class="panel"><h3><span><span class="tag call">Calls</span> Did they land?</span></h3>
-    <div class="lede" style="gap:4px"><span class="big ${th/tc>=.5?'good':'bad'}">${th} of ${tc} landed · ${pc(th/tc)}</span><span class="small muted">All calls this season, by gameweek. Darker bar = the gameweek you're viewing.</span></div>
-    ${bars}
-    <div class="mk"><span class="h">Market</span><span class="h pct">Landed</span><span class="h pct">Rate</span>${mkRows}</div>
-    <p class="small muted">Calls before this model went live were worked out afterwards, using only data from before each gameweek.${tc < 100 ? " Fewer than 100 calls so far, so treat the rate as a rough guide." : ""}</p></div>`;
+function renderTrack(){
+  const cs = settledCalls();
+  const rv = DATA.reviews.filter(r => r.model === "v3").sort((a,b) => a.round.localeCompare(b.round));
+  const pending = allCalls(v3).filter(c => c.hit == null && c.x.hc == null).length;
 
-  // predictions, season to date
+  // ---- calls: did they land?
+  const n = cs.length, h = cs.filter(c => c.hit).length, said = n ? avg(cs.map(c => c.p)) : null;
+  setSum("trCallsSum", n ? `${h} of ${n} landed · ${pc(h / n)}` : "nothing marked yet");
+  if (!n){
+    $("#trCalls").innerHTML = `<div class="panel"><p class="empty">Nothing marked yet. Calls are marked once results arrive, usually a day or two after the games.</p></div>`;
+  } else {
+    const by = {}, byLg = {};
+    cs.forEach(c => {
+      const v = by[c.market] = by[c.market] || {n: 0, h: 0, p: 0}; v.n++; v.h += c.hit; v.p += c.p;
+      const l = byLg[c.x.league] = byLg[c.x.league] || {n: 0, h: 0, p: 0}; l.n++; l.h += c.hit; l.p += c.p;
+    });
+    const trow = (label, v) => `<tr><td class="l">${label}</td><td>${v.n}</td><td>${v.h}</td><td class="${rateClass(v.h / v.n, v.p / v.n)}"><b>${pc(v.h / v.n)}</b></td><td class="muted">${pc(v.p / v.n)}</td></tr>`;
+    const thead = first => `<thead><tr><th class="l">${first}</th><th>Calls</th><th>Landed</th><th>Rate</th><th>Model said</th></tr></thead>`;
+    const mkt = Object.entries(by).sort((a, b) => b[1].n - a[1].n).map(([m, v]) => trow(esc(mName(m)), v)).join("");
+    const lgs = ["Championship", "League 1", "League 2"].filter(l => byLg[l]).map(l => trow(esc(l), byLg[l])).join("");
+    const gw = rounds.map(r => { const c = cs.filter(c => c.x.round === r.id); return {r, n: c.length, h: c.filter(c => c.hit).length}; }).filter(g => g.n);
+    const maxH = 96;
+    const bars = `<div class="weeks"><div class="fifty" style="bottom:${maxH / 2 + 2}px"><span>50%</span></div>${gw.map(g => { const q = g.h / g.n;
+        return `<div class="wk" title="GW${g.r.n}: ${g.h} of ${g.n}"><span>${pc(q)}</span><i style="height:${Math.max(q * maxH, 2)}px"></i></div>`; }).join("")}</div>
+      <div class="wklabels">${gw.map(g => `<span>GW${g.r.n}<br>${g.n} call${g.n === 1 ? "" : "s"}</span>`).join("")}</div>`;
+    const dom = by["Corner dominance"];
+    $("#trCalls").innerHTML = `
+      <div class="tiles">
+        ${trTile("Calls landed", `${h} of ${n}`, `${pc(h / n)} of the calls that have been played`)}
+        ${trTile("The model said", pc(said), "its average chance on those calls")}
+        ${dom ? trTile("Corner dominance", `${dom.h} of ${dom.n}`, `${pc(dom.h / dom.n)} · model said ${pc(dom.p / dom.n)}`) : ""}
+        ${by["Cards total"] ? trTile("Card totals", `${by["Cards total"].h} of ${by["Cards total"].n}`, `${pc(by["Cards total"].h / by["Cards total"].n)} · model said ${pc(by["Cards total"].p / by["Cards total"].n)}`) : ""}
+        ${trTile("Still to play", pending, "calls waiting on results")}
+      </div>
+      <div class="panel"><h3>By market</h3><div class="tablebox" style="border:0"><table>${thead("Market")}<tbody>${mkt}</tbody></table></div>
+        <p class="small muted">“Model said” is the average chance the model gave those calls. If the rate sits near it, the model's confidence can be trusted; well under it, the calls are overconfident. Green is at or near what it said, amber above a coin flip but short of it, red below 50%.</p></div>
+      <div class="panel"><h3>By division</h3><div class="tablebox" style="border:0"><table>${thead("Division")}<tbody>${lgs}</tbody></table></div></div>
+      <div class="panel"><h3>By gameweek</h3>${bars}</div>
+      <p class="small muted">Calls before this model went live were worked out afterwards, using only data from before each gameweek. Corner dominance was added on 29 Sep, so its calls for earlier gameweeks were worked out afterwards from each match's expected corners as frozen before kick-off: a replay, not a live record.${n < 100 ? " Fewer than 100 calls so far, so treat the rates as a rough guide." : ""}</p>`;
+  }
+
+  // ---- every call, newest first
+  const markets = [...new Set(cs.map(c => c.market))].sort((a, b) => mName(a).localeCompare(mName(b)));
+  if (TS.market !== "All" && !markets.includes(TS.market)) TS.market = "All";
+  const list = cs.filter(c => TS.market === "All" || c.market === TS.market)
+    .sort((a, b) => (b.x.date + (b.x.time || "")).localeCompare(a.x.date + (a.x.time || "")) || b.p - a.p);
+  setSum("trLogSum", `${n} settled call${n === 1 ? "" : "s"}${pending ? ` · ${pending} to play` : ""}`);
+  $("#trLog").innerHTML = !n ? `<p class="empty">No calls have been marked yet.</p>` : `
+    <div class="row">${["All", ...markets].map(m => `<button class="pill" data-trm="${esc(m)}" aria-pressed="${TS.market === m}">${m === "All" ? "All calls" : esc(mName(m))}</button>`).join("")}</div>
+    <div class="tablebox"><table><thead><tr><th class="l">Date</th><th class="l">Match</th><th class="l">Call</th><th>Chance</th><th class="l">Result</th><th>Outcome</th></tr></thead><tbody>
+    ${list.map(c => { const x = c.x;
+      return `<tr><td class="l">${dm(x.date)}</td><td class="l">${tn(x.home)} v ${tn(x.away)}<div class="lg">${esc(x.league)}</div></td>
+        <td class="l">${esc(describe(c, x).text)}</td><td>${pc(c.p)}</td><td class="l small">${esc(callResult(c, x))}</td><td>${outcome(c, x)}</td></tr>`; }).join("")}
+    </tbody></table></div>`;
+
+  // ---- predictions, season to date
+  const box = $("#trPred");
+  if (!rv.length){ setSum("trPredSum", "nothing marked yet"); box.innerHTML = `<div class="panel"><p class="empty">Nothing marked yet.</p></div>`; return; }
   const sideN = rv.reduce((s,r)=>s+(r.side_n||0),0), sideH = rv.reduce((s,r)=>s+(r.side_hit||0),0);
-  const n = rv.reduce((s,r)=>s+r.matches,0);
-  const mae = rv.reduce((s,r)=>s+r.corner_mae*r.matches,0)/n, bmae = rv.reduce((s,r)=>s+(r.base_mae||0)*r.matches,0)/n;
+  const nm = rv.reduce((s,r)=>s+r.matches,0);
+  const mae = rv.reduce((s,r)=>s+r.corner_mae*r.matches,0)/nm, bmae = rv.reduce((s,r)=>s+(r.base_mae||0)*r.matches,0)/nm;
+  setSum("trPredSum", `${sideH} of ${sideN} sides right`);
   const verdict = s => s == null ? ["–","meh"] : s > .02 ? ["Better","good"] : s < -.02 ? ["Worse","bad"] : ["About the same","meh"];
   const names = {"Cards over 3.5":"Cards over 3.5","Cards over 4.5":"Cards over 4.5","Corners over 9.5":"Corners over 9.5","Corners over 10.5":"Corners over 10.5","Both 4+ corners":"Both teams 4+ corners","Who wins more corners":"Which side wins more corners","BTTS":"Both teams to score","Over 2.5 goals":"Over 2.5 goals","Home clean sheet":"Home clean sheet","Away clean sheet":"Away clean sheet"};
   const sk = (DATA.skill.v3||[]).filter(s => s.n).map(s => { const [t,c] = verdict(s.skill);
     return `<span>${esc(names[s.market]||s.market)}</span><span class="small muted">${s.skill==null?"":(s.skill>=0?"+":"")+(s.skill*100).toFixed(0)+"%"}</span><span class="verdict ${c}">${t}</span>`; }).join("");
   const total = k => rv.reduce((s,r)=>s+(r[k]||0),0);
-  const tr = (label, hit, n, usual) => `<span>${label}</span><span class="pct">${n?`${hit} of ${n}`:"none yet"}</span><span class="pct ${n&&usual!=null?(hit/n>usual?'good':'bad'):''}">${n?pc(hit/n):""}</span>${usual!=null?`<span class="small muted" style="grid-column:1/-1;margin-top:-4px">usually ${pc(usual)}</span>`:""}`;
+  const tr = (label, hit, cnt, usual) => `<span>${label}</span><span class="pct">${cnt?`${hit} of ${cnt}`:"none yet"}</span><span class="pct ${cnt&&usual!=null?(hit/cnt>usual?'good':'bad'):''}">${cnt?pc(hit/cnt):""}</span>${usual!=null?`<span class="small muted" style="grid-column:1/-1;margin-top:-4px">usually ${pc(usual)}</span>`:""}`;
   const done = v3.filter(x => x.hc != null);
   const sidesDone = done.flatMap(x => [[+x.eh, x.hc], [+x.ea, x.ac]]);
-  const hiTag = sidesDone.filter(([mu]) => isHigh(mu)), hiHit = hiTag.filter(([,n]) => n >= S.hi).length;
-  const hiUsual = sidesDone.length ? sidesDone.filter(([,n]) => n >= S.hi).length / sidesDone.length : null;
+  const hiTag = sidesDone.filter(([mu]) => isHigh(mu)), hiHit = hiTag.filter(([,c]) => c >= S.hi).length;
+  const hiUsual = sidesDone.length ? sidesDone.filter(([,c]) => c >= S.hi).length / sidesDone.length : null;
   const tagRows = `<div class="trk"><span class="h">Tagged predictions</span><span class="h pct">Came off</span><span class="h pct">Rate</span>
       ${tr(`<span class="chip hi">High ${S.hi}+</span> side took ${S.hi}+ corners`, hiHit, hiTag.length, hiUsual)}
       ${tr(`<span class="chip gap">Big gap</span> side won more corners`, total("gap_hit"), total("gap_n"), null)}
       ${tr(`<span class="chip cs">Good chance</span> clean sheet kept`, total("cs_hit"), total("cs_n"), avgRate("cs"))}
       ${tr(`<span class="chip low">Low corners</span> side took under 3`, total("u3_hit"), total("u3_n"), avgRate("u3"))}</div>`;
-  html += `<div class="panel"><h3><span><span class="tag pred">Predictions</span> Better than the league average?</span></h3>
+  box.innerHTML = `<div class="panel">
     <div class="lede" style="gap:4px"><span class="big">${sideH} of ${sideN} · ${pc(sideH/sideN)}</span><span class="small muted">matches where it picked the side that won more corners (level counts left out). Corner totals were off by ${f1(mae)} on average, against ${f1(bmae)} using the league average.</span></div>
     ${tagRows}
     <div class="mk"><span class="h">Market</span><span class="h pct">Score</span><span class="h pct">Verdict</span>${sk}</div>
     <p class="small muted">Every prediction's chance is compared with the league's rate as it stood before that gameweek. "Better" means the model knew something the average didn't. Most markets sit close to the average, which is why so few predictions become calls.</p></div>`;
-  box.innerHTML = html;
 }
 
 // ---- teams
@@ -867,42 +981,38 @@ function renderTeams(){
       : `<td>${c==="p"?t.p:(c.startsWith("xg")?f2(t[c]):f1(t[c]))}</td>`).join("")}</tr>`;
   }
   $("#teamTable").innerHTML = h + `</tbody>`;
+  setSum("teamsSum", `${xs.length} teams`);
 }
 
-// ---- jump bar
-const JUMPS = [["callsSec","Calls"],["predSec","Predictions"],["csSec","Clean sheets"],["cardsSec","Cards"],["fxSec","Matches"],
-               ["reviewSec","Track record"],["teamsSec","Teams"],["refSec","Referees"],["helpSec","How it works"]];
-$("#jump").innerHTML = JUMPS.map(([id, t]) => `<button data-jump="${id}">${t}</button>`).join("");
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-function jumpTo(id){
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (id === "helpSec") $("#glossary").open = true;
-  el.scrollIntoView({behavior: reduceMotion ? "auto" : "smooth", block: "start"});
+// ---- views: Gameweek, Track record, Teams, Referees
+const VIEWS = [["board", "Gameweek"], ["track", "Track record"], ["teams", "Teams"], ["refs", "Referees"]];
+S.view = VIEWS.some(([k]) => k === store.get("view")) ? store.get("view") : "board";
+function showView(v, toTop){
+  S.view = v; store.set("view", v);
+  VIEWS.forEach(([k]) => { $("#v-" + k).hidden = k !== v; });
+  $("#jump").innerHTML = VIEWS.map(([k, t]) => `<button data-view="${k}" aria-current="${k === v}">${t}</button>`).join("");
+  syncControls();
+  if (toTop){ const top = $("header.top").offsetHeight + 20; if (window.scrollY > top) window.scrollTo(0, top); }
 }
 function syncControls(){
-  // the jump bar sits under the controls while they stick (wide screens), at the top on phones
-  const ctrl = $(".controls");
-  const h = getComputedStyle(ctrl).position === "sticky" ? ctrl.offsetHeight : 0;
-  document.documentElement.style.setProperty("--ctrl-h", h + "px");
+  // the view bar sticks to the top; the gameweek controls stick under it (wide screens only)
+  const nav = $("#jump"), ctrl = $(".controls");
+  const n = nav ? nav.offsetHeight : 0;
+  const c = ctrl && getComputedStyle(ctrl).position === "sticky" ? ctrl.offsetHeight : 0;
+  document.documentElement.style.setProperty("--nav-h", n + "px");
+  document.documentElement.style.setProperty("--ctrl-h", (n + c) + "px");
 }
-let lastJump = null;
-function markJump(){
-  const off = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--ctrl-h")) || 0) + 90;
-  let cur = null;
-  for (const [id] of JUMPS){ const el = document.getElementById(id); if (el && el.getBoundingClientRect().top - off <= 0) cur = id; }
-  if (cur === lastJump) return;
-  lastJump = cur;
-  $("#jump").querySelectorAll("button").forEach(b => {
-    const on = b.dataset.jump === cur;
-    b.setAttribute("aria-current", on ? "true" : "false");
-    if (on) $("#jump").scrollLeft = b.offsetLeft - 16;
+window.addEventListener("resize", syncControls);
+if (window.ResizeObserver){ const ro = new ResizeObserver(syncControls); ro.observe($(".controls")); ro.observe($("#jump")); }
+
+// dropdown sections remember whether they were left open
+function initDD(){
+  document.querySelectorAll("details.dd").forEach(d => {
+    const saved = store.get("dd:" + d.id);
+    if (saved === "1") d.open = true; else if (saved === "0") d.open = false;
+    d.addEventListener("toggle", () => store.set("dd:" + d.id, d.open ? "1" : "0"));
   });
 }
-let ticking = false;
-window.addEventListener("scroll", () => { if (!ticking){ ticking = true; requestAnimationFrame(() => { ticking = false; markJump(); }); } }, {passive: true});
-window.addEventListener("resize", syncControls);
-if (window.ResizeObserver) new ResizeObserver(syncControls).observe($(".controls"));
 
 // ---- team pages
 const MATCHES = DATA.matches || [];
@@ -1225,6 +1335,7 @@ function renderRefDetail(){
 function renderRefs(){
   const N = REF_LIST.length;
   $("#refDrop").hidden = !N;
+  setSum("refSecSum", N ? `${N} referees this season` : "");
   $("#refIntro").textContent = N
     ? `${N} referees have taken a match this season. Open the list and pick one to see every match they've done: results, cards, fouls, and how they compare with the league average. Only this season counts here; the Strict and Lenient tags use every season since 2017-18.`
     : "No referee has been named in this season's results yet.";
@@ -1237,8 +1348,8 @@ function renderRefs(){
 }
 $("#refQ").addEventListener("input", e => { RS.q = e.target.value; renderRefList(); });
 
-function render(){ renderTabs(); renderLede(); renderCalls(); renderHighlights(); renderCleanSheets(); renderCardsSection(); renderFixtures(); renderReview(); renderTeams(); }
+function render(){ renderTabs(); renderLede(); renderCalls(); renderHighlights(); renderWarnings(); renderCleanSheets(); renderCardsSection(); renderFixtures(); renderTrack(); renderTeams(); }
 render();
 renderRefs();
-syncControls(); markJump(); route();
+initDD(); showView(S.view); route();
 </script>

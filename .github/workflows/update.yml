@@ -2,16 +2,20 @@ name: Update corners board
 
 on:
   schedule:
-    # 07:00 and 19:00 UTC every day. football-data uploads weekend results
-    # on a weekday evening (the last one landed Mon 17:50 UTC), so the
-    # evening run picks them up the same day and the morning run is a
-    # safety net.
-    - cron: "0 7,19 * * *"
+    # 09:17 and 21:17 UTC every day: 10:17am and 10:17pm UK summer time, 9:17
+    # and 9:17 in winter. football-data uploads weekend results on a weekday
+    # evening (the last one landed Mon 17:50 UTC), so the evening run picks
+    # them up the same day and the morning run is a safety net. The odd minute
+    # is deliberate: GitHub queues scheduled runs at the top of the hour behind
+    # everyone else's, and one "19:00" run here started at 23:36.
+    - cron: "17 9,21 * * *"
   workflow_dispatch: {}        # "Run workflow" button on GitHub
   push:
     paths:
       - manual_results.csv     # Flashscore results from the scheduled task
       - referees.csv           # referee appointments from the scheduled task
+      - run.py                 # a change to the model or the page rebuilds the
+      - tracker/**             # board straight away, not at the next slot
 
 permissions:
   contents: write

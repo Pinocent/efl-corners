@@ -26,7 +26,11 @@ except Exception:                        # very old Python: treat times as UTC
     UK = None
 
 # how sure the model must be before a prediction becomes a call
-CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60, "cards": 0.60}
+# "dom" is a side taking more corners than the other (a level count is a miss).
+# Chosen on 2018-19 to 2023-24: at 65% about 12% of matches qualified and the
+# favoured side won more corners 72% of the time; on 2024-25 and 2025-26,
+# which it hadn't seen, 17% qualified and 75% landed.
+CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60, "cards": 0.60, "dom": 0.65}
 
 # Prediction tags - not calls. Each marks where the model says something
 # clearly different from the norm (rates from replaying 2024-25 and 2025-26).
@@ -39,7 +43,7 @@ TAG = {
 FIELDS = (["model", "made", "round", "date", "time", "league", "home", "away",
            "eh", "ea", "et", "main_line"] +
           [f"o{str(l).replace('.', '')}" for l in TOTAL_LINES] +
-          ["home4", "away4", "both4", "home_u3", "away_u3", "home_more",
+          ["home4", "away4", "both4", "home_u3", "away_u3", "home_more", "dom_home", "dom_away",
            "ph", "pa", "lh", "la", "p_home", "p_draw", "p_away", "btts", "o25",
            "cs_home", "cs_away", "sample",
            "ref", "ref_f", "kh", "ka", "kt", "k25", "k35", "k45", "k55", "k65",
@@ -99,6 +103,7 @@ def to_row(fx, pred, made, model="v3", cards=None):
            "eh": c["eh"], "ea": c["ea"], "et": c["et"], "main_line": c["main_line"],
            "home4": c["home4"], "away4": c["away4"], "both4": c["both4"],
            "home_u3": c["home_u3"], "away_u3": c["away_u3"], "home_more": c["home_more"],
+           "dom_home": c["dom_home"], "dom_away": c["dom_away"],
            "ph": ";".join(f"{x:.4f}" for x in c["ph"]),
            "pa": ";".join(f"{x:.4f}" for x in c["pa"]),
            "lh": g["lh"], "la": g["la"], "p_home": g["home"], "p_draw": g["draw"],
@@ -150,6 +155,11 @@ def calls_for(p):
     elif kq is not None and 1 - kq >= CALL["cards"]:
         out.append(("Cards total", f"Under {kl}", 1 - kq))
 
+    # corner dominance: which side takes more corners than the other
+    d = dominance_call(p)
+    if d:
+        out.append(d)
+
     b4 = f(p.get("both4"))
     if b4 is not None and b4 >= CALL["both4"]:
         out.append(("Both 4+ corners", "Yes", b4))
@@ -169,6 +179,24 @@ def calls_for(p):
     return [{"market": m, "pick": k, "p": round(v, 3)} for m, k, v in out]
 
 
+def dominance_call(p):
+    """(market, pick, chance) if one side is confidently expected to win more corners."""
+    dh, da = f(p.get("dom_home")), f(p.get("dom_away"))
+    if dh is not None and dh >= CALL["dom"]:
+        return ("Corner dominance", "Home", dh)
+    if da is not None and da >= CALL["dom"]:
+        return ("Corner dominance", "Away", da)
+    return None
+
+
+def add_call(row, call):
+    """Add one (market, pick, chance) call to a stored row, once."""
+    calls = json.loads(row["calls"]) if row.get("calls") else []
+    if call and not any(c["market"] == call[0] for c in calls):
+        calls.append({"market": call[0], "pick": call[1], "p": round(call[2], 3)})
+        row["calls"] = json.dumps(calls)
+
+
 def landed(call, hc, ac, hg, ag, hk=None, ak=None):
     """Did a stored call come off? (None if it can't be marked yet)"""
     m, pick = call["market"], call["pick"]
@@ -180,6 +208,8 @@ def landed(call, hc, ac, hg, ag, hk=None, ak=None):
     if m == "Corners total":
         side, line = pick.split()
         return hc + ac > float(line) if side == "Over" else hc + ac < float(line)
+    if m == "Corner dominance":
+        return hc > ac if pick == "Home" else ac > hc
     if m == "Both 4+ corners":
         return hc >= 4 and ac >= 4
     if m == "BTTS":

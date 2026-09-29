@@ -17,6 +17,7 @@ import sys
 from datetime import date, datetime, timedelta, timezone
 
 from tracker import evaluate as ev
+from tracker import markets
 from tracker import sources
 from tracker.cards import CardModel, cards_of
 from tracker.flags import fixture_flags
@@ -75,7 +76,7 @@ def upgrade_rows(store):
     out once, now, and frozen from then on. Old-spreadsheet (v2) rows also
     get their per-side chances filled in the way v2 made them.
     """
-    n = 0
+    n = dom = 0
     for r in store.values():
         if r["model"] == "v2" and not r.get("ph"):
             c = independent_markets(float(r["eh"]), float(r["ea"]))
@@ -85,7 +86,15 @@ def upgrade_rows(store):
         if not r.get("calls"):
             ev.freeze_calls(r)
             n += 1
-    return n
+        # corner dominance was added later: work it out once for older rows, from
+        # the expected corners frozen at kick-off, and add the call if it qualifies
+        if r["model"] == "v3" and not r.get("dom_home") and r.get("eh") and r.get("ea"):
+            j = markets.corner_joint(float(r["eh"]), float(r["ea"]), PARAMS["total_size"], PARAMS["split_kappa"])
+            r["dom_home"] = round(sum(p for (h, a), p in j.items() if h > a), 6)
+            r["dom_away"] = round(sum(p for (h, a), p in j.items() if a > h), 6)
+            ev.add_call(r, ev.dominance_call(r))
+            dom += 1
+    return n, dom
 
 
 def history(season):
@@ -320,9 +329,11 @@ def main():
     n = import_legacy(store)
     if n:
         print(f"  Imported {n} predictions from the old spreadsheet")
-    n = upgrade_rows(store)
+    n, dom = upgrade_rows(store)
     if n:
         print(f"  Stored calls for {n} older predictions")
+    if dom:
+        print(f"  Worked out corner-dominance chances for {dom} earlier predictions")
     if rounds:
         n = backfill(store, results, rounds, prior, last, today, movers, hist, card_prior)
         if n:
