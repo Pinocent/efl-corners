@@ -18,6 +18,7 @@ if ! git pull -q --rebase --autostash origin main; then
 fi
 
 git add manual_results.csv referees.csv checkin.txt 2>/dev/null
+git add schedule_*.csv 2>/dev/null        # the fixture list, refreshed from this Mac
 if git diff --cached --quiet; then
     echo "Nothing new to send."
     exit 0

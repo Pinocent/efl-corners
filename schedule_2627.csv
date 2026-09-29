@@ -1,0 +1,1657 @@
+date,time,league,home,away
+2026-08-14,20:00,Championship,Wolves,Blackburn
+2026-08-15,12:30,Championship,Bolton,Preston
+2026-08-15,15:00,Championship,Bristol City,Millwall
+2026-08-15,15:00,Championship,Charlton,Derby
+2026-08-15,15:00,Championship,Middlesbrough,Lincoln
+2026-08-15,15:00,Championship,Norwich,West Brom
+2026-08-15,15:00,Championship,Portsmouth,QPR
+2026-08-15,17:30,Championship,Sheffield Utd,Birmingham
+2026-08-15,15:00,Championship,Stoke,Swansea
+2026-08-15,15:00,League 1,Barnsley,Bromley
+2026-08-15,15:00,League 1,Blackpool,Wycombe
+2026-08-15,15:00,League 1,Bradford,Peterborough
+2026-08-15,15:00,League 1,Burton,Stevenage
+2026-08-15,15:00,League 1,Cambridge Utd,Wigan
+2026-08-15,15:00,League 1,Huddersfield,AFC Wimbledon
+2026-08-15,15:00,League 1,Leyton Orient,Sheffield Wed
+2026-08-15,15:00,League 1,Mansfield,Doncaster
+2026-08-15,12:30,League 1,Notts County,Leicester
+2026-08-15,12:30,League 1,Oxford Utd,MK Dons
+2026-08-15,15:00,League 1,Plymouth,Stockport
+2026-08-15,12:30,League 1,Reading,Luton
+2026-08-15,15:00,League 2,Accrington,Colchester
+2026-08-15,15:00,League 2,Barnet,Salford
+2026-08-15,15:00,League 2,Cheltenham,Rotherham
+2026-08-15,15:00,League 2,Chesterfield,Fleetwood
+2026-08-15,15:00,League 2,Crawley,Crewe
+2026-08-15,15:00,League 2,Gillingham,Walsall
+2026-08-15,15:00,League 2,Grimsby,Exeter
+2026-08-15,12:30,League 2,Newport,Rochdale
+2026-08-15,15:00,League 2,Northampton,Swindon
+2026-08-15,12:30,League 2,Oldham,Port Vale
+2026-08-15,15:00,League 2,Tranmere,Shrewsbury
+2026-08-15,15:00,League 2,York,Bristol Rovers
+2026-08-16,16:00,Championship,Burnley,West Ham
+2026-08-16,13:30,Championship,Watford,Southampton
+2026-08-17,20:00,Championship,Cardiff,Wrexham
+2026-08-20,20:00,League 1,Sheffield Wed,Bradford
+2026-08-22,12:30,Championship,Birmingham,Bristol City
+2026-08-22,15:00,Championship,Blackburn,Middlesbrough
+2026-08-22,15:00,Championship,Derby,Cardiff
+2026-08-22,12:30,Championship,Lincoln,Portsmouth
+2026-08-22,12:30,Championship,Millwall,Norwich
+2026-08-22,15:00,Championship,Preston,Wolves
+2026-08-22,15:00,Championship,QPR,Bolton
+2026-08-22,15:00,Championship,Southampton,Stoke
+2026-08-22,15:00,Championship,Swansea,Sheffield Utd
+2026-08-22,15:00,Championship,West Ham,Charlton
+2026-08-22,15:00,Championship,Wrexham,Watford
+2026-08-22,15:00,League 1,AFC Wimbledon,Reading
+2026-08-22,15:00,League 1,Bromley,Cambridge Utd
+2026-08-22,12:30,League 1,Doncaster,Barnsley
+2026-08-22,15:00,League 1,Leicester,Burton
+2026-08-22,12:30,League 1,Luton,Notts County
+2026-08-22,15:00,League 1,MK Dons,Huddersfield
+2026-08-22,15:00,League 1,Peterborough,Mansfield
+2026-08-22,15:00,League 1,Stevenage,Oxford Utd
+2026-08-22,15:00,League 1,Stockport,Blackpool
+2026-08-22,15:00,League 1,Wigan,Leyton Orient
+2026-08-22,15:00,League 1,Wycombe,Plymouth
+2026-08-22,12:30,League 2,Bristol Rovers,Newport
+2026-08-22,15:00,League 2,Colchester,Oldham
+2026-08-22,15:00,League 2,Crewe,Northampton
+2026-08-22,15:00,League 2,Exeter,Accrington
+2026-08-22,15:00,League 2,Fleetwood,Gillingham
+2026-08-22,15:00,League 2,Port Vale,Tranmere
+2026-08-22,15:00,League 2,Rochdale,Crawley
+2026-08-22,15:00,League 2,Rotherham,York
+2026-08-22,12:30,League 2,Salford,Chesterfield
+2026-08-22,15:00,League 2,Shrewsbury,Barnet
+2026-08-22,15:00,League 2,Swindon,Cheltenham
+2026-08-22,12:30,League 2,Walsall,Grimsby
+2026-08-23,12:00,Championship,West Brom,Burnley
+2026-08-28,20:00,Championship,Wrexham,Birmingham
+2026-08-29,15:00,Championship,Blackburn,QPR
+2026-08-29,15:00,Championship,Bolton,Lincoln
+2026-08-29,15:00,Championship,Bristol City,Portsmouth
+2026-08-29,15:00,Championship,Cardiff,Sheffield Utd
+2026-08-29,15:00,Championship,Charlton,Preston
+2026-08-29,12:30,Championship,Derby,Swansea
+2026-08-29,12:30,Championship,Middlesbrough,West Brom
+2026-08-29,15:00,Championship,Norwich,Burnley
+2026-08-29,15:00,Championship,Southampton,Millwall
+2026-08-29,15:00,Championship,Watford,West Ham
+2026-08-29,12:30,Championship,Wolves,Stoke
+2026-08-29,12:30,League 1,Blackpool,Peterborough
+2026-08-29,15:00,League 1,Cambridge Utd,Huddersfield
+2026-08-29,15:00,League 1,Leyton Orient,Barnsley
+2026-08-29,12:30,League 1,MK Dons,Leicester
+2026-08-29,15:00,League 1,Notts County,Burton
+2026-08-29,15:00,League 1,Plymouth,Bradford
+2026-08-29,15:00,League 1,Sheffield Wed,Bromley
+2026-08-29,15:00,League 1,Stevenage,Doncaster
+2026-08-29,15:00,League 1,Stockport,Wycombe
+2026-08-29,12:30,League 2,Barnet,Cheltenham
+2026-08-29,15:00,League 2,Colchester,Rochdale
+2026-08-29,15:00,League 2,Crawley,Bristol Rovers
+2026-08-29,15:00,League 2,Gillingham,Northampton
+2026-08-29,15:00,League 2,Grimsby,Fleetwood
+2026-08-29,15:00,League 2,Newport,Tranmere
+2026-08-29,15:00,League 2,Oldham,Swindon
+2026-08-29,12:30,League 2,Port Vale,Crewe
+2026-08-29,13:00,League 2,Rotherham,Chesterfield
+2026-08-29,15:00,League 2,Shrewsbury,Salford
+2026-08-29,15:00,League 2,Walsall,Accrington
+2026-08-29,15:00,League 2,York,Exeter
+2026-08-30,14:00,League 1,AFC Wimbledon,Wigan
+2026-08-30,15:00,League 1,Mansfield,Luton
+2026-09-01,20:00,Championship,Birmingham,Southampton
+2026-09-01,19:45,Championship,Lincoln,Blackburn
+2026-09-01,19:45,Championship,Portsmouth,Derby
+2026-09-01,19:45,Championship,Preston,Bristol City
+2026-09-01,19:45,Championship,Sheffield Utd,Bolton
+2026-09-01,20:00,Championship,Stoke,Norwich
+2026-09-01,19:45,Championship,Swansea,Watford
+2026-09-01,19:45,Championship,West Ham,Wolves
+2026-09-01,19:45,League 1,Bradford,Cambridge Utd
+2026-09-01,19:45,League 1,Bromley,Leyton Orient
+2026-09-01,19:45,League 1,Doncaster,Notts County
+2026-09-01,19:45,League 1,Huddersfield,Oxford Utd
+2026-09-01,19:45,League 1,Leicester,Plymouth
+2026-09-01,19:45,League 1,Peterborough,Stevenage
+2026-09-01,19:45,League 1,Wycombe,Sheffield Wed
+2026-09-01,19:45,League 2,Accrington,Grimsby
+2026-09-01,19:45,League 2,Bristol Rovers,Colchester
+2026-09-01,19:45,League 2,Cheltenham,York
+2026-09-01,19:45,League 2,Chesterfield,Gillingham
+2026-09-01,19:45,League 2,Crewe,Walsall
+2026-09-01,19:45,League 2,Exeter,Barnet
+2026-09-01,19:45,League 2,Fleetwood,Oldham
+2026-09-01,19:45,League 2,Northampton,Crawley
+2026-09-01,19:45,League 2,Rochdale,Shrewsbury
+2026-09-01,19:45,League 2,Salford,Newport
+2026-09-01,19:45,League 2,Swindon,Port Vale
+2026-09-01,19:45,League 2,Tranmere,Rotherham
+2026-09-02,20:00,Championship,Burnley,Middlesbrough
+2026-09-02,19:45,Championship,Millwall,Wrexham
+2026-09-02,19:45,Championship,QPR,Cardiff
+2026-09-02,19:45,Championship,West Brom,Charlton
+2026-09-02,19:45,League 1,Barnsley,Blackpool
+2026-09-02,19:45,League 1,Burton,AFC Wimbledon
+2026-09-02,19:45,League 1,Luton,Stockport
+2026-09-02,20:00,League 1,Reading,Mansfield
+2026-09-02,19:45,League 1,Wigan,MK Dons
+2026-09-05,15:00,Championship,Burnley,Bristol City
+2026-09-05,12:30,Championship,Lincoln,Southampton
+2026-09-05,15:00,Championship,Millwall,Bolton
+2026-09-05,15:00,Championship,Portsmouth,Cardiff
+2026-09-05,12:30,Championship,Preston,Blackburn
+2026-09-05,15:00,Championship,QPR,Middlesbrough
+2026-09-05,15:00,Championship,Sheffield Utd,Norwich
+2026-09-05,12:30,Championship,Stoke,Charlton
+2026-09-05,20:00,Championship,Swansea,Wrexham
+2026-09-05,15:00,Championship,West Brom,Watford
+2026-09-05,15:00,Championship,West Ham,Derby
+2026-09-05,15:00,League 1,Barnsley,Stevenage
+2026-09-05,15:00,League 1,Bradford,Mansfield
+2026-09-05,15:00,League 1,Burton,Cambridge Utd
+2026-09-05,15:00,League 1,Doncaster,Plymouth
+2026-09-05,15:00,League 1,Huddersfield,Notts County
+2026-09-05,15:00,League 1,Leicester,Oxford Utd
+2026-09-05,15:00,League 1,Luton,Leyton Orient
+2026-09-05,12:30,League 1,Peterborough,Sheffield Wed
+2026-09-05,15:00,League 1,Reading,Blackpool
+2026-09-05,12:30,League 1,Wigan,Stockport
+2026-09-05,15:00,League 1,Wycombe,MK Dons
+2026-09-05,15:00,League 2,Accrington,Crawley
+2026-09-05,15:00,League 2,Bristol Rovers,Rotherham
+2026-09-05,15:00,League 2,Cheltenham,Grimsby
+2026-09-05,15:00,League 2,Chesterfield,Barnet
+2026-09-05,15:00,League 2,Crewe,York
+2026-09-05,15:00,League 2,Exeter,Walsall
+2026-09-05,12:30,League 2,Fleetwood,Shrewsbury
+2026-09-05,15:00,League 2,Northampton,Newport
+2026-09-05,15:00,League 2,Rochdale,Gillingham
+2026-09-05,12:30,League 2,Salford,Port Vale
+2026-09-05,15:00,League 2,Swindon,Colchester
+2026-09-05,15:00,League 2,Tranmere,Oldham
+2026-09-06,12:00,Championship,Birmingham,Wolves
+2026-09-07,20:00,League 1,Bromley,AFC Wimbledon
+2026-09-08,19:45,Championship,Blackburn,Sheffield Utd
+2026-09-08,20:00,Championship,Bolton,West Ham
+2026-09-08,19:45,Championship,Cardiff,Stoke
+2026-09-08,19:45,Championship,Southampton,Swansea
+2026-09-08,19:45,Championship,Watford,Preston
+2026-09-08,19:45,Championship,Wrexham,Burnley
+2026-09-09,20:00,Championship,Charlton,QPR
+2026-09-09,19:45,Championship,Derby,West Brom
+2026-09-09,19:45,Championship,Norwich,Birmingham
+2026-09-10,20:00,League 1,Stevenage,Luton
+2026-09-11,20:00,Championship,West Ham,Wrexham
+2026-09-12,15:00,Championship,Blackburn,Millwall
+2026-09-12,12:30,Championship,Bolton,Cardiff
+2026-09-12,15:00,Championship,Charlton,Portsmouth
+2026-09-12,12:30,Championship,Derby,Birmingham
+2026-09-12,15:00,Championship,Middlesbrough,Norwich
+2026-09-12,15:00,Championship,Preston,Lincoln
+2026-09-12,15:00,Championship,Southampton,Bristol City
+2026-09-12,15:00,Championship,Swansea,Burnley
+2026-09-12,15:00,Championship,Watford,Stoke
+2026-09-12,12:30,Championship,West Brom,QPR
+2026-09-12,15:00,League 1,AFC Wimbledon,Doncaster
+2026-09-12,15:00,League 1,Blackpool,Bromley
+2026-09-12,15:00,League 1,Cambridge Utd,Reading
+2026-09-12,12:30,League 1,Leyton Orient,Wycombe
+2026-09-12,15:00,League 1,MK Dons,Peterborough
+2026-09-12,15:00,League 1,Mansfield,Huddersfield
+2026-09-12,12:30,League 1,Notts County,Bradford
+2026-09-12,15:00,League 1,Oxford Utd,Burton
+2026-09-12,15:00,League 1,Plymouth,Barnsley
+2026-09-12,15:00,League 1,Sheffield Wed,Wigan
+2026-09-12,15:00,League 1,Stockport,Leicester
+2026-09-12,15:00,League 2,Barnet,Accrington
+2026-09-12,15:00,League 2,Colchester,Crewe
+2026-09-12,12:30,League 2,Crawley,Cheltenham
+2026-09-12,15:00,League 2,Gillingham,Tranmere
+2026-09-12,12:30,League 2,Grimsby,Bristol Rovers
+2026-09-12,15:00,League 2,Newport,Fleetwood
+2026-09-12,15:00,League 2,Oldham,Chesterfield
+2026-09-12,15:00,League 2,Port Vale,Exeter
+2026-09-12,15:00,League 2,Rotherham,Salford
+2026-09-12,15:00,League 2,Shrewsbury,Northampton
+2026-09-12,15:00,League 2,Walsall,Rochdale
+2026-09-12,15:00,League 2,York,Swindon
+2026-09-13,12:00,Championship,Sheffield Utd,Wolves
+2026-09-15,19:45,Championship,Bristol City,Lincoln
+2026-09-15,19:45,Championship,Middlesbrough,Millwall
+2026-09-17,20:00,League 1,AFC Wimbledon,MK Dons
+2026-09-18,20:00,Championship,Bristol City,Watford
+2026-09-19,15:00,Championship,Birmingham,Middlesbrough
+2026-09-19,15:00,Championship,Burnley,Derby
+2026-09-19,12:30,Championship,Cardiff,Charlton
+2026-09-19,15:00,Championship,Lincoln,Swansea
+2026-09-19,12:30,Championship,Millwall,West Ham
+2026-09-19,15:00,Championship,Portsmouth,Blackburn
+2026-09-19,15:00,Championship,QPR,Preston
+2026-09-19,12:30,Championship,Stoke,Sheffield Utd
+2026-09-19,15:00,Championship,Wrexham,Southampton
+2026-09-19,12:30,League 1,Barnsley,Leicester
+2026-09-19,15:00,League 1,Blackpool,Plymouth
+2026-09-19,15:00,League 1,Bromley,Huddersfield
+2026-09-19,12:30,League 1,Burton,Mansfield
+2026-09-19,15:00,League 1,Leyton Orient,Stevenage
+2026-09-19,15:00,League 1,Luton,Bradford
+2026-09-19,15:00,League 1,Oxford Utd,Cambridge Utd
+2026-09-19,15:00,League 1,Peterborough,Doncaster
+2026-09-19,15:00,League 1,Reading,Notts County
+2026-09-19,15:00,League 1,Sheffield Wed,Stockport
+2026-09-19,15:00,League 1,Wigan,Wycombe
+2026-09-19,15:00,League 2,Accrington,Newport
+2026-09-19,15:00,League 2,Barnet,Fleetwood
+2026-09-19,15:00,League 2,Chesterfield,York
+2026-09-19,15:00,League 2,Colchester,Cheltenham
+2026-09-19,15:00,League 2,Crewe,Shrewsbury
+2026-09-19,15:00,League 2,Exeter,Tranmere
+2026-09-19,15:00,League 2,Gillingham,Bristol Rovers
+2026-09-19,15:00,League 2,Grimsby,Crawley
+2026-09-19,15:00,League 2,Northampton,Rotherham
+2026-09-19,12:30,League 2,Rochdale,Oldham
+2026-09-19,15:00,League 2,Salford,Swindon
+2026-09-19,12:30,League 2,Walsall,Port Vale
+2026-09-20,13:30,Championship,Norwich,Bolton
+2026-09-20,12:00,Championship,Wolves,West Brom
+2026-09-26,15:00,League 1,Bradford,Barnsley
+2026-09-26,15:00,League 1,Cambridge Utd,AFC Wimbledon
+2026-09-26,15:00,League 1,Doncaster,Oxford Utd
+2026-09-26,15:00,League 1,Huddersfield,Luton
+2026-09-26,15:00,League 1,Leicester,Wigan
+2026-09-26,15:00,League 1,MK Dons,Bromley
+2026-09-26,15:00,League 1,Mansfield,Leyton Orient
+2026-09-26,15:00,League 1,Notts County,Blackpool
+2026-09-26,15:00,League 1,Plymouth,Burton
+2026-09-26,15:00,League 1,Stevenage,Sheffield Wed
+2026-09-26,15:00,League 1,Stockport,Peterborough
+2026-09-26,15:00,League 1,Wycombe,Reading
+2026-09-26,15:00,League 2,Bristol Rovers,Exeter
+2026-09-26,15:00,League 2,Cheltenham,Chesterfield
+2026-09-26,12:30,League 2,Crawley,Barnet
+2026-09-26,15:00,League 2,Fleetwood,Rochdale
+2026-09-26,15:00,League 2,Newport,Grimsby
+2026-09-26,17:30,League 2,Oldham,Salford
+2026-09-26,15:00,League 2,Port Vale,Northampton
+2026-09-26,15:00,League 2,Rotherham,Crewe
+2026-09-26,15:00,League 2,Shrewsbury,Colchester
+2026-09-26,15:00,League 2,Swindon,Accrington
+2026-09-26,15:00,League 2,Tranmere,Walsall
+2026-09-26,15:00,League 2,York,Gillingham
+2026-10-03,15:00,League 1,AFC Wimbledon,Stevenage
+2026-10-03,15:00,League 1,Barnsley,MK Dons
+2026-10-03,15:00,League 1,Blackpool,Leicester
+2026-10-03,15:00,League 1,Bromley,Wycombe
+2026-10-03,15:00,League 1,Burton,Huddersfield
+2026-10-03,15:00,League 1,Leyton Orient,Plymouth
+2026-10-03,15:00,League 1,Luton,Doncaster
+2026-10-03,15:00,League 1,Peterborough,Notts County
+2026-10-03,15:00,League 1,Reading,Bradford
+2026-10-03,15:00,League 1,Sheffield Wed,Cambridge Utd
+2026-10-03,15:00,League 1,Wigan,Mansfield
+2026-10-03,15:00,League 2,Accrington,Cheltenham
+2026-10-03,15:00,League 2,Barnet,York
+2026-10-03,12:30,League 2,Chesterfield,Tranmere
+2026-10-03,15:00,League 2,Colchester,Port Vale
+2026-10-03,15:00,League 2,Crewe,Bristol Rovers
+2026-10-03,15:00,League 2,Exeter,Rotherham
+2026-10-03,15:00,League 2,Gillingham,Newport
+2026-10-03,15:00,League 2,Grimsby,Shrewsbury
+2026-10-03,15:00,League 2,Northampton,Oldham
+2026-10-03,15:00,League 2,Rochdale,Swindon
+2026-10-03,15:00,League 2,Salford,Fleetwood
+2026-10-03,15:00,League 2,Walsall,Crawley
+2026-10-09,20:00,Championship,West Ham,QPR
+2026-10-10,15:00,Championship,Blackburn,Cardiff
+2026-10-10,15:00,Championship,Bolton,Stoke
+2026-10-10,12:30,Championship,Charlton,Bristol City
+2026-10-10,15:00,Championship,Derby,Wrexham
+2026-10-10,15:00,Championship,Middlesbrough,Wolves
+2026-10-10,15:00,Championship,Preston,Millwall
+2026-10-10,15:00,Championship,Sheffield Utd,Lincoln
+2026-10-10,12:30,Championship,Swansea,Norwich
+2026-10-10,15:00,Championship,Watford,Burnley
+2026-10-10,12:30,Championship,West Brom,Birmingham
+2026-10-10,15:00,League 1,Bradford,Leyton Orient
+2026-10-10,15:00,League 1,Cambridge Utd,Blackpool
+2026-10-10,15:00,League 1,Doncaster,Burton
+2026-10-10,15:00,League 1,Huddersfield,Sheffield Wed
+2026-10-10,15:00,League 1,Leicester,Peterborough
+2026-10-10,15:00,League 1,MK Dons,Reading
+2026-10-10,15:00,League 1,Mansfield,Bromley
+2026-10-10,12:30,League 1,Notts County,Oxford Utd
+2026-10-10,12:30,League 1,Plymouth,AFC Wimbledon
+2026-10-10,15:00,League 1,Stevenage,Wigan
+2026-10-10,15:00,League 1,Stockport,Barnsley
+2026-10-10,15:00,League 1,Wycombe,Luton
+2026-10-10,15:00,League 2,Bristol Rovers,Barnet
+2026-10-10,15:00,League 2,Cheltenham,Salford
+2026-10-10,15:00,League 2,Crawley,Chesterfield
+2026-10-10,15:00,League 2,Fleetwood,Walsall
+2026-10-10,15:00,League 2,Newport,Colchester
+2026-10-10,12:30,League 2,Oldham,Accrington
+2026-10-10,15:00,League 2,Port Vale,Grimsby
+2026-10-10,15:00,League 2,Rotherham,Gillingham
+2026-10-10,15:00,League 2,Shrewsbury,Exeter
+2026-10-10,12:30,League 2,Swindon,Crewe
+2026-10-10,15:00,League 2,Tranmere,Rochdale
+2026-10-10,15:00,League 2,York,Northampton
+2026-10-11,12:00,Championship,Southampton,Portsmouth
+2026-10-13,20:00,Championship,Birmingham,Preston
+2026-10-13,19:45,Championship,Bristol City,Blackburn
+2026-10-13,19:45,Championship,Burnley,Charlton
+2026-10-13,19:45,Championship,Cardiff,Watford
+2026-10-13,19:45,Championship,Millwall,Swansea
+2026-10-13,20:00,Championship,Stoke,Middlesbrough
+2026-10-13,19:45,Championship,Wolves,Bolton
+2026-10-13,19:45,Championship,Wrexham,West Brom
+2026-10-14,20:00,Championship,Lincoln,West Ham
+2026-10-14,19:45,Championship,Norwich,Southampton
+2026-10-14,19:45,Championship,Portsmouth,Sheffield Utd
+2026-10-14,19:45,Championship,QPR,Derby
+2026-10-15,20:00,League 1,Mansfield,Oxford Utd
+2026-10-16,20:00,Championship,Burnley,Wolves
+2026-10-17,15:00,Championship,Birmingham,QPR
+2026-10-17,15:00,Championship,Bristol City,Sheffield Utd
+2026-10-17,15:00,Championship,Derby,Stoke
+2026-10-17,12:30,Championship,Middlesbrough,Cardiff
+2026-10-17,12:30,Championship,Millwall,Lincoln
+2026-10-17,15:00,Championship,Norwich,Portsmouth
+2026-10-17,15:00,Championship,Southampton,Bolton
+2026-10-17,15:00,Championship,Swansea,West Ham
+2026-10-17,12:30,Championship,Watford,Charlton
+2026-10-17,15:00,Championship,West Brom,Blackburn
+2026-10-17,15:00,Championship,Wrexham,Preston
+2026-10-17,15:00,League 1,Barnsley,Cambridge Utd
+2026-10-17,15:00,League 1,Bradford,Stevenage
+2026-10-17,15:00,League 1,Leicester,Doncaster
+2026-10-17,15:00,League 1,Leyton Orient,Blackpool
+2026-10-17,12:30,League 1,MK Dons,Luton
+2026-10-17,12:30,League 1,Peterborough,Burton
+2026-10-17,15:00,League 1,Plymouth,Huddersfield
+2026-10-17,15:00,League 1,Sheffield Wed,AFC Wimbledon
+2026-10-17,15:00,League 1,Stockport,Bromley
+2026-10-17,15:00,League 1,Wigan,Reading
+2026-10-17,15:00,League 1,Wycombe,Notts County
+2026-10-17,15:00,League 2,Accrington,Gillingham
+2026-10-17,15:00,League 2,Colchester,Exeter
+2026-10-17,15:00,League 2,Crewe,Rochdale
+2026-10-17,12:30,League 2,Fleetwood,Rotherham
+2026-10-17,15:00,League 2,Grimsby,Northampton
+2026-10-17,15:00,League 2,Newport,York
+2026-10-17,15:00,League 2,Oldham,Cheltenham
+2026-10-17,15:00,League 2,Port Vale,Chesterfield
+2026-10-17,15:00,League 2,Salford,Crawley
+2026-10-17,12:30,League 2,Shrewsbury,Bristol Rovers
+2026-10-17,15:00,League 2,Swindon,Walsall
+2026-10-17,15:00,League 2,Tranmere,Barnet
+2026-10-20,19:45,Championship,Wolves,Portsmouth
+2026-10-20,19:45,League 1,AFC Wimbledon,Mansfield
+2026-10-20,19:45,League 1,Blackpool,MK Dons
+2026-10-20,19:45,League 1,Bromley,Leicester
+2026-10-20,19:45,League 1,Burton,Bradford
+2026-10-20,19:45,League 1,Cambridge Utd,Wycombe
+2026-10-20,19:45,League 1,Doncaster,Stockport
+2026-10-20,19:45,League 1,Huddersfield,Peterborough
+2026-10-20,19:45,League 1,Luton,Barnsley
+2026-10-20,19:45,League 1,Notts County,Sheffield Wed
+2026-10-20,19:45,League 1,Oxford Utd,Wigan
+2026-10-20,19:45,League 1,Stevenage,Plymouth
+2026-10-20,19:45,League 2,Barnet,Swindon
+2026-10-20,19:45,League 2,Bristol Rovers,Salford
+2026-10-20,19:45,League 2,Cheltenham,Fleetwood
+2026-10-20,19:45,League 2,Chesterfield,Colchester
+2026-10-20,19:45,League 2,Crawley,Shrewsbury
+2026-10-20,19:45,League 2,Exeter,Crewe
+2026-10-20,20:00,League 2,Gillingham,Port Vale
+2026-10-20,19:45,League 2,Northampton,Tranmere
+2026-10-20,19:45,League 2,Rochdale,Grimsby
+2026-10-20,19:45,League 2,Rotherham,Newport
+2026-10-20,19:45,League 2,Walsall,Oldham
+2026-10-20,19:45,League 2,York,Accrington
+2026-10-21,20:00,League 1,Reading,Leyton Orient
+2026-10-23,20:00,Championship,Bolton,Middlesbrough
+2026-10-24,15:00,Championship,Blackburn,Wrexham
+2026-10-24,15:00,Championship,Cardiff,Birmingham
+2026-10-24,12:30,Championship,Charlton,Norwich
+2026-10-24,15:00,Championship,Lincoln,Burnley
+2026-10-24,12:30,Championship,Portsmouth,Millwall
+2026-10-24,15:00,Championship,Preston,West Brom
+2026-10-24,15:00,Championship,QPR,Swansea
+2026-10-24,12:30,Championship,Sheffield Utd,Derby
+2026-10-24,15:00,Championship,Stoke,Bristol City
+2026-10-24,15:00,Championship,West Ham,Southampton
+2026-10-24,15:00,Championship,Wolves,Watford
+2026-10-24,15:00,League 1,AFC Wimbledon,Wycombe
+2026-10-24,15:00,League 1,Blackpool,Mansfield
+2026-10-24,15:00,League 1,Bromley,Peterborough
+2026-10-24,15:00,League 1,Burton,Leyton Orient
+2026-10-24,15:00,League 1,Cambridge Utd,Plymouth
+2026-10-24,15:00,League 1,Doncaster,Sheffield Wed
+2026-10-24,12:30,League 1,Huddersfield,Wigan
+2026-10-24,12:30,League 1,Luton,Leicester
+2026-10-24,15:00,League 1,Notts County,Stockport
+2026-10-24,15:00,League 1,Oxford Utd,Bradford
+2026-10-24,15:00,League 1,Reading,Barnsley
+2026-10-24,15:00,League 1,Stevenage,MK Dons
+2026-10-24,15:00,League 2,Barnet,Oldham
+2026-10-24,12:30,League 2,Bristol Rovers,Swindon
+2026-10-24,12:30,League 2,Cheltenham,Newport
+2026-10-24,15:00,League 2,Chesterfield,Crewe
+2026-10-24,15:00,League 2,Crawley,Tranmere
+2026-10-24,15:00,League 2,Exeter,Fleetwood
+2026-10-24,15:00,League 2,Gillingham,Grimsby
+2026-10-24,12:30,League 2,Northampton,Colchester
+2026-10-24,15:00,League 2,Rochdale,Accrington
+2026-10-24,15:00,League 2,Rotherham,Shrewsbury
+2026-10-24,15:00,League 2,York,Port Vale
+2026-10-26,20:00,League 2,Walsall,Salford
+2026-10-27,19:45,League 1,Oxford Utd,Stockport
+2026-10-30,20:00,Championship,Sheffield Utd,Wrexham
+2026-10-30,19:45,League 2,Newport,Chesterfield
+2026-10-31,15:00,Championship,Bolton,Bristol City
+2026-10-31,15:00,Championship,Burnley,Portsmouth
+2026-10-31,12:30,Championship,Lincoln,Birmingham
+2026-10-31,15:00,Championship,Middlesbrough,Charlton
+2026-10-31,15:00,Championship,Millwall,Derby
+2026-10-31,12:30,Championship,Norwich,Watford
+2026-10-31,15:00,Championship,Southampton,QPR
+2026-10-31,12:30,Championship,Stoke,Preston
+2026-10-31,15:00,Championship,Swansea,Blackburn
+2026-10-31,15:00,Championship,West Ham,West Brom
+2026-10-31,15:00,Championship,Wolves,Cardiff
+2026-10-31,15:00,League 1,Barnsley,Oxford Utd
+2026-10-31,12:30,League 1,Bradford,Huddersfield
+2026-10-31,15:00,League 1,Leicester,Stevenage
+2026-10-31,12:30,League 1,Leyton Orient,Cambridge Utd
+2026-10-31,15:00,League 1,MK Dons,Doncaster
+2026-10-31,15:00,League 1,Mansfield,Notts County
+2026-10-31,15:00,League 1,Peterborough,Luton
+2026-10-31,12:30,League 1,Plymouth,Reading
+2026-10-31,15:00,League 1,Stockport,AFC Wimbledon
+2026-10-31,15:00,League 1,Wigan,Bromley
+2026-10-31,15:00,League 1,Wycombe,Burton
+2026-10-31,15:00,League 2,Accrington,Northampton
+2026-10-31,15:00,League 2,Colchester,Walsall
+2026-10-31,15:00,League 2,Crewe,Barnet
+2026-10-31,15:00,League 2,Fleetwood,Bristol Rovers
+2026-10-31,12:30,League 2,Grimsby,York
+2026-10-31,15:00,League 2,Oldham,Crawley
+2026-10-31,12:30,League 2,Port Vale,Rochdale
+2026-10-31,15:00,League 2,Salford,Exeter
+2026-10-31,15:00,League 2,Shrewsbury,Gillingham
+2026-10-31,15:00,League 2,Swindon,Rotherham
+2026-10-31,15:00,League 2,Tranmere,Cheltenham
+2026-11-01,14:00,League 1,Sheffield Wed,Blackpool
+2026-11-03,20:00,Championship,Birmingham,Millwall
+2026-11-03,19:45,Championship,Blackburn,Stoke
+2026-11-03,19:45,Championship,Charlton,Bolton
+2026-11-03,19:45,Championship,Derby,Norwich
+2026-11-03,19:45,Championship,Portsmouth,Swansea
+2026-11-03,19:45,Championship,Preston,Sheffield Utd
+2026-11-03,19:45,Championship,QPR,Burnley
+2026-11-03,19:45,Championship,Watford,Lincoln
+2026-11-03,20:00,Championship,West Brom,Southampton
+2026-11-04,20:00,Championship,Bristol City,Wolves
+2026-11-04,19:45,Championship,Cardiff,West Ham
+2026-11-04,19:45,Championship,Wrexham,Middlesbrough
+2026-11-04,19:45,League 1,Oxford Utd,Reading
+2026-11-06,20:00,Championship,Derby,Bolton
+2026-11-07,15:00,Championship,Birmingham,Swansea
+2026-11-07,15:00,Championship,Blackburn,West Ham
+2026-11-07,12:30,Championship,Bristol City,Norwich
+2026-11-07,15:00,Championship,Cardiff,Burnley
+2026-11-07,15:00,Championship,Charlton,Sheffield Utd
+2026-11-07,12:30,Championship,Portsmouth,Stoke
+2026-11-07,15:00,Championship,Preston,Southampton
+2026-11-07,15:00,Championship,QPR,Lincoln
+2026-11-07,15:00,Championship,Watford,Middlesbrough
+2026-11-07,15:00,Championship,West Brom,Millwall
+2026-11-07,12:30,Championship,Wrexham,Wolves
+2026-11-14,15:00,League 1,AFC Wimbledon,Blackpool
+2026-11-14,15:00,League 1,Bromley,Notts County
+2026-11-14,15:00,League 1,Doncaster,Leyton Orient
+2026-11-14,15:00,League 1,Leicester,Bradford
+2026-11-14,15:00,League 1,Luton,Cambridge Utd
+2026-11-14,15:00,League 1,MK Dons,Burton
+2026-11-14,15:00,League 1,Peterborough,Oxford Utd
+2026-11-14,15:00,League 1,Sheffield Wed,Plymouth
+2026-11-14,15:00,League 1,Stevenage,Mansfield
+2026-11-14,15:00,League 1,Stockport,Reading
+2026-11-14,15:00,League 1,Wigan,Barnsley
+2026-11-14,15:00,League 1,Wycombe,Huddersfield
+2026-11-14,15:00,League 2,Bristol Rovers,Chesterfield
+2026-11-14,15:00,League 2,Colchester,Gillingham
+2026-11-14,15:00,League 2,Crewe,Newport
+2026-11-14,12:30,League 2,Exeter,Cheltenham
+2026-11-14,17:30,League 2,Fleetwood,Tranmere
+2026-11-14,15:00,League 2,Port Vale,Accrington
+2026-11-14,15:00,League 2,Rochdale,York
+2026-11-14,15:00,League 2,Rotherham,Crawley
+2026-11-14,15:00,League 2,Salford,Northampton
+2026-11-14,15:00,League 2,Shrewsbury,Oldham
+2026-11-14,15:00,League 2,Swindon,Grimsby
+2026-11-14,15:00,League 2,Walsall,Barnet
+2026-11-20,20:00,League 1,Barnsley,Sheffield Wed
+2026-11-21,15:00,Championship,Bolton,Portsmouth
+2026-11-21,15:00,Championship,Lincoln,Wrexham
+2026-11-21,15:00,Championship,Middlesbrough,Bristol City
+2026-11-21,12:30,Championship,Millwall,QPR
+2026-11-21,12:30,Championship,Norwich,Cardiff
+2026-11-21,15:00,Championship,Sheffield Utd,Watford
+2026-11-21,12:30,Championship,Southampton,Derby
+2026-11-21,15:00,Championship,Stoke,Birmingham
+2026-11-21,15:00,Championship,Swansea,West Brom
+2026-11-21,15:00,Championship,West Ham,Preston
+2026-11-21,15:00,Championship,Wolves,Charlton
+2026-11-21,12:30,League 1,Blackpool,Wigan
+2026-11-21,15:00,League 1,Bradford,Doncaster
+2026-11-21,15:00,League 1,Burton,Luton
+2026-11-21,15:00,League 1,Cambridge Utd,Stockport
+2026-11-21,15:00,League 1,Huddersfield,Leicester
+2026-11-21,15:00,League 1,Leyton Orient,AFC Wimbledon
+2026-11-21,15:00,League 1,Mansfield,MK Dons
+2026-11-21,15:00,League 1,Notts County,Stevenage
+2026-11-21,15:00,League 1,Oxford Utd,Wycombe
+2026-11-21,15:00,League 1,Plymouth,Peterborough
+2026-11-21,12:30,League 1,Reading,Bromley
+2026-11-21,15:00,League 2,Accrington,Salford
+2026-11-21,15:00,League 2,Barnet,Port Vale
+2026-11-21,15:00,League 2,Cheltenham,Bristol Rovers
+2026-11-21,15:00,League 2,Chesterfield,Shrewsbury
+2026-11-21,15:00,League 2,Crawley,Fleetwood
+2026-11-21,12:30,League 2,Gillingham,Crewe
+2026-11-21,15:00,League 2,Grimsby,Rotherham
+2026-11-21,12:30,League 2,Newport,Swindon
+2026-11-21,15:00,League 2,Northampton,Rochdale
+2026-11-21,15:00,League 2,Oldham,Exeter
+2026-11-21,15:00,League 2,Tranmere,Colchester
+2026-11-21,15:00,League 2,York,Walsall
+2026-11-22,12:00,Championship,Burnley,Blackburn
+2026-11-24,19:45,Championship,Bristol City,Wrexham
+2026-11-24,19:45,Championship,Cardiff,Preston
+2026-11-24,19:45,Championship,Charlton,Lincoln
+2026-11-24,19:45,Championship,Middlesbrough,Swansea
+2026-11-24,19:45,Championship,Norwich,QPR
+2026-11-24,19:45,Championship,Portsmouth,West Ham
+2026-11-24,19:45,Championship,Sheffield Utd,Southampton
+2026-11-24,20:00,Championship,Wolves,Derby
+2026-11-25,19:45,Championship,Bolton,West Brom
+2026-11-25,19:45,Championship,Burnley,Birmingham
+2026-11-25,20:00,Championship,Stoke,Millwall
+2026-11-25,19:45,Championship,Watford,Blackburn
+2026-11-26,20:00,League 1,Doncaster,Huddersfield
+2026-11-27,20:00,Championship,Southampton,Middlesbrough
+2026-11-28,15:00,Championship,Birmingham,Bolton
+2026-11-28,12:30,Championship,Blackburn,Charlton
+2026-11-28,15:00,Championship,Derby,Watford
+2026-11-28,12:30,Championship,Lincoln,Wolves
+2026-11-28,15:00,Championship,Millwall,Burnley
+2026-11-28,12:30,Championship,Preston,Norwich
+2026-11-28,15:00,Championship,QPR,Sheffield Utd
+2026-11-28,15:00,Championship,West Brom,Bristol City
+2026-11-28,15:00,Championship,West Ham,Stoke
+2026-11-28,15:00,Championship,Wrexham,Portsmouth
+2026-11-28,15:00,League 1,AFC Wimbledon,Barnsley
+2026-11-28,15:00,League 1,Bromley,Burton
+2026-11-28,15:00,League 1,Leicester,Mansfield
+2026-11-28,15:00,League 1,Luton,Oxford Utd
+2026-11-28,12:30,League 1,MK Dons,Notts County
+2026-11-28,12:30,League 1,Peterborough,Cambridge Utd
+2026-11-28,15:00,League 1,Sheffield Wed,Reading
+2026-11-28,15:00,League 1,Stevenage,Blackpool
+2026-11-28,15:00,League 1,Stockport,Leyton Orient
+2026-11-28,15:00,League 1,Wigan,Plymouth
+2026-11-28,15:00,League 1,Wycombe,Bradford
+2026-11-28,12:30,League 2,Bristol Rovers,Tranmere
+2026-11-28,15:00,League 2,Colchester,York
+2026-11-28,15:00,League 2,Crewe,Grimsby
+2026-11-28,12:30,League 2,Exeter,Crawley
+2026-11-28,15:00,League 2,Fleetwood,Accrington
+2026-11-28,15:00,League 2,Port Vale,Newport
+2026-11-28,15:00,League 2,Rochdale,Barnet
+2026-11-28,15:00,League 2,Rotherham,Oldham
+2026-11-28,15:00,League 2,Salford,Gillingham
+2026-11-28,15:00,League 2,Shrewsbury,Cheltenham
+2026-11-28,15:00,League 2,Swindon,Chesterfield
+2026-11-28,15:00,League 2,Walsall,Northampton
+2026-11-29,12:00,Championship,Swansea,Cardiff
+2026-12-01,19:45,League 1,Barnsley,Wycombe
+2026-12-01,19:45,League 1,Blackpool,Luton
+2026-12-01,19:45,League 1,Bradford,MK Dons
+2026-12-01,19:45,League 1,Burton,Wigan
+2026-12-01,19:45,League 1,Cambridge Utd,Leicester
+2026-12-01,19:45,League 1,Huddersfield,Stevenage
+2026-12-01,19:45,League 1,Leyton Orient,Peterborough
+2026-12-01,19:45,League 1,Mansfield,Stockport
+2026-12-01,19:45,League 1,Notts County,AFC Wimbledon
+2026-12-01,19:45,League 1,Oxford Utd,Sheffield Wed
+2026-12-01,19:45,League 1,Plymouth,Bromley
+2026-12-01,20:00,League 1,Reading,Doncaster
+2026-12-01,19:45,League 2,Accrington,Crewe
+2026-12-01,19:45,League 2,Barnet,Rotherham
+2026-12-01,19:45,League 2,Cheltenham,Rochdale
+2026-12-01,19:45,League 2,Chesterfield,Exeter
+2026-12-01,19:45,League 2,Crawley,Port Vale
+2026-12-01,19:45,League 2,Gillingham,Swindon
+2026-12-01,19:45,League 2,Grimsby,Colchester
+2026-12-01,19:45,League 2,Newport,Walsall
+2026-12-01,19:45,League 2,Northampton,Fleetwood
+2026-12-01,19:45,League 2,Oldham,Bristol Rovers
+2026-12-01,19:45,League 2,Tranmere,Salford
+2026-12-01,19:45,League 2,York,Shrewsbury
+2026-12-04,20:00,Championship,Sheffield Utd,West Ham
+2026-12-05,12:30,Championship,Bolton,Blackburn
+2026-12-05,12:30,Championship,Bristol City,Swansea
+2026-12-05,15:00,Championship,Cardiff,Lincoln
+2026-12-05,15:00,Championship,Charlton,Birmingham
+2026-12-05,12:30,Championship,Middlesbrough,Derby
+2026-12-05,15:00,Championship,Norwich,Wrexham
+2026-12-05,15:00,Championship,Portsmouth,West Brom
+2026-12-05,15:00,Championship,Stoke,QPR
+2026-12-05,12:30,Championship,Watford,Millwall
+2026-12-05,15:00,Championship,Wolves,Southampton
+2026-12-06,12:00,Championship,Burnley,Preston
+2026-12-08,20:00,Championship,Birmingham,Watford
+2026-12-08,19:45,Championship,Blackburn,Norwich
+2026-12-08,19:45,Championship,Millwall,Sheffield Utd
+2026-12-08,19:45,Championship,QPR,Wolves
+2026-12-08,19:45,Championship,Swansea,Bolton
+2026-12-08,19:45,Championship,West Brom,Cardiff
+2026-12-08,20:00,Championship,West Ham,Middlesbrough
+2026-12-08,19:45,Championship,Wrexham,Charlton
+2026-12-09,19:45,Championship,Derby,Bristol City
+2026-12-09,19:45,Championship,Lincoln,Stoke
+2026-12-09,19:45,Championship,Preston,Portsmouth
+2026-12-09,20:00,Championship,Southampton,Burnley
+2026-12-10,20:00,League 1,Leicester,Sheffield Wed
+2026-12-11,20:00,Championship,Bolton,Wrexham
+2026-12-12,15:00,Championship,Blackburn,Derby
+2026-12-12,15:00,Championship,Cardiff,Southampton
+2026-12-12,15:00,Championship,Charlton,Swansea
+2026-12-12,15:00,Championship,Portsmouth,Birmingham
+2026-12-12,12:30,Championship,Preston,Middlesbrough
+2026-12-12,12:30,Championship,QPR,Watford
+2026-12-12,15:00,Championship,Sheffield Utd,Burnley
+2026-12-12,12:30,Championship,Stoke,West Brom
+2026-12-12,15:00,Championship,West Ham,Bristol City
+2026-12-12,15:00,Championship,Wolves,Millwall
+2026-12-12,15:00,League 1,Bradford,AFC Wimbledon
+2026-12-12,12:30,League 1,Burton,Reading
+2026-12-12,15:00,League 1,Doncaster,Bromley
+2026-12-12,15:00,League 1,Huddersfield,Leyton Orient
+2026-12-12,15:00,League 1,Luton,Wigan
+2026-12-12,15:00,League 1,MK Dons,Cambridge Utd
+2026-12-12,15:00,League 1,Mansfield,Wycombe
+2026-12-12,15:00,League 1,Notts County,Plymouth
+2026-12-12,15:00,League 1,Oxford Utd,Blackpool
+2026-12-12,15:00,League 1,Peterborough,Barnsley
+2026-12-12,12:30,League 1,Stevenage,Stockport
+2026-12-12,15:00,League 2,Barnet,Northampton
+2026-12-12,15:00,League 2,Bristol Rovers,Accrington
+2026-12-12,15:00,League 2,Cheltenham,Crewe
+2026-12-12,12:30,League 2,Chesterfield,Grimsby
+2026-12-12,15:00,League 2,Crawley,Newport
+2026-12-12,15:00,League 2,Exeter,Rochdale
+2026-12-12,15:00,League 2,Fleetwood,Swindon
+2026-12-12,15:00,League 2,Oldham,Gillingham
+2026-12-12,15:00,League 2,Rotherham,Walsall
+2026-12-12,15:00,League 2,Salford,Colchester
+2026-12-12,15:00,League 2,Shrewsbury,Port Vale
+2026-12-12,12:30,League 2,Tranmere,York
+2026-12-13,14:00,Championship,Lincoln,Norwich
+2026-12-17,20:00,League 2,Crewe,Salford
+2026-12-18,20:00,Championship,West Brom,Sheffield Utd
+2026-12-18,19:45,League 1,Cambridge Utd,Stevenage
+2026-12-19,12:30,Championship,Birmingham,West Ham
+2026-12-19,12:30,Championship,Bristol City,Cardiff
+2026-12-19,15:00,Championship,Burnley,Stoke
+2026-12-19,15:00,Championship,Derby,Lincoln
+2026-12-19,15:00,Championship,Middlesbrough,Portsmouth
+2026-12-19,12:30,Championship,Millwall,Charlton
+2026-12-19,15:00,Championship,Norwich,Wolves
+2026-12-19,15:00,Championship,Southampton,Blackburn
+2026-12-19,12:30,Championship,Swansea,Preston
+2026-12-19,12:30,Championship,Watford,Bolton
+2026-12-19,15:00,Championship,Wrexham,QPR
+2026-12-19,15:00,League 1,AFC Wimbledon,Oxford Utd
+2026-12-19,12:30,League 1,Barnsley,Huddersfield
+2026-12-19,15:00,League 1,Blackpool,Burton
+2026-12-19,15:00,League 1,Bromley,Bradford
+2026-12-19,15:00,League 1,Leyton Orient,Notts County
+2026-12-19,15:00,League 1,Plymouth,Mansfield
+2026-12-19,15:00,League 1,Reading,Leicester
+2026-12-19,12:30,League 1,Sheffield Wed,Luton
+2026-12-19,15:00,League 1,Stockport,MK Dons
+2026-12-19,15:00,League 1,Wigan,Peterborough
+2026-12-19,15:00,League 1,Wycombe,Doncaster
+2026-12-19,15:00,League 2,Accrington,Chesterfield
+2026-12-19,12:30,League 2,Colchester,Fleetwood
+2026-12-19,15:00,League 2,Gillingham,Cheltenham
+2026-12-19,15:00,League 2,Grimsby,Barnet
+2026-12-19,15:00,League 2,Newport,Oldham
+2026-12-19,12:30,League 2,Northampton,Exeter
+2026-12-19,15:00,League 2,Port Vale,Rotherham
+2026-12-19,15:00,League 2,Rochdale,Bristol Rovers
+2026-12-19,15:00,League 2,Swindon,Tranmere
+2026-12-19,15:00,League 2,Walsall,Shrewsbury
+2026-12-19,15:00,League 2,York,Crawley
+2026-12-26,15:00,Championship,Blackburn,Birmingham
+2026-12-26,12:30,Championship,Bolton,Burnley
+2026-12-26,15:00,Championship,Cardiff,Millwall
+2026-12-26,15:00,Championship,Charlton,Southampton
+2026-12-26,15:00,Championship,Lincoln,West Brom
+2026-12-26,15:00,Championship,Portsmouth,Watford
+2026-12-26,15:00,Championship,Preston,Derby
+2026-12-26,15:00,Championship,QPR,Bristol City
+2026-12-26,12:30,Championship,Sheffield Utd,Middlesbrough
+2026-12-26,15:00,Championship,Stoke,Wrexham
+2026-12-26,15:00,Championship,West Ham,Norwich
+2026-12-26,15:00,Championship,Wolves,Swansea
+2026-12-26,15:00,League 1,Bradford,Stockport
+2026-12-26,15:00,League 1,Burton,Sheffield Wed
+2026-12-26,15:00,League 1,Doncaster,Wigan
+2026-12-26,15:00,League 1,Huddersfield,Blackpool
+2026-12-26,15:00,League 1,Leicester,AFC Wimbledon
+2026-12-26,15:00,League 1,Luton,Bromley
+2026-12-26,15:00,League 1,MK Dons,Leyton Orient
+2026-12-26,15:00,League 1,Mansfield,Barnsley
+2026-12-26,15:00,League 1,Notts County,Cambridge Utd
+2026-12-26,15:00,League 1,Oxford Utd,Plymouth
+2026-12-26,15:00,League 1,Peterborough,Wycombe
+2026-12-26,15:00,League 1,Stevenage,Reading
+2026-12-26,15:00,League 2,Barnet,Colchester
+2026-12-26,15:00,League 2,Bristol Rovers,Walsall
+2026-12-26,15:00,League 2,Cheltenham,Port Vale
+2026-12-26,15:00,League 2,Chesterfield,Northampton
+2026-12-26,15:00,League 2,Crawley,Gillingham
+2026-12-26,15:00,League 2,Exeter,Newport
+2026-12-26,15:00,League 2,Fleetwood,Crewe
+2026-12-26,15:00,League 2,Oldham,York
+2026-12-26,15:00,League 2,Rotherham,Rochdale
+2026-12-26,15:00,League 2,Salford,Grimsby
+2026-12-26,15:00,League 2,Shrewsbury,Swindon
+2026-12-26,15:00,League 2,Tranmere,Accrington
+2026-12-29,20:00,Championship,Birmingham,Cardiff
+2026-12-29,19:45,Championship,Bristol City,Stoke
+2026-12-29,19:45,Championship,Burnley,Lincoln
+2026-12-29,19:45,Championship,Derby,Sheffield Utd
+2026-12-29,19:45,Championship,Middlesbrough,Bolton
+2026-12-29,19:45,Championship,Millwall,Portsmouth
+2026-12-29,19:45,Championship,Norwich,Charlton
+2026-12-29,20:15,Championship,Southampton,West Ham
+2026-12-29,19:45,Championship,Swansea,QPR
+2026-12-29,19:45,Championship,Watford,Wolves
+2026-12-29,19:45,Championship,West Brom,Preston
+2026-12-29,18:00,Championship,Wrexham,Blackburn
+2026-12-29,19:45,League 1,AFC Wimbledon,Luton
+2026-12-29,19:45,League 1,Barnsley,Burton
+2026-12-29,19:45,League 1,Blackpool,Bradford
+2026-12-29,19:45,League 1,Bromley,Oxford Utd
+2026-12-29,19:45,League 1,Cambridge Utd,Doncaster
+2026-12-29,19:45,League 1,Leyton Orient,Leicester
+2026-12-29,19:45,League 1,Plymouth,MK Dons
+2026-12-29,20:00,League 1,Reading,Peterborough
+2026-12-29,19:45,League 1,Sheffield Wed,Mansfield
+2026-12-29,19:45,League 1,Stockport,Huddersfield
+2026-12-29,19:45,League 1,Wigan,Notts County
+2026-12-29,19:45,League 1,Wycombe,Stevenage
+2026-12-29,19:45,League 2,Accrington,Rotherham
+2026-12-29,19:45,League 2,Colchester,Crawley
+2026-12-29,19:45,League 2,Crewe,Tranmere
+2026-12-29,19:45,League 2,Gillingham,Barnet
+2026-12-29,19:45,League 2,Grimsby,Oldham
+2026-12-29,19:45,League 2,Newport,Shrewsbury
+2026-12-29,19:45,League 2,Northampton,Cheltenham
+2026-12-29,19:45,League 2,Port Vale,Bristol Rovers
+2026-12-29,19:45,League 2,Rochdale,Salford
+2026-12-29,19:45,League 2,Swindon,Exeter
+2026-12-29,19:45,League 2,Walsall,Chesterfield
+2026-12-29,19:45,League 2,York,Fleetwood
+2027-01-01,15:00,Championship,Birmingham,Portsmouth
+2027-01-01,15:00,Championship,Bristol City,West Ham
+2027-01-01,17:30,Championship,Burnley,Sheffield Utd
+2027-01-01,15:00,Championship,Derby,Blackburn
+2027-01-01,15:00,Championship,Middlesbrough,Preston
+2027-01-01,12:30,Championship,Millwall,Wolves
+2027-01-01,15:00,Championship,Norwich,Lincoln
+2027-01-01,15:00,Championship,Southampton,Cardiff
+2027-01-01,15:00,Championship,Swansea,Charlton
+2027-01-01,15:00,Championship,Watford,QPR
+2027-01-01,15:00,Championship,West Brom,Stoke
+2027-01-01,15:00,Championship,Wrexham,Bolton
+2027-01-01,15:00,League 1,AFC Wimbledon,Peterborough
+2027-01-01,15:00,League 1,Barnsley,Notts County
+2027-01-01,15:00,League 1,Blackpool,Doncaster
+2027-01-01,15:00,League 1,Bromley,Stevenage
+2027-01-01,15:00,League 1,Leyton Orient,Oxford Utd
+2027-01-01,15:00,League 1,Reading,MK Dons
+2027-01-01,15:00,League 1,Sheffield Wed,Huddersfield
+2027-01-01,15:00,League 1,Wigan,Bradford
+2027-01-01,15:00,League 1,Wycombe,Leicester
+2027-01-01,15:00,League 2,Accrington,Shrewsbury
+2027-01-01,15:00,League 2,Colchester,Rotherham
+2027-01-01,15:00,League 2,Crewe,Oldham
+2027-01-01,15:00,League 2,Grimsby,Tranmere
+2027-01-01,15:00,League 2,Newport,Barnet
+2027-01-01,15:00,League 2,Port Vale,Fleetwood
+2027-01-01,15:00,League 2,Rochdale,Chesterfield
+2027-01-01,15:00,League 2,Swindon,Crawley
+2027-01-01,15:00,League 2,Walsall,Cheltenham
+2027-01-01,15:00,League 2,York,Salford
+2027-01-02,15:00,League 1,Cambridge Utd,Mansfield
+2027-01-02,15:00,League 1,Plymouth,Luton
+2027-01-02,15:00,League 1,Stockport,Burton
+2027-01-02,15:00,League 2,Gillingham,Exeter
+2027-01-02,15:00,League 2,Northampton,Bristol Rovers
+2027-01-08,20:00,League 1,Burton,Blackpool
+2027-01-09,15:00,League 1,Bradford,Bromley
+2027-01-09,15:00,League 1,Doncaster,Wycombe
+2027-01-09,15:00,League 1,Huddersfield,Barnsley
+2027-01-09,15:00,League 1,Leicester,Reading
+2027-01-09,15:00,League 1,Luton,Sheffield Wed
+2027-01-09,15:00,League 1,MK Dons,Stockport
+2027-01-09,15:00,League 1,Mansfield,Plymouth
+2027-01-09,15:00,League 1,Notts County,Leyton Orient
+2027-01-09,12:30,League 1,Oxford Utd,AFC Wimbledon
+2027-01-09,15:00,League 1,Peterborough,Wigan
+2027-01-09,12:30,League 1,Stevenage,Cambridge Utd
+2027-01-09,12:30,League 2,Barnet,Grimsby
+2027-01-09,15:00,League 2,Bristol Rovers,Rochdale
+2027-01-09,15:00,League 2,Cheltenham,Gillingham
+2027-01-09,12:30,League 2,Chesterfield,Accrington
+2027-01-09,15:00,League 2,Crawley,York
+2027-01-09,15:00,League 2,Exeter,Northampton
+2027-01-09,15:00,League 2,Fleetwood,Colchester
+2027-01-09,15:00,League 2,Oldham,Newport
+2027-01-09,15:00,League 2,Rotherham,Port Vale
+2027-01-09,15:00,League 2,Salford,Crewe
+2027-01-09,12:30,League 2,Shrewsbury,Walsall
+2027-01-09,15:00,League 2,Tranmere,Swindon
+2027-01-16,15:00,Championship,Blackburn,West Brom
+2027-01-16,15:00,Championship,Bolton,Southampton
+2027-01-16,15:00,Championship,Cardiff,Middlesbrough
+2027-01-16,15:00,Championship,Charlton,Watford
+2027-01-16,15:00,Championship,Lincoln,Millwall
+2027-01-16,15:00,Championship,Portsmouth,Norwich
+2027-01-16,15:00,Championship,Preston,Wrexham
+2027-01-16,15:00,Championship,QPR,Birmingham
+2027-01-16,15:00,Championship,Sheffield Utd,Bristol City
+2027-01-16,15:00,Championship,Stoke,Derby
+2027-01-16,15:00,Championship,West Ham,Swansea
+2027-01-16,15:00,Championship,Wolves,Burnley
+2027-01-16,15:00,League 1,AFC Wimbledon,Sheffield Wed
+2027-01-16,15:00,League 1,Blackpool,Leyton Orient
+2027-01-16,15:00,League 1,Bromley,Stockport
+2027-01-16,15:00,League 1,Burton,Peterborough
+2027-01-16,15:00,League 1,Cambridge Utd,Barnsley
+2027-01-16,15:00,League 1,Doncaster,Leicester
+2027-01-16,15:00,League 1,Huddersfield,Plymouth
+2027-01-16,15:00,League 1,Luton,MK Dons
+2027-01-16,15:00,League 1,Notts County,Wycombe
+2027-01-16,15:00,League 1,Oxford Utd,Mansfield
+2027-01-16,15:00,League 1,Reading,Wigan
+2027-01-16,15:00,League 1,Stevenage,Bradford
+2027-01-16,15:00,League 2,Barnet,Tranmere
+2027-01-16,15:00,League 2,Bristol Rovers,Shrewsbury
+2027-01-16,15:00,League 2,Cheltenham,Oldham
+2027-01-16,15:00,League 2,Chesterfield,Port Vale
+2027-01-16,15:00,League 2,Crawley,Salford
+2027-01-16,15:00,League 2,Exeter,Colchester
+2027-01-16,15:00,League 2,Gillingham,Accrington
+2027-01-16,15:00,League 2,Northampton,Grimsby
+2027-01-16,15:00,League 2,Rochdale,Crewe
+2027-01-16,15:00,League 2,Rotherham,Fleetwood
+2027-01-16,15:00,League 2,Walsall,Swindon
+2027-01-16,15:00,League 2,York,Newport
+2027-01-19,19:45,League 1,Barnsley,Luton
+2027-01-19,19:45,League 1,Bradford,Burton
+2027-01-19,19:45,League 1,Leicester,Bromley
+2027-01-19,19:45,League 1,Leyton Orient,Reading
+2027-01-19,19:45,League 1,MK Dons,Blackpool
+2027-01-19,19:45,League 1,Mansfield,AFC Wimbledon
+2027-01-19,19:45,League 1,Peterborough,Huddersfield
+2027-01-19,19:45,League 1,Plymouth,Stevenage
+2027-01-19,19:45,League 1,Sheffield Wed,Notts County
+2027-01-19,19:45,League 1,Stockport,Doncaster
+2027-01-19,19:45,League 1,Wigan,Oxford Utd
+2027-01-19,19:45,League 1,Wycombe,Cambridge Utd
+2027-01-19,19:45,League 2,Accrington,York
+2027-01-19,19:45,League 2,Colchester,Chesterfield
+2027-01-19,19:45,League 2,Crewe,Exeter
+2027-01-19,19:45,League 2,Fleetwood,Cheltenham
+2027-01-19,19:45,League 2,Grimsby,Rochdale
+2027-01-19,19:45,League 2,Newport,Rotherham
+2027-01-19,19:45,League 2,Oldham,Walsall
+2027-01-19,19:45,League 2,Port Vale,Gillingham
+2027-01-19,19:45,League 2,Salford,Bristol Rovers
+2027-01-19,19:45,League 2,Shrewsbury,Crawley
+2027-01-19,19:45,League 2,Swindon,Barnet
+2027-01-19,19:45,League 2,Tranmere,Northampton
+2027-01-23,15:00,Championship,Birmingham,Lincoln
+2027-01-23,15:00,Championship,Blackburn,Swansea
+2027-01-23,15:00,Championship,Bristol City,Bolton
+2027-01-23,15:00,Championship,Cardiff,Wolves
+2027-01-23,15:00,Championship,Charlton,Middlesbrough
+2027-01-23,15:00,Championship,Derby,Millwall
+2027-01-23,15:00,Championship,Portsmouth,Burnley
+2027-01-23,15:00,Championship,Preston,Stoke
+2027-01-23,15:00,Championship,QPR,Southampton
+2027-01-23,15:00,Championship,Watford,Norwich
+2027-01-23,15:00,Championship,West Brom,West Ham
+2027-01-23,15:00,Championship,Wrexham,Sheffield Utd
+2027-01-23,15:00,League 1,Barnsley,Reading
+2027-01-23,15:00,League 1,Bradford,Oxford Utd
+2027-01-23,15:00,League 1,Leicester,Luton
+2027-01-23,15:00,League 1,Leyton Orient,Burton
+2027-01-23,15:00,League 1,MK Dons,Stevenage
+2027-01-23,15:00,League 1,Mansfield,Blackpool
+2027-01-23,15:00,League 1,Peterborough,Bromley
+2027-01-23,15:00,League 1,Plymouth,Cambridge Utd
+2027-01-23,15:00,League 1,Sheffield Wed,Doncaster
+2027-01-23,15:00,League 1,Stockport,Notts County
+2027-01-23,15:00,League 1,Wigan,Huddersfield
+2027-01-23,15:00,League 1,Wycombe,AFC Wimbledon
+2027-01-23,15:00,League 2,Accrington,Rochdale
+2027-01-23,15:00,League 2,Colchester,Northampton
+2027-01-23,15:00,League 2,Crewe,Chesterfield
+2027-01-23,15:00,League 2,Fleetwood,Exeter
+2027-01-23,15:00,League 2,Grimsby,Gillingham
+2027-01-23,15:00,League 2,Newport,Cheltenham
+2027-01-23,15:00,League 2,Oldham,Barnet
+2027-01-23,15:00,League 2,Port Vale,York
+2027-01-23,15:00,League 2,Salford,Walsall
+2027-01-23,15:00,League 2,Shrewsbury,Rotherham
+2027-01-23,15:00,League 2,Swindon,Bristol Rovers
+2027-01-23,15:00,League 2,Tranmere,Crawley
+2027-01-26,19:45,Championship,Bolton,Charlton
+2027-01-26,19:45,Championship,Burnley,QPR
+2027-01-26,19:45,Championship,Lincoln,Watford
+2027-01-26,19:45,Championship,Millwall,Birmingham
+2027-01-26,19:45,Championship,Norwich,Derby
+2027-01-26,19:45,Championship,Sheffield Utd,Preston
+2027-01-26,19:45,Championship,Southampton,West Brom
+2027-01-26,19:45,Championship,Stoke,Blackburn
+2027-01-27,19:45,Championship,Middlesbrough,Wrexham
+2027-01-27,19:45,Championship,Swansea,Portsmouth
+2027-01-27,19:45,Championship,West Ham,Cardiff
+2027-01-27,19:45,Championship,Wolves,Bristol City
+2027-01-30,15:00,Championship,Bolton,Derby
+2027-01-30,15:00,Championship,Burnley,Cardiff
+2027-01-30,15:00,Championship,Lincoln,QPR
+2027-01-30,15:00,Championship,Middlesbrough,Watford
+2027-01-30,15:00,Championship,Millwall,West Brom
+2027-01-30,15:00,Championship,Norwich,Bristol City
+2027-01-30,15:00,Championship,Sheffield Utd,Charlton
+2027-01-30,15:00,Championship,Southampton,Preston
+2027-01-30,15:00,Championship,Stoke,Portsmouth
+2027-01-30,15:00,Championship,Swansea,Birmingham
+2027-01-30,15:00,Championship,West Ham,Blackburn
+2027-01-30,15:00,Championship,Wolves,Wrexham
+2027-01-30,15:00,League 1,AFC Wimbledon,Stockport
+2027-01-30,15:00,League 1,Blackpool,Sheffield Wed
+2027-01-30,15:00,League 1,Bromley,Wigan
+2027-01-30,15:00,League 1,Burton,Wycombe
+2027-01-30,15:00,League 1,Cambridge Utd,Leyton Orient
+2027-01-30,15:00,League 1,Doncaster,MK Dons
+2027-01-30,12:30,League 1,Huddersfield,Bradford
+2027-01-30,15:00,League 1,Luton,Peterborough
+2027-01-30,15:00,League 1,Notts County,Mansfield
+2027-01-30,15:00,League 1,Oxford Utd,Barnsley
+2027-01-30,15:00,League 1,Reading,Plymouth
+2027-01-30,15:00,League 1,Stevenage,Leicester
+2027-01-30,15:00,League 2,Barnet,Crewe
+2027-01-30,15:00,League 2,Bristol Rovers,Fleetwood
+2027-01-30,15:00,League 2,Cheltenham,Tranmere
+2027-01-30,15:00,League 2,Chesterfield,Newport
+2027-01-30,15:00,League 2,Crawley,Oldham
+2027-01-30,15:00,League 2,Exeter,Salford
+2027-01-30,15:00,League 2,Gillingham,Shrewsbury
+2027-01-30,15:00,League 2,Northampton,Accrington
+2027-01-30,15:00,League 2,Rochdale,Port Vale
+2027-01-30,15:00,League 2,Rotherham,Swindon
+2027-01-30,15:00,League 2,Walsall,Colchester
+2027-01-30,15:00,League 2,York,Grimsby
+2027-02-06,15:00,Championship,Birmingham,Stoke
+2027-02-06,15:00,Championship,Blackburn,Burnley
+2027-02-06,15:00,Championship,Bristol City,Middlesbrough
+2027-02-06,15:00,Championship,Cardiff,Norwich
+2027-02-06,15:00,Championship,Charlton,Wolves
+2027-02-06,15:00,Championship,Derby,Southampton
+2027-02-06,15:00,Championship,Portsmouth,Bolton
+2027-02-06,15:00,Championship,Preston,West Ham
+2027-02-06,15:00,Championship,QPR,Millwall
+2027-02-06,15:00,Championship,Watford,Sheffield Utd
+2027-02-06,15:00,Championship,West Brom,Swansea
+2027-02-06,15:00,Championship,Wrexham,Lincoln
+2027-02-06,15:00,League 1,Barnsley,Leyton Orient
+2027-02-06,15:00,League 1,Bradford,Plymouth
+2027-02-06,15:00,League 1,Bromley,Sheffield Wed
+2027-02-06,15:00,League 1,Burton,Notts County
+2027-02-06,15:00,League 1,Doncaster,Stevenage
+2027-02-06,15:00,League 1,Huddersfield,Cambridge Utd
+2027-02-06,15:00,League 1,Leicester,MK Dons
+2027-02-06,15:00,League 1,Luton,Mansfield
+2027-02-06,15:00,League 1,Peterborough,Blackpool
+2027-02-06,15:00,League 1,Reading,Oxford Utd
+2027-02-06,15:00,League 1,Wigan,AFC Wimbledon
+2027-02-06,15:00,League 1,Wycombe,Stockport
+2027-02-06,15:00,League 2,Accrington,Walsall
+2027-02-06,15:00,League 2,Bristol Rovers,Crawley
+2027-02-06,15:00,League 2,Cheltenham,Barnet
+2027-02-06,15:00,League 2,Chesterfield,Rotherham
+2027-02-06,15:00,League 2,Crewe,Port Vale
+2027-02-06,15:00,League 2,Exeter,York
+2027-02-06,15:00,League 2,Fleetwood,Grimsby
+2027-02-06,15:00,League 2,Northampton,Gillingham
+2027-02-06,15:00,League 2,Rochdale,Colchester
+2027-02-06,15:00,League 2,Salford,Shrewsbury
+2027-02-06,15:00,League 2,Swindon,Oldham
+2027-02-06,15:00,League 2,Tranmere,Newport
+2027-02-09,19:45,League 1,AFC Wimbledon,Burton
+2027-02-09,19:45,League 1,Blackpool,Barnsley
+2027-02-09,19:45,League 1,Cambridge Utd,Bradford
+2027-02-09,19:45,League 1,Leyton Orient,Bromley
+2027-02-09,19:45,League 1,MK Dons,Wigan
+2027-02-09,19:45,League 1,Mansfield,Reading
+2027-02-09,19:45,League 1,Notts County,Doncaster
+2027-02-09,19:45,League 1,Oxford Utd,Huddersfield
+2027-02-09,19:45,League 1,Plymouth,Leicester
+2027-02-09,19:45,League 1,Sheffield Wed,Wycombe
+2027-02-09,19:45,League 1,Stevenage,Peterborough
+2027-02-09,19:45,League 1,Stockport,Luton
+2027-02-09,19:45,League 2,Barnet,Exeter
+2027-02-09,19:45,League 2,Colchester,Bristol Rovers
+2027-02-09,19:45,League 2,Crawley,Northampton
+2027-02-09,19:45,League 2,Gillingham,Chesterfield
+2027-02-09,19:45,League 2,Grimsby,Accrington
+2027-02-09,19:45,League 2,Newport,Salford
+2027-02-09,19:45,League 2,Oldham,Fleetwood
+2027-02-09,19:45,League 2,Port Vale,Swindon
+2027-02-09,19:45,League 2,Rotherham,Tranmere
+2027-02-09,19:45,League 2,Shrewsbury,Rochdale
+2027-02-09,19:45,League 2,Walsall,Crewe
+2027-02-09,19:45,League 2,York,Cheltenham
+2027-02-13,15:00,Championship,Birmingham,Derby
+2027-02-13,15:00,Championship,Bristol City,Southampton
+2027-02-13,15:00,Championship,Burnley,Swansea
+2027-02-13,15:00,Championship,Cardiff,Bolton
+2027-02-13,15:00,Championship,Lincoln,Preston
+2027-02-13,15:00,Championship,Millwall,Blackburn
+2027-02-13,15:00,Championship,Norwich,Middlesbrough
+2027-02-13,15:00,Championship,Portsmouth,Charlton
+2027-02-13,15:00,Championship,QPR,West Brom
+2027-02-13,15:00,Championship,Stoke,Watford
+2027-02-13,15:00,Championship,Wolves,Sheffield Utd
+2027-02-13,15:00,Championship,Wrexham,West Ham
+2027-02-13,15:00,League 1,AFC Wimbledon,Bromley
+2027-02-13,15:00,League 1,Blackpool,Reading
+2027-02-13,15:00,League 1,Cambridge Utd,Burton
+2027-02-13,15:00,League 1,Leyton Orient,Luton
+2027-02-13,15:00,League 1,MK Dons,Wycombe
+2027-02-13,15:00,League 1,Mansfield,Bradford
+2027-02-13,15:00,League 1,Notts County,Huddersfield
+2027-02-13,15:00,League 1,Oxford Utd,Leicester
+2027-02-13,15:00,League 1,Plymouth,Doncaster
+2027-02-13,15:00,League 1,Sheffield Wed,Peterborough
+2027-02-13,15:00,League 1,Stevenage,Barnsley
+2027-02-13,15:00,League 1,Stockport,Wigan
+2027-02-13,15:00,League 2,Barnet,Chesterfield
+2027-02-13,15:00,League 2,Colchester,Swindon
+2027-02-13,15:00,League 2,Crawley,Accrington
+2027-02-13,15:00,League 2,Gillingham,Rochdale
+2027-02-13,15:00,League 2,Grimsby,Cheltenham
+2027-02-13,15:00,League 2,Newport,Northampton
+2027-02-13,15:00,League 2,Oldham,Tranmere
+2027-02-13,15:00,League 2,Port Vale,Salford
+2027-02-13,15:00,League 2,Rotherham,Bristol Rovers
+2027-02-13,15:00,League 2,Shrewsbury,Fleetwood
+2027-02-13,15:00,League 2,Walsall,Exeter
+2027-02-13,15:00,League 2,York,Crewe
+2027-02-16,19:45,Championship,Blackburn,Bristol City
+2027-02-16,19:45,Championship,Charlton,Burnley
+2027-02-16,19:45,Championship,Derby,QPR
+2027-02-16,19:45,Championship,Preston,Birmingham
+2027-02-16,19:45,Championship,Sheffield Utd,Portsmouth
+2027-02-16,19:45,Championship,Watford,Cardiff
+2027-02-16,19:45,Championship,West Brom,Wrexham
+2027-02-16,19:45,Championship,West Ham,Lincoln
+2027-02-17,19:45,Championship,Bolton,Wolves
+2027-02-17,19:45,Championship,Middlesbrough,Stoke
+2027-02-17,19:45,Championship,Southampton,Norwich
+2027-02-17,19:45,Championship,Swansea,Millwall
+2027-02-20,15:00,Championship,Blackburn,Portsmouth
+2027-02-20,15:00,Championship,Bolton,Norwich
+2027-02-20,15:00,Championship,Charlton,Cardiff
+2027-02-20,15:00,Championship,Derby,Burnley
+2027-02-20,15:00,Championship,Middlesbrough,Birmingham
+2027-02-20,15:00,Championship,Preston,QPR
+2027-02-20,15:00,Championship,Sheffield Utd,Stoke
+2027-02-20,15:00,Championship,Southampton,Wrexham
+2027-02-20,15:00,Championship,Swansea,Lincoln
+2027-02-20,15:00,Championship,Watford,Bristol City
+2027-02-20,15:00,Championship,West Brom,Wolves
+2027-02-20,15:00,League 1,Barnsley,Plymouth
+2027-02-20,15:00,League 1,Bradford,Notts County
+2027-02-20,15:00,League 1,Bromley,Blackpool
+2027-02-20,15:00,League 1,Burton,Oxford Utd
+2027-02-20,15:00,League 1,Doncaster,AFC Wimbledon
+2027-02-20,15:00,League 1,Huddersfield,Mansfield
+2027-02-20,15:00,League 1,Leicester,Stockport
+2027-02-20,15:00,League 1,Luton,Stevenage
+2027-02-20,15:00,League 1,Peterborough,MK Dons
+2027-02-20,15:00,League 1,Reading,Cambridge Utd
+2027-02-20,15:00,League 1,Wigan,Sheffield Wed
+2027-02-20,15:00,League 1,Wycombe,Leyton Orient
+2027-02-20,15:00,League 2,Accrington,Barnet
+2027-02-20,15:00,League 2,Bristol Rovers,Grimsby
+2027-02-20,15:00,League 2,Cheltenham,Crawley
+2027-02-20,15:00,League 2,Chesterfield,Oldham
+2027-02-20,15:00,League 2,Crewe,Colchester
+2027-02-20,15:00,League 2,Exeter,Port Vale
+2027-02-20,15:00,League 2,Fleetwood,Newport
+2027-02-20,15:00,League 2,Northampton,Shrewsbury
+2027-02-20,15:00,League 2,Rochdale,Walsall
+2027-02-20,15:00,League 2,Salford,Rotherham
+2027-02-20,15:00,League 2,Swindon,York
+2027-02-20,15:00,League 2,Tranmere,Gillingham
+2027-02-21,12:00,Championship,West Ham,Millwall
+2027-02-27,15:00,Championship,Birmingham,West Brom
+2027-02-27,15:00,Championship,Bristol City,Charlton
+2027-02-27,15:00,Championship,Burnley,Watford
+2027-02-27,15:00,Championship,Cardiff,Blackburn
+2027-02-27,15:00,Championship,Lincoln,Sheffield Utd
+2027-02-27,15:00,Championship,Millwall,Preston
+2027-02-27,15:00,Championship,Norwich,Swansea
+2027-02-27,15:00,Championship,QPR,West Ham
+2027-02-27,15:00,Championship,Stoke,Bolton
+2027-02-27,15:00,Championship,Wolves,Middlesbrough
+2027-02-27,15:00,Championship,Wrexham,Derby
+2027-02-27,15:00,League 1,Barnsley,Wigan
+2027-02-27,15:00,League 1,Blackpool,AFC Wimbledon
+2027-02-27,15:00,League 1,Bradford,Leicester
+2027-02-27,15:00,League 1,Burton,MK Dons
+2027-02-27,12:30,League 1,Cambridge Utd,Peterborough
+2027-02-27,15:00,League 1,Huddersfield,Wycombe
+2027-02-27,15:00,League 1,Leyton Orient,Doncaster
+2027-02-27,15:00,League 1,Mansfield,Stevenage
+2027-02-27,15:00,League 1,Notts County,Bromley
+2027-02-27,15:00,League 1,Oxford Utd,Luton
+2027-02-27,15:00,League 1,Plymouth,Sheffield Wed
+2027-02-27,15:00,League 1,Reading,Stockport
+2027-02-27,15:00,League 2,Accrington,Port Vale
+2027-02-27,15:00,League 2,Barnet,Walsall
+2027-02-27,15:00,League 2,Cheltenham,Exeter
+2027-02-27,15:00,League 2,Chesterfield,Bristol Rovers
+2027-02-27,15:00,League 2,Crawley,Rotherham
+2027-02-27,15:00,League 2,Gillingham,Colchester
+2027-02-27,15:00,League 2,Grimsby,Swindon
+2027-02-27,15:00,League 2,Newport,Crewe
+2027-02-27,15:00,League 2,Northampton,Salford
+2027-02-27,15:00,League 2,Oldham,Shrewsbury
+2027-02-27,15:00,League 2,Tranmere,Fleetwood
+2027-02-27,15:00,League 2,York,Rochdale
+2027-02-28,12:00,Championship,Portsmouth,Southampton
+2027-03-02,19:45,Championship,Bolton,QPR
+2027-03-02,19:45,Championship,Bristol City,Birmingham
+2027-03-02,19:45,Championship,Burnley,West Brom
+2027-03-02,19:45,Championship,Cardiff,Derby
+2027-03-02,19:45,Championship,Charlton,West Ham
+2027-03-02,19:45,Championship,Middlesbrough,Blackburn
+2027-03-02,19:45,Championship,Norwich,Millwall
+2027-03-02,19:45,Championship,Watford,Wrexham
+2027-03-03,19:45,Championship,Portsmouth,Lincoln
+2027-03-03,19:45,Championship,Sheffield Utd,Swansea
+2027-03-03,19:45,Championship,Stoke,Southampton
+2027-03-03,19:45,Championship,Wolves,Preston
+2027-03-06,15:00,Championship,Birmingham,Sheffield Utd
+2027-03-06,15:00,Championship,Blackburn,Wolves
+2027-03-06,15:00,Championship,Derby,Charlton
+2027-03-06,15:00,Championship,Lincoln,Middlesbrough
+2027-03-06,15:00,Championship,Millwall,Bristol City
+2027-03-06,15:00,Championship,Preston,Bolton
+2027-03-06,15:00,Championship,QPR,Portsmouth
+2027-03-06,15:00,Championship,Southampton,Watford
+2027-03-06,15:00,Championship,Swansea,Stoke
+2027-03-06,15:00,Championship,West Brom,Norwich
+2027-03-06,15:00,Championship,West Ham,Burnley
+2027-03-06,15:00,Championship,Wrexham,Cardiff
+2027-03-06,15:00,League 1,AFC Wimbledon,Huddersfield
+2027-03-06,15:00,League 1,Bromley,Barnsley
+2027-03-06,15:00,League 1,Doncaster,Mansfield
+2027-03-06,15:00,League 1,Leicester,Notts County
+2027-03-06,15:00,League 1,Luton,Reading
+2027-03-06,15:00,League 1,MK Dons,Oxford Utd
+2027-03-06,15:00,League 1,Peterborough,Bradford
+2027-03-06,15:00,League 1,Sheffield Wed,Leyton Orient
+2027-03-06,15:00,League 1,Stevenage,Burton
+2027-03-06,15:00,League 1,Stockport,Plymouth
+2027-03-06,15:00,League 1,Wigan,Cambridge Utd
+2027-03-06,15:00,League 1,Wycombe,Blackpool
+2027-03-06,15:00,League 2,Bristol Rovers,York
+2027-03-06,15:00,League 2,Colchester,Accrington
+2027-03-06,15:00,League 2,Crewe,Crawley
+2027-03-06,15:00,League 2,Exeter,Grimsby
+2027-03-06,15:00,League 2,Fleetwood,Chesterfield
+2027-03-06,15:00,League 2,Port Vale,Oldham
+2027-03-06,15:00,League 2,Rochdale,Newport
+2027-03-06,15:00,League 2,Rotherham,Cheltenham
+2027-03-06,15:00,League 2,Salford,Barnet
+2027-03-06,15:00,League 2,Shrewsbury,Tranmere
+2027-03-06,15:00,League 2,Swindon,Northampton
+2027-03-06,15:00,League 2,Walsall,Gillingham
+2027-03-13,15:00,Championship,Bolton,Birmingham
+2027-03-13,15:00,Championship,Bristol City,West Brom
+2027-03-13,15:00,Championship,Burnley,Millwall
+2027-03-13,15:00,Championship,Cardiff,Swansea
+2027-03-13,15:00,Championship,Charlton,Blackburn
+2027-03-13,15:00,Championship,Middlesbrough,Southampton
+2027-03-13,15:00,Championship,Norwich,Preston
+2027-03-13,15:00,Championship,Portsmouth,Wrexham
+2027-03-13,15:00,Championship,Sheffield Utd,QPR
+2027-03-13,15:00,Championship,Stoke,West Ham
+2027-03-13,15:00,Championship,Watford,Derby
+2027-03-13,15:00,Championship,Wolves,Lincoln
+2027-03-13,15:00,League 1,Barnsley,Doncaster
+2027-03-13,15:00,League 1,Blackpool,Stockport
+2027-03-13,15:00,League 1,Bradford,Sheffield Wed
+2027-03-13,15:00,League 1,Burton,Leicester
+2027-03-13,15:00,League 1,Cambridge Utd,Bromley
+2027-03-13,15:00,League 1,Huddersfield,MK Dons
+2027-03-13,15:00,League 1,Leyton Orient,Wigan
+2027-03-13,15:00,League 1,Mansfield,Peterborough
+2027-03-13,15:00,League 1,Notts County,Luton
+2027-03-13,15:00,League 1,Oxford Utd,Stevenage
+2027-03-13,15:00,League 1,Plymouth,Wycombe
+2027-03-13,15:00,League 1,Reading,AFC Wimbledon
+2027-03-13,15:00,League 2,Accrington,Exeter
+2027-03-13,15:00,League 2,Barnet,Shrewsbury
+2027-03-13,15:00,League 2,Cheltenham,Swindon
+2027-03-13,15:00,League 2,Chesterfield,Salford
+2027-03-13,15:00,League 2,Crawley,Rochdale
+2027-03-13,15:00,League 2,Gillingham,Fleetwood
+2027-03-13,15:00,League 2,Grimsby,Walsall
+2027-03-13,15:00,League 2,Newport,Bristol Rovers
+2027-03-13,15:00,League 2,Northampton,Crewe
+2027-03-13,15:00,League 2,Oldham,Colchester
+2027-03-13,15:00,League 2,Tranmere,Port Vale
+2027-03-13,15:00,League 2,York,Rotherham
+2027-03-16,19:45,Championship,Derby,Middlesbrough
+2027-03-16,19:45,Championship,Lincoln,Cardiff
+2027-03-16,19:45,Championship,Preston,Burnley
+2027-03-16,19:45,Championship,QPR,Stoke
+2027-03-16,19:45,Championship,Southampton,Wolves
+2027-03-16,19:45,Championship,Swansea,Bristol City
+2027-03-16,19:45,Championship,West Brom,Portsmouth
+2027-03-16,19:45,Championship,Wrexham,Norwich
+2027-03-17,20:00,Championship,Birmingham,Charlton
+2027-03-17,19:45,Championship,Blackburn,Bolton
+2027-03-17,19:45,Championship,Millwall,Watford
+2027-03-17,19:45,Championship,West Ham,Sheffield Utd
+2027-03-20,15:00,Championship,Birmingham,Blackburn
+2027-03-20,15:00,Championship,Bristol City,QPR
+2027-03-20,15:00,Championship,Burnley,Bolton
+2027-03-20,15:00,Championship,Derby,Preston
+2027-03-20,15:00,Championship,Middlesbrough,Sheffield Utd
+2027-03-20,15:00,Championship,Millwall,Cardiff
+2027-03-20,15:00,Championship,Norwich,West Ham
+2027-03-20,15:00,Championship,Southampton,Charlton
+2027-03-20,15:00,Championship,Swansea,Wolves
+2027-03-20,15:00,Championship,Watford,Portsmouth
+2027-03-20,15:00,Championship,West Brom,Lincoln
+2027-03-20,15:00,Championship,Wrexham,Stoke
+2027-03-20,15:00,League 1,AFC Wimbledon,Leyton Orient
+2027-03-20,15:00,League 1,Bromley,Reading
+2027-03-20,15:00,League 1,Doncaster,Bradford
+2027-03-20,15:00,League 1,Leicester,Huddersfield
+2027-03-20,15:00,League 1,Luton,Burton
+2027-03-20,15:00,League 1,MK Dons,Mansfield
+2027-03-20,15:00,League 1,Peterborough,Plymouth
+2027-03-20,15:00,League 1,Sheffield Wed,Barnsley
+2027-03-20,15:00,League 1,Stevenage,Notts County
+2027-03-20,15:00,League 1,Stockport,Cambridge Utd
+2027-03-20,15:00,League 1,Wigan,Blackpool
+2027-03-20,15:00,League 1,Wycombe,Oxford Utd
+2027-03-20,15:00,League 2,Bristol Rovers,Cheltenham
+2027-03-20,15:00,League 2,Colchester,Tranmere
+2027-03-20,15:00,League 2,Crewe,Gillingham
+2027-03-20,15:00,League 2,Exeter,Oldham
+2027-03-20,15:00,League 2,Fleetwood,Crawley
+2027-03-20,15:00,League 2,Port Vale,Barnet
+2027-03-20,15:00,League 2,Rochdale,Northampton
+2027-03-20,15:00,League 2,Rotherham,Grimsby
+2027-03-20,15:00,League 2,Salford,Accrington
+2027-03-20,15:00,League 2,Shrewsbury,Chesterfield
+2027-03-20,15:00,League 2,Swindon,Newport
+2027-03-20,15:00,League 2,Walsall,York
+2027-03-26,15:00,League 1,Bradford,Wigan
+2027-03-26,15:00,League 1,Burton,Stockport
+2027-03-26,15:00,League 1,Doncaster,Blackpool
+2027-03-26,15:00,League 1,Huddersfield,Reading
+2027-03-26,15:00,League 1,Leicester,Wycombe
+2027-03-26,15:00,League 1,Luton,Plymouth
+2027-03-26,15:00,League 1,MK Dons,Sheffield Wed
+2027-03-26,15:00,League 1,Mansfield,Cambridge Utd
+2027-03-26,15:00,League 1,Notts County,Barnsley
+2027-03-26,15:00,League 1,Oxford Utd,Leyton Orient
+2027-03-26,15:00,League 1,Peterborough,AFC Wimbledon
+2027-03-26,15:00,League 1,Stevenage,Bromley
+2027-03-26,15:00,League 2,Barnet,Newport
+2027-03-26,15:00,League 2,Bristol Rovers,Northampton
+2027-03-26,15:00,League 2,Cheltenham,Walsall
+2027-03-26,15:00,League 2,Chesterfield,Rochdale
+2027-03-26,15:00,League 2,Crawley,Swindon
+2027-03-26,15:00,League 2,Exeter,Gillingham
+2027-03-26,15:00,League 2,Fleetwood,Port Vale
+2027-03-26,15:00,League 2,Oldham,Crewe
+2027-03-26,15:00,League 2,Rotherham,Colchester
+2027-03-26,15:00,League 2,Salford,York
+2027-03-26,15:00,League 2,Shrewsbury,Accrington
+2027-03-26,15:00,League 2,Tranmere,Grimsby
+2027-03-29,15:00,League 1,AFC Wimbledon,Leicester
+2027-03-29,15:00,League 1,Barnsley,Mansfield
+2027-03-29,15:00,League 1,Blackpool,Oxford Utd
+2027-03-29,15:00,League 1,Bromley,Doncaster
+2027-03-29,15:00,League 1,Cambridge Utd,MK Dons
+2027-03-29,15:00,League 1,Leyton Orient,Huddersfield
+2027-03-29,15:00,League 1,Plymouth,Notts County
+2027-03-29,15:00,League 1,Reading,Stevenage
+2027-03-29,15:00,League 1,Sheffield Wed,Burton
+2027-03-29,15:00,League 1,Stockport,Bradford
+2027-03-29,15:00,League 1,Wigan,Luton
+2027-03-29,15:00,League 1,Wycombe,Peterborough
+2027-03-29,15:00,League 2,Accrington,Tranmere
+2027-03-29,15:00,League 2,Colchester,Barnet
+2027-03-29,15:00,League 2,Crewe,Fleetwood
+2027-03-29,15:00,League 2,Gillingham,Crawley
+2027-03-29,15:00,League 2,Grimsby,Salford
+2027-03-29,15:00,League 2,Newport,Exeter
+2027-03-29,15:00,League 2,Northampton,Chesterfield
+2027-03-29,15:00,League 2,Port Vale,Cheltenham
+2027-03-29,15:00,League 2,Rochdale,Rotherham
+2027-03-29,15:00,League 2,Swindon,Shrewsbury
+2027-03-29,15:00,League 2,Walsall,Bristol Rovers
+2027-03-29,15:00,League 2,York,Oldham
+2027-04-03,15:00,Championship,Blackburn,Southampton
+2027-04-03,15:00,Championship,Bolton,Watford
+2027-04-03,15:00,Championship,Cardiff,Bristol City
+2027-04-03,12:30,Championship,Charlton,Millwall
+2027-04-03,15:00,Championship,Lincoln,Derby
+2027-04-03,15:00,Championship,Portsmouth,Middlesbrough
+2027-04-03,15:00,Championship,Preston,Swansea
+2027-04-03,15:00,Championship,QPR,Wrexham
+2027-04-03,15:00,Championship,Sheffield Utd,West Brom
+2027-04-03,15:00,Championship,Stoke,Burnley
+2027-04-03,15:00,Championship,West Ham,Birmingham
+2027-04-03,15:00,Championship,Wolves,Norwich
+2027-04-03,15:00,League 1,Bradford,Blackpool
+2027-04-03,15:00,League 1,Burton,Barnsley
+2027-04-03,15:00,League 1,Doncaster,Cambridge Utd
+2027-04-03,15:00,League 1,Huddersfield,Stockport
+2027-04-03,15:00,League 1,Leicester,Leyton Orient
+2027-04-03,15:00,League 1,Luton,AFC Wimbledon
+2027-04-03,15:00,League 1,MK Dons,Plymouth
+2027-04-03,15:00,League 1,Mansfield,Sheffield Wed
+2027-04-03,15:00,League 1,Notts County,Wigan
+2027-04-03,15:00,League 1,Oxford Utd,Bromley
+2027-04-03,15:00,League 1,Peterborough,Reading
+2027-04-03,15:00,League 1,Stevenage,Wycombe
+2027-04-03,15:00,League 2,Barnet,Gillingham
+2027-04-03,15:00,League 2,Bristol Rovers,Port Vale
+2027-04-03,15:00,League 2,Cheltenham,Northampton
+2027-04-03,15:00,League 2,Chesterfield,Walsall
+2027-04-03,15:00,League 2,Crawley,Colchester
+2027-04-03,15:00,League 2,Exeter,Swindon
+2027-04-03,15:00,League 2,Fleetwood,York
+2027-04-03,15:00,League 2,Oldham,Grimsby
+2027-04-03,15:00,League 2,Rotherham,Accrington
+2027-04-03,15:00,League 2,Salford,Rochdale
+2027-04-03,15:00,League 2,Shrewsbury,Newport
+2027-04-03,15:00,League 2,Tranmere,Crewe
+2027-04-06,19:45,Championship,Burnley,Wrexham
+2027-04-06,19:45,Championship,Lincoln,Bristol City
+2027-04-06,19:45,Championship,Millwall,Middlesbrough
+2027-04-06,19:45,Championship,Portsmouth,Wolves
+2027-04-06,19:45,Championship,QPR,Charlton
+2027-04-06,19:45,Championship,Stoke,Cardiff
+2027-04-06,19:45,Championship,Swansea,Southampton
+2027-04-06,19:45,Championship,West Ham,Bolton
+2027-04-07,20:00,Championship,Birmingham,Norwich
+2027-04-07,19:45,Championship,Preston,Watford
+2027-04-07,19:45,Championship,Sheffield Utd,Blackburn
+2027-04-07,19:45,Championship,West Brom,Derby
+2027-04-10,15:00,Championship,Blackburn,Preston
+2027-04-10,15:00,Championship,Bolton,Millwall
+2027-04-10,15:00,Championship,Bristol City,Burnley
+2027-04-10,15:00,Championship,Cardiff,Portsmouth
+2027-04-10,15:00,Championship,Charlton,Stoke
+2027-04-10,15:00,Championship,Derby,West Ham
+2027-04-10,15:00,Championship,Middlesbrough,QPR
+2027-04-10,15:00,Championship,Norwich,Sheffield Utd
+2027-04-10,15:00,Championship,Southampton,Lincoln
+2027-04-10,15:00,Championship,Watford,West Brom
+2027-04-10,15:00,Championship,Wolves,Birmingham
+2027-04-10,15:00,Championship,Wrexham,Swansea
+2027-04-10,15:00,League 1,AFC Wimbledon,Bradford
+2027-04-10,15:00,League 1,Barnsley,Peterborough
+2027-04-10,15:00,League 1,Blackpool,Huddersfield
+2027-04-10,15:00,League 1,Bromley,Luton
+2027-04-10,15:00,League 1,Cambridge Utd,Notts County
+2027-04-10,15:00,League 1,Leyton Orient,MK Dons
+2027-04-10,15:00,League 1,Plymouth,Oxford Utd
+2027-04-10,15:00,League 1,Reading,Burton
+2027-04-10,15:00,League 1,Sheffield Wed,Leicester
+2027-04-10,15:00,League 1,Stockport,Stevenage
+2027-04-10,15:00,League 1,Wigan,Doncaster
+2027-04-10,15:00,League 1,Wycombe,Mansfield
+2027-04-10,15:00,League 2,Accrington,Bristol Rovers
+2027-04-10,15:00,League 2,Colchester,Salford
+2027-04-10,15:00,League 2,Crewe,Cheltenham
+2027-04-10,15:00,League 2,Gillingham,Oldham
+2027-04-10,15:00,League 2,Grimsby,Chesterfield
+2027-04-10,15:00,League 2,Newport,Crawley
+2027-04-10,15:00,League 2,Northampton,Barnet
+2027-04-10,15:00,League 2,Port Vale,Shrewsbury
+2027-04-10,15:00,League 2,Rochdale,Exeter
+2027-04-10,15:00,League 2,Swindon,Fleetwood
+2027-04-10,15:00,League 2,Walsall,Rotherham
+2027-04-10,15:00,League 2,York,Tranmere
+2027-04-13,19:45,League 1,AFC Wimbledon,Cambridge Utd
+2027-04-13,19:45,League 1,Barnsley,Bradford
+2027-04-13,19:45,League 1,Blackpool,Notts County
+2027-04-13,19:45,League 1,Bromley,MK Dons
+2027-04-13,19:45,League 1,Burton,Plymouth
+2027-04-13,19:45,League 1,Leyton Orient,Mansfield
+2027-04-13,19:45,League 1,Luton,Huddersfield
+2027-04-13,19:45,League 1,Oxford Utd,Doncaster
+2027-04-13,19:45,League 1,Peterborough,Stockport
+2027-04-13,20:00,League 1,Reading,Wycombe
+2027-04-13,19:45,League 1,Sheffield Wed,Stevenage
+2027-04-13,19:45,League 1,Wigan,Leicester
+2027-04-13,19:45,League 2,Accrington,Oldham
+2027-04-13,19:45,League 2,Barnet,Bristol Rovers
+2027-04-13,19:45,League 2,Chesterfield,Crawley
+2027-04-13,19:45,League 2,Colchester,Newport
+2027-04-13,19:45,League 2,Crewe,Swindon
+2027-04-13,19:45,League 2,Exeter,Shrewsbury
+2027-04-13,19:45,League 2,Gillingham,Rotherham
+2027-04-13,19:45,League 2,Grimsby,Port Vale
+2027-04-13,19:45,League 2,Northampton,York
+2027-04-13,19:45,League 2,Rochdale,Tranmere
+2027-04-13,19:45,League 2,Salford,Cheltenham
+2027-04-13,19:45,League 2,Walsall,Fleetwood
+2027-04-17,15:00,Championship,Birmingham,Wrexham
+2027-04-17,15:00,Championship,Burnley,Norwich
+2027-04-17,15:00,Championship,Lincoln,Bolton
+2027-04-17,15:00,Championship,Millwall,Southampton
+2027-04-17,15:00,Championship,Portsmouth,Bristol City
+2027-04-17,15:00,Championship,Preston,Charlton
+2027-04-17,15:00,Championship,QPR,Blackburn
+2027-04-17,15:00,Championship,Sheffield Utd,Cardiff
+2027-04-17,15:00,Championship,Stoke,Wolves
+2027-04-17,15:00,Championship,Swansea,Derby
+2027-04-17,15:00,Championship,West Brom,Middlesbrough
+2027-04-17,15:00,Championship,West Ham,Watford
+2027-04-17,15:00,League 1,Bradford,Luton
+2027-04-17,15:00,League 1,Cambridge Utd,Oxford Utd
+2027-04-17,15:00,League 1,Doncaster,Peterborough
+2027-04-17,15:00,League 1,Huddersfield,Bromley
+2027-04-17,15:00,League 1,Leicester,Barnsley
+2027-04-17,12:30,League 1,MK Dons,AFC Wimbledon
+2027-04-17,15:00,League 1,Mansfield,Burton
+2027-04-17,15:00,League 1,Notts County,Reading
+2027-04-17,15:00,League 1,Plymouth,Blackpool
+2027-04-17,15:00,League 1,Stevenage,Leyton Orient
+2027-04-17,15:00,League 1,Stockport,Sheffield Wed
+2027-04-17,15:00,League 1,Wycombe,Wigan
+2027-04-17,15:00,League 2,Bristol Rovers,Gillingham
+2027-04-17,15:00,League 2,Cheltenham,Colchester
+2027-04-17,15:00,League 2,Crawley,Grimsby
+2027-04-17,15:00,League 2,Fleetwood,Barnet
+2027-04-17,15:00,League 2,Newport,Accrington
+2027-04-17,12:30,League 2,Oldham,Rochdale
+2027-04-17,15:00,League 2,Port Vale,Walsall
+2027-04-17,15:00,League 2,Rotherham,Northampton
+2027-04-17,15:00,League 2,Shrewsbury,Crewe
+2027-04-17,15:00,League 2,Swindon,Salford
+2027-04-17,15:00,League 2,Tranmere,Exeter
+2027-04-17,15:00,League 2,York,Chesterfield
+2027-04-20,19:45,Championship,Bolton,Sheffield Utd
+2027-04-20,19:45,Championship,Charlton,West Brom
+2027-04-20,19:45,Championship,Derby,Portsmouth
+2027-04-20,19:45,Championship,Middlesbrough,Burnley
+2027-04-20,19:45,Championship,Norwich,Stoke
+2027-04-20,19:45,Championship,Southampton,Birmingham
+2027-04-20,19:45,Championship,Wolves,West Ham
+2027-04-20,19:45,Championship,Wrexham,Millwall
+2027-04-21,19:45,Championship,Blackburn,Lincoln
+2027-04-21,19:45,Championship,Bristol City,Preston
+2027-04-21,19:45,Championship,Cardiff,QPR
+2027-04-21,19:45,Championship,Watford,Swansea
+2027-04-24,15:00,Championship,Bolton,Swansea
+2027-04-24,15:00,Championship,Bristol City,Derby
+2027-04-24,15:00,Championship,Burnley,Southampton
+2027-04-24,15:00,Championship,Cardiff,West Brom
+2027-04-24,15:00,Championship,Charlton,Wrexham
+2027-04-24,15:00,Championship,Middlesbrough,West Ham
+2027-04-24,15:00,Championship,Norwich,Blackburn
+2027-04-24,15:00,Championship,Portsmouth,Preston
+2027-04-24,15:00,Championship,Sheffield Utd,Millwall
+2027-04-24,15:00,Championship,Stoke,Lincoln
+2027-04-24,15:00,Championship,Watford,Birmingham
+2027-04-24,15:00,Championship,Wolves,QPR
+2027-04-24,15:00,League 1,AFC Wimbledon,Plymouth
+2027-04-24,15:00,League 1,Barnsley,Stockport
+2027-04-24,15:00,League 1,Blackpool,Cambridge Utd
+2027-04-24,15:00,League 1,Bromley,Mansfield
+2027-04-24,15:00,League 1,Burton,Doncaster
+2027-04-24,15:00,League 1,Leyton Orient,Bradford
+2027-04-24,15:00,League 1,Luton,Wycombe
+2027-04-24,15:00,League 1,Oxford Utd,Notts County
+2027-04-24,15:00,League 1,Peterborough,Leicester
+2027-04-24,15:00,League 1,Reading,Huddersfield
+2027-04-24,15:00,League 1,Sheffield Wed,MK Dons
+2027-04-24,15:00,League 1,Wigan,Stevenage
+2027-04-24,15:00,League 2,Accrington,Swindon
+2027-04-24,15:00,League 2,Barnet,Crawley
+2027-04-24,15:00,League 2,Chesterfield,Cheltenham
+2027-04-24,15:00,League 2,Colchester,Shrewsbury
+2027-04-24,15:00,League 2,Crewe,Rotherham
+2027-04-24,15:00,League 2,Exeter,Bristol Rovers
+2027-04-24,15:00,League 2,Gillingham,York
+2027-04-24,15:00,League 2,Grimsby,Newport
+2027-04-24,15:00,League 2,Northampton,Port Vale
+2027-04-24,15:00,League 2,Rochdale,Fleetwood
+2027-04-24,15:00,League 2,Salford,Oldham
+2027-04-24,15:00,League 2,Walsall,Tranmere
+2027-04-27,19:45,League 1,Bradford,Reading
+2027-04-27,19:45,League 1,Cambridge Utd,Sheffield Wed
+2027-04-27,19:45,League 1,Doncaster,Luton
+2027-04-27,19:45,League 1,Huddersfield,Burton
+2027-04-27,19:45,League 1,Leicester,Blackpool
+2027-04-27,19:45,League 1,MK Dons,Barnsley
+2027-04-27,19:45,League 1,Mansfield,Wigan
+2027-04-27,19:45,League 1,Notts County,Peterborough
+2027-04-27,19:45,League 1,Plymouth,Leyton Orient
+2027-04-27,19:45,League 1,Stevenage,AFC Wimbledon
+2027-04-27,19:45,League 1,Stockport,Oxford Utd
+2027-04-27,19:45,League 1,Wycombe,Bromley
+2027-04-27,19:45,League 2,Bristol Rovers,Crewe
+2027-04-27,19:45,League 2,Cheltenham,Accrington
+2027-04-27,19:45,League 2,Crawley,Walsall
+2027-04-27,19:45,League 2,Fleetwood,Salford
+2027-04-27,19:45,League 2,Newport,Gillingham
+2027-04-27,19:45,League 2,Oldham,Northampton
+2027-04-27,19:45,League 2,Port Vale,Colchester
+2027-04-27,19:45,League 2,Rotherham,Exeter
+2027-04-27,19:45,League 2,Shrewsbury,Grimsby
+2027-04-27,19:45,League 2,Swindon,Rochdale
+2027-04-27,19:45,League 2,Tranmere,Chesterfield
+2027-04-27,19:45,League 2,York,Barnet
+2027-05-01,12:30,Championship,Birmingham,Burnley
+2027-05-01,12:30,Championship,Blackburn,Watford
+2027-05-01,12:30,Championship,Derby,Wolves
+2027-05-01,12:30,Championship,Lincoln,Charlton
+2027-05-01,12:30,Championship,Millwall,Stoke
+2027-05-01,12:30,Championship,Preston,Cardiff
+2027-05-01,12:30,Championship,QPR,Norwich
+2027-05-01,12:30,Championship,Southampton,Sheffield Utd
+2027-05-01,12:30,Championship,Swansea,Middlesbrough
+2027-05-01,12:30,Championship,West Brom,Bolton
+2027-05-01,12:30,Championship,West Ham,Portsmouth
+2027-05-01,12:30,Championship,Wrexham,Bristol City
+2027-05-01,15:00,League 1,Barnsley,AFC Wimbledon
+2027-05-01,15:00,League 1,Blackpool,Stevenage
+2027-05-01,15:00,League 1,Bradford,Wycombe
+2027-05-01,15:00,League 1,Burton,Bromley
+2027-05-01,15:00,League 1,Cambridge Utd,Luton
+2027-05-01,15:00,League 1,Huddersfield,Doncaster
+2027-05-01,15:00,League 1,Leyton Orient,Stockport
+2027-05-01,15:00,League 1,Mansfield,Leicester
+2027-05-01,15:00,League 1,Notts County,MK Dons
+2027-05-01,15:00,League 1,Oxford Utd,Peterborough
+2027-05-01,15:00,League 1,Plymouth,Wigan
+2027-05-01,15:00,League 1,Reading,Sheffield Wed
+2027-05-01,15:00,League 2,Accrington,Fleetwood
+2027-05-01,15:00,League 2,Barnet,Rochdale
+2027-05-01,15:00,League 2,Cheltenham,Shrewsbury
+2027-05-01,15:00,League 2,Chesterfield,Swindon
+2027-05-01,15:00,League 2,Crawley,Exeter
+2027-05-01,15:00,League 2,Gillingham,Salford
+2027-05-01,15:00,League 2,Grimsby,Crewe
+2027-05-01,15:00,League 2,Newport,Port Vale
+2027-05-01,15:00,League 2,Northampton,Walsall
+2027-05-01,15:00,League 2,Oldham,Rotherham
+2027-05-01,15:00,League 2,Tranmere,Bristol Rovers
+2027-05-01,15:00,League 2,York,Colchester
+2027-05-08,12:30,League 1,AFC Wimbledon,Notts County
+2027-05-08,12:30,League 1,Bromley,Plymouth
+2027-05-08,12:30,League 1,Doncaster,Reading
+2027-05-08,12:30,League 1,Leicester,Cambridge Utd
+2027-05-08,12:30,League 1,Luton,Blackpool
+2027-05-08,12:30,League 1,MK Dons,Bradford
+2027-05-08,12:30,League 1,Peterborough,Leyton Orient
+2027-05-08,12:30,League 1,Sheffield Wed,Oxford Utd
+2027-05-08,12:30,League 1,Stevenage,Huddersfield
+2027-05-08,12:30,League 1,Stockport,Mansfield
+2027-05-08,12:30,League 1,Wigan,Burton
+2027-05-08,12:30,League 1,Wycombe,Barnsley
+2027-05-08,15:00,League 2,Bristol Rovers,Oldham
+2027-05-08,15:00,League 2,Colchester,Grimsby
+2027-05-08,15:00,League 2,Crewe,Accrington
+2027-05-08,15:00,League 2,Exeter,Chesterfield
+2027-05-08,15:00,League 2,Fleetwood,Northampton
+2027-05-08,15:00,League 2,Port Vale,Crawley
+2027-05-08,15:00,League 2,Rochdale,Cheltenham
+2027-05-08,15:00,League 2,Rotherham,Barnet
+2027-05-08,15:00,League 2,Salford,Tranmere
+2027-05-08,15:00,League 2,Shrewsbury,York
+2027-05-08,15:00,League 2,Swindon,Gillingham
+2027-05-08,15:00,League 2,Walsall,Newport

@@ -15,6 +15,7 @@ on:
       - manual_results.csv     # Flashscore results from the scheduled task
       - referees.csv           # referee appointments from the scheduled task
       - checkin.txt            # our check-ins with the model (self_review.py)
+      - schedule_*.csv         # the fixture list, refreshed from the Mac
       - run.py                 # a change to the model or the page rebuilds the
       - tracker/**             # board straight away, not at the next slot
 
@@ -43,7 +44,7 @@ jobs:
         run: |
           git config user.name "corners-bot"
           git config user.email "corners-bot@users.noreply.github.com"
-          git add data docs
+          git add data docs $(ls schedule_*.csv 2>/dev/null)
           git diff --cached --quiet && exit 0
           git commit -m "Update $(date -u +%Y-%m-%d)"
           # someone may have pushed (e.g. Flashscore results) while this ran

@@ -270,7 +270,8 @@ def main():
     print(f"\n  EFL corners & goals - season {season[:2]}/{season[2:]}\n")
 
     official = sources.get_results(season, CACHE)
-    schedule = sources.get_fixtures(season)
+    fixture_status = {}
+    schedule = sources.get_fixtures(season, sources.schedule_path(HERE, season), status=fixture_status)
     if not official and not schedule:
         sys.exit("  Nothing downloaded - check the connection. Nothing was changed.")
     known = {(m["league"], t) for m in official + schedule for t in (m["home"], m["away"])}
@@ -396,7 +397,15 @@ def main():
     for rid in shown:
         r = rounds.get(rid)
         if not r:
-            continue
+            # a gameweek with predictions but missing from today's fixture list
+            # (a download failed): rebuild it from its own matches rather than hide it
+            ds = sorted(date.fromisoformat(x["date"]) for x in rows if x.get("round") == rid)
+            if not ds:
+                continue
+            kind = "Midweek" if sum(d.weekday() in (1, 2, 3) for d in ds) * 2 >= len(ds) else "Weekend"
+            prior_n = [x["n"] for x in rinfo]
+            r = {"start": ds[0], "end": ds[-1], "kind": kind, "n": (max(prior_n) + 1) if prior_n else 0,
+                 "label": f"{kind} · {ds[0]:%a %-d %b}" + (f" – {ds[-1]:%a %-d %b}" if ds[-1] != ds[0] else "")}
         status = "upcoming" if r["start"] > today else ("completed" if r["end"] < today else "in play")
         rinfo.append({"id": rid, "label": r["label"], "kind": r["kind"], "n": r["n"],
                       "start": r["start"].isoformat(), "end": r["end"].isoformat(),
@@ -449,7 +458,8 @@ def main():
                  "latest": {k: v.isoformat() for k, v in latest.items()},
                  "manual": n_manual, "skipped": skipped, "matches": len(results),
                  "call": ev.CALL, "tag": ev.TAG, "book_line": ev.BOOK_LINE,
-                 "card_line": ev.CARD_LINE, "strict": STRICT, "lenient": LENIENT},
+                 "card_line": ev.CARD_LINE, "strict": STRICT, "lenient": LENIENT,
+                 "fixtures_source": fixture_status},
         "rounds": rinfo, "fixtures": fixtures, "reviews": reviews, "skill": skill,
         "rates": rates_now, "teams": team_table(results, model),
         "matches": match_rows(results), "last_season": season_summary(last),

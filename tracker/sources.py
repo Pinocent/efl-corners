@@ -171,8 +171,53 @@ def get_results(season, cache_dir=None, log=print):
     return out
 
 
-def get_fixtures(season, log=print):
-    """Whole-season schedule for all three divisions."""
+SCHEDULE_FIELDS = ["date", "time", "league", "home", "away"]
+
+
+def schedule_path(folder, season):
+    """The saved copy of a season's fixture list (repository root)."""
+    return os.path.join(folder, f"schedule_{season}.csv")
+
+
+def get_fixtures(season, cache=None, log=print, status=None):
+    """
+    Whole-season schedule for all three divisions. fixturedownload.com
+    sometimes refuses automated requests (it blocked the cloud's on 29 Sep), so
+    every good download is saved to `cache`, and a division that can't be
+    downloaded comes from the saved copy instead. `status` (a dict) is filled
+    with what happened, for the page.
+    """
+    fresh = _download_fixtures(season, log)
+    got = {f["league"] for f in fresh}
+    if status is not None:
+        status.update(source="download", missing=[])
+    if not cache:
+        return fresh
+    saved = []
+    if os.path.exists(cache):
+        for r in read_csv(cache):
+            d = parse_date(r.get("date"))
+            if d:
+                saved.append({"date": d, "time": r.get("time", ""), "league": r["league"],
+                              "home": r["home"], "away": r["away"]})
+    if len(got) == len(FIXTURE_URLS):
+        new = sorted(fresh, key=lambda f: (f["date"], f["league"], f["home"]))
+        old = sorted(saved, key=lambda f: (f["date"], f["league"], f["home"]))
+        if new != old:
+            write_csv(cache, new, SCHEDULE_FIELDS)
+        return fresh
+    missing = [lg for lg in FIXTURE_URLS if lg not in got]
+    use = [f for f in saved if f["league"] in missing]
+    if use:
+        log(f"  ! fixture list download failed for {', '.join(missing)}: using the saved copy")
+        if status is not None:
+            status.update(source="saved copy", missing=missing)
+    elif status is not None:
+        status.update(source="unavailable", missing=missing)
+    return fresh + use
+
+
+def _download_fixtures(season, log=print):
     yr = 2000 + int(season[:2])
     out = []
     for league, patterns in FIXTURE_URLS.items():

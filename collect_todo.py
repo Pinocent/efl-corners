@@ -31,7 +31,8 @@ def main():
     have = {(m["home"], m["away"]) for m in official}
     manual = sources.get_manual(os.path.join(HERE, "manual_results.csv"), log=quiet)
     have |= {(m["home"], m["away"]) for m in manual}
-    schedule = sources.get_fixtures(season, log=quiet)
+    # also refreshes the saved fixture list, which the cloud falls back on
+    schedule = sources.get_fixtures(season, sources.schedule_path(HERE, season), log=quiet)
     refs = sources.get_upcoming_referees(log=quiet)
     refs.update(sources.get_manual_referees(os.path.join(HERE, sources.REFEREE_FILE)))
 
