@@ -36,10 +36,11 @@ the app is closed then, it runs the next time the app opens):
    The push starts the cloud update, and the online board refreshes about two
    minutes later.
 
-If a run gets stuck (one waited 25 hours on a web page that never finished
-loading), the app won't start the next one until it's stopped: open the task
-in the Scheduled list and stop the run. The board shows "Nightly Flashscore
-check: nothing since ..." in its header once two days pass without a sync.
+A run that stops to ask for approval, or gets stuck, blocks the next night's
+until it finishes or is stopped (one sat at a BBC Sport page for 25 hours).
+Open the task in the Scheduled list and approve it ("always allow", so it
+doesn't ask again) or stop it. The board shows "Nightly Flashscore check:
+nothing since ..." in its header once two days pass without a sync.
 
 The official results feed replaces the Flashscore corners, goals and cards
 when it publishes them, usually a day or two later. Possession, crosses and
