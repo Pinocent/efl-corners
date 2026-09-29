@@ -562,12 +562,17 @@ const inLeague = x => S.league === "All" || x.league === S.league;
 
 // ---- header + glossary text
 $("#season").textContent = `Season ${DATA.meta.season}`;
-$("#updated").textContent = `Updated ${new Date(DATA.meta.updated.replace(" UTC","Z").replace(" ","T")).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}`;
+const updatedAt = new Date(DATA.meta.updated.replace(" UTC","Z").replace(" ","T"));
+$("#updated").textContent = `Updated ${updatedAt.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}`;
+// the Mac's nightly task (Flashscore stats, referees) hasn't reached GitHub for two days
+const synced = DATA.meta.last_sync ? new Date(DATA.meta.last_sync) : null;
+const syncLate = synced && !isNaN(synced) && updatedAt - synced > 2 * 864e5;
 $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
   `<span class="fresh">${esc(k)} results in to ${new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")
   + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "")
   + (((DATA.meta.fixtures_source || {}).source || "download") !== "download" ? `<span class="fresh chip warn" title="fixturedownload.com refused the download; the board is using the fixture list saved on the last good download">${DATA.meta.fixtures_source.source === "saved copy" ? "Fixture list from the saved copy" : "Fixture list unavailable"}: ${esc((DATA.meta.fixtures_source.missing || []).join(", "))}</span>` : "")
   + (((DATA.selfreview || {}).active || []).length ? `<span class="fresh chip meh" title="${esc(DATA.selfreview.active.map(a => a.text).join("\n"))}">${DATA.selfreview.active.length} self-correction${DATA.selfreview.active.length > 1 ? "s" : ""} in force</span>` : "")
+  + (syncLate ? `<span class="fresh chip warn" title="The Claude task on the Mac adds Flashscore stats and referees at 22:30 each night, then refreshes this board. Nothing has come from it for over two days: check the Mac is on, the task isn't stuck, and the GitHub login hasn't expired.">Nightly Flashscore check: nothing since ${synced.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}</span>` : "")
   + ((DATA.meta.skipped||[]).length ? `<span class="fresh chip warn" title="${esc(DATA.meta.skipped.join("\n"))}">${DATA.meta.skipped.length} Flashscore row${DATA.meta.skipped.length>1?"s":""} not used: team name not recognised</span>` : "");
 const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
 $("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.dom)} for one side to win more corners, ${pc(CALL.cards)} for cards, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
@@ -639,7 +644,7 @@ function renderLede(){
     predCard = `<div class="fig">${side} of ${dec.length} right</div>
       <div class="what">Picked the side that won more corners in ${side} of ${dec.length} matches (level counts left out). Corner totals were off by ${f1(mae)} on average. ${played.length} of ${xs.length} matches played${lg}.</div>`;
   } else {
-    predCard = `<div class="fig">${xs.length} matches</div><div class="what">Every match${lg} has a prediction. They update twice a day as results come in, until kick-off, then freeze.</div>`;
+    predCard = `<div class="fig">${xs.length} matches</div><div class="what">Every match${lg} has a prediction. They update several times a day as results come in, until kick-off, then freeze.</div>`;
   }
   $("#lede").innerHTML = `<div class="sechead"><div class="eyebrow">Gameweek ${r.n ?? ""} · ${esc(r.kind || "")} · ${r.status === "completed" ? "results in" : r.status === "in play" ? "in play" : "upcoming"}</div>
     <h2>${esc((r.label||"").replace(/^(Weekend|Midweek) · /,""))}</h2></div>

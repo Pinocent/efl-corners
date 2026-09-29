@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 The update. No arguments, no third-party packages. Runs the same on a Mac
-or in GitHub Actions (twice a day there).
+or in GitHub Actions (every three hours there, and whenever the Mac syncs).
 
   1. downloads results (goals, corners, xG, shots, red cards) + the fixture list
   2. merges manual_results.csv for matches the feed hasn't published yet
@@ -37,9 +37,19 @@ REFEREE_FILE = os.path.join(HERE, sources.REFEREE_FILE)
 STRICT, LENIENT = 1.10, 0.90   # referee factor at which the page calls a referee strict / lenient
 LEGACY_XLSX = os.path.join(HERE, "old version", "corners_tracker.xlsx")
 REVIEW_FILE = os.path.join(DATA, "self_review.json")
+LAST_SYNC_FILE = os.path.join(HERE, "last_sync.txt")   # written by sync_to_github.sh on the Mac
 TEMPLATE = os.path.join(HERE, "tracker", "dashboard.html")
 LOOKAHEAD_DAYS = 10     # predict every gameweek starting within this many days
 FIRST_SEASON = "1718"   # history goes back to here (cached after the first download)
+
+
+def last_sync():
+    """When the Mac's nightly task last reached GitHub (UTC, ISO), or "" if never."""
+    try:
+        with open(LAST_SYNC_FILE) as fh:
+            return fh.read().strip()
+    except OSError:
+        return ""
 
 
 def load_store():
@@ -459,7 +469,8 @@ def main():
                  "manual": n_manual, "skipped": skipped, "matches": len(results),
                  "call": ev.CALL, "tag": ev.TAG, "book_line": ev.BOOK_LINE,
                  "card_line": ev.CARD_LINE, "strict": STRICT, "lenient": LENIENT,
-                 "fixtures_source": fixture_status},
+                 "fixtures_source": fixture_status,
+                 "last_sync": last_sync()},
         "rounds": rinfo, "fixtures": fixtures, "reviews": reviews, "skill": skill,
         "rates": rates_now, "teams": team_table(results, model),
         "matches": match_rows(results), "last_season": season_summary(last),

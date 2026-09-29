@@ -8,12 +8,14 @@ and League 2, logs every prediction, and marks it against the result.
 - **On the Mac:** double-click `Update Dashboard.command`. It opens `docs/index.html`.
 - **In the cloud:** push this folder to a GitHub repo and turn on Pages
   (Settings → Pages → Deploy from branch → `main` / `docs`). The workflow in
-  `.github/workflows/update.yml` then runs at 09:17 and 21:17 UTC every day (about
-  10am and 10pm UK summer time) and republishes the dashboard, with no terminal
-  involved. GitHub starts scheduled runs when it has capacity, and one has
-  started hours late, so the "Updated" time on the page is when the build
-  actually ran. Pushing `manual_results.csv`, `referees.csv`, `run.py` or
-  anything in `tracker/` starts a run straight away.
+  `.github/workflows/update.yml` then republishes the dashboard, with no
+  terminal involved. Pushing `manual_results.csv`, `referees.csv`,
+  `last_sync.txt`, `run.py` or anything in `tracker/` starts a run straight
+  away, so the Mac's nightly sync (below) is what refreshes the board at about
+  22:35. GitHub's own timer runs it every three hours as a backstop, but it
+  starts scheduled runs when it has capacity: here they have started 4-8 hours
+  late or not at all. The "Updated" time on the page is when the build
+  actually ran.
 
 No packages to install. Python 3.9+ standard library only.
 
@@ -29,8 +31,15 @@ the app is closed then, it runs the next time the app opens):
 2. It reads each finished match on Flashscore (goals, corners, yellow and red
    cards, fouls, possession, crosses, referee) into `manual_results.csv`, and
    announced referee appointments into `referees.csv`.
-3. `./sync_to_github.sh` uploads both files. The push starts the cloud
-   update, and the online board refreshes about two minutes later.
+3. `./sync_to_github.sh` uploads both files, plus `last_sync.txt` (when it
+   ran), so there's always something to push, even on nights with no new data.
+   The push starts the cloud update, and the online board refreshes about two
+   minutes later.
+
+If a run gets stuck (one waited 25 hours on a web page that never finished
+loading), the app won't start the next one until it's stopped: open the task
+in the Scheduled list and stop the run. The board shows "Nightly Flashscore
+check: nothing since ..." in its header once two days pass without a sync.
 
 The official results feed replaces the Flashscore corners, goals and cards
 when it publishes them, usually a day or two later. Possession, crosses and
@@ -73,6 +82,8 @@ review flags something. `python3 self_review.py` prints the latest review;
 | `data/predictions.csv` | Every prediction and its calls, frozen at kick-off, with the result once known (`v3` = this model, `v2` = the old spreadsheet's) |
 | `manual_results.csv` | Flashscore numbers for matches the feed hasn't published yet (filled nightly by the scheduled task) |
 | `referees.csv` | Referee appointments for upcoming matches (filled nightly by the scheduled task) |
+| `schedule_2627.csv` | The season's fixture list, saved on every good download; used when fixturedownload.com refuses the cloud |
+| `last_sync.txt` | When the Mac last synced (written by `sync_to_github.sh`); pushing it rebuilds the board |
 | `docs/index.html` | The dashboard: Gameweek, Track record, Teams and Referees views, every section a dropdown |
 | `backtest.py` | Replays every season since 2018-19: `python3 backtest.py` (corners and goals), `cards`, or `tune` / `cards-tune` to re-tune |
 | `data/self_review.json` | The self-review's state: corrections in force, their history, a snapshot per reviewed gameweek |

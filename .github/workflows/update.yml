@@ -2,18 +2,19 @@ name: Update corners board
 
 on:
   schedule:
-    # 09:17 and 21:17 UTC every day: 10:17am and 10:17pm UK summer time, 9:17
-    # and 9:17 in winter. football-data uploads weekend results on a weekday
-    # evening (the last one landed Mon 17:50 UTC), so the evening run picks
-    # them up the same day and the morning run is a safety net. The odd minute
-    # is deliberate: GitHub queues scheduled runs at the top of the hour behind
-    # everyone else's, and one "19:00" run here started at 23:36.
-    - cron: "17 9,21 * * *"
+    # Every three hours, at 17 past (00:17, 03:17 ... 21:17 UTC). This is the
+    # backstop, not the main trigger: GitHub starts scheduled runs when it has
+    # capacity, and here they have started 4-8 hours late or not at all (the
+    # odd minute avoids the top-of-the-hour queue, which makes it worse). The
+    # dependable refresh is the Mac's nightly sync at 22:30, which pushes
+    # last_sync.txt and rebuilds the board within minutes.
+    - cron: "17 */3 * * *"
   workflow_dispatch: {}        # "Run workflow" button on GitHub
   push:
     paths:
       - manual_results.csv     # Flashscore results from the scheduled task
       - referees.csv           # referee appointments from the scheduled task
+      - last_sync.txt          # the Mac's nightly sync, new data or not
       - checkin.txt            # our check-ins with the model (self_review.py)
       - schedule_*.csv         # the fixture list, refreshed from the Mac
       - run.py                 # a change to the model or the page rebuilds the
