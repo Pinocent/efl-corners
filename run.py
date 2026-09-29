@@ -23,6 +23,7 @@ from tracker.cards import CardModel, cards_of
 from tracker.flags import fixture_flags
 from tracker.legacy import independent_markets
 from tracker.model import PARAMS, Model, learn_movers
+from tracker import review
 from tracker.rounds import detect_rounds
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -35,6 +36,7 @@ MANUAL_FILE = os.path.join(HERE, "manual_results.csv")
 REFEREE_FILE = os.path.join(HERE, sources.REFEREE_FILE)
 STRICT, LENIENT = 1.10, 0.90   # referee factor at which the page calls a referee strict / lenient
 LEGACY_XLSX = os.path.join(HERE, "old version", "corners_tracker.xlsx")
+REVIEW_FILE = os.path.join(DATA, "self_review.json")
 TEMPLATE = os.path.join(HERE, "tracker", "dashboard.html")
 LOOKAHEAD_DAYS = 10     # predict every gameweek starting within this many days
 FIRST_SEASON = "1718"   # history goes back to here (cached after the first download)
@@ -308,22 +310,12 @@ def main():
     model = Model().fit(results, today + timedelta(days=1), prior, movers)
     card_model = CardModel().fit(results, today + timedelta(days=1), hist, card_prior)
 
-    # ---- predict every gameweek starting soon (and any in progress)
+    # ---- which gameweeks to predict: every one starting soon, and any in progress
     upcoming = [r for r in rounds.values()
                 if r["end"] >= today and r["start"] <= today + timedelta(days=LOOKAHEAD_DAYS)]
     if not upcoming:
         upcoming = [r for r in rounds.values() if r["end"] >= today][:1]
     up_ids = {r["id"] for r in upcoming}
-    new_rows = []
-    for f in todo:
-        if f.get("round") in up_ids:
-            row_date = {"date": f["date"].isoformat(), "time": f.get("time", "")}
-            if ev.started(row_date, now):
-                continue                  # kicked off: its prediction is frozen
-            p = model.predict(f)
-            if p:
-                ref = refs_up.get((f["home"], f["away"]))
-                new_rows.append(ev.to_row(f, p, today, cards=card_model.predict(f, ref)))
 
     store = load_store()
     n = import_legacy(store)
@@ -338,13 +330,46 @@ def main():
         n = backfill(store, results, rounds, prior, last, today, movers, hist, card_prior)
         if n:
             print(f"  Replayed {n} predictions for this season's earlier gameweeks")
-    ev.upsert(store, new_rows, now)
     by_start = sorted(rounds.values(), key=lambda r: r["start"])
     for r in store.values():
         d = date.fromisoformat(r["date"])
         if d >= season_start:
             r["round"] = next((x["id"] for x in by_start if x["start"] <= d <= x["end"]), r.get("round", ""))
     ev.settle(store, results)
+
+    # ---- the weekly self-review: once a gameweek is marked, check every market
+    # and decide whether any cautious correction is warranted (tracker/review.py)
+    state = review.load(REVIEW_FILE, today)
+    checkin = os.path.join(HERE, "checkin.txt")     # written by self_review.py --checked-in
+    if os.path.exists(checkin):
+        with open(checkin) as fh:
+            recorded = fh.read().strip()
+        if recorded and recorded > state.get("last_checkin", ""):
+            state["last_checkin"] = recorded
+    season_v3 = [r for r in store.values() if r["model"] == "v3" and date.fromisoformat(r["date"]) >= season_start]
+    marked_v3 = [dict(r, calls=ev.mark(r)) for r in season_v3]
+    snap = review.weekly(state, season_v3, marked_v3, rounds, today)
+    if snap:
+        print(f"  Self-review after gameweek {snap['gameweek']}: "
+              + (f"{len(snap['flags'])} thing(s) flagged" if snap["flags"] else "nothing beyond normal variation"))
+        for line in snap["changes"]:
+            print(f"    {line}")
+    adjust = review.Adjuster(state)
+
+    # ---- predict every gameweek starting soon (and any in progress)
+    new_rows = []
+    for f in todo:
+        if f.get("round") in up_ids:
+            row_date = {"date": f["date"].isoformat(), "time": f.get("time", "")}
+            if ev.started(row_date, now):
+                continue                  # kicked off: its prediction is frozen
+            p = model.predict(f, adjust=adjust if adjust.any() else None)
+            if p:
+                ref = refs_up.get((f["home"], f["away"]))
+                cards = card_model.predict(f, ref, adjust=adjust if adjust.any() else None)
+                new_rows.append(ev.to_row(f, p, today, cards=cards, cal=adjust.version if adjust.any() else ""))
+    ev.upsert(store, new_rows, now)
+    review.save(REVIEW_FILE, state)
     sources.write_csv(PRED_FILE, sorted(store.values(), key=lambda r: (r["date"], r["model"], r["home"])),
                       ev.FIELDS)
     sources.write_csv(MATCH_FILE, sorted(results, key=lambda m: (m["date"], m["league"], m["home"])),
@@ -429,6 +454,9 @@ def main():
         "rates": rates_now, "teams": team_table(results, model),
         "matches": match_rows(results), "last_season": season_summary(last),
         "referees": ref_rows,
+        "selfreview": {**review.summary(state, today),
+                       "health": review.health([r for r in rows if r["model"] == "v3"],
+                                               [r for r in rows if r["model"] == "v3"])},
     }
     with open(os.path.join(DOCS, "data.json"), "w") as fh:
         json.dump(payload, fh, default=str)

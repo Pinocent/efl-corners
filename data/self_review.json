@@ -1,0 +1,45 @@
+{
+ "active": {
+  "cards": {
+   "centre": {},
+   "level": {},
+   "spread": 1.0
+  },
+  "corners": {
+   "centre": {},
+   "level": {},
+   "spread": 1.0
+  },
+  "goals": {
+   "centre": {},
+   "level": {},
+   "spread": 1.0
+  }
+ },
+ "cooldown": {},
+ "history": [],
+ "last_checkin": "2026-09-29",
+ "reviewed": [
+  "2026-08-28",
+  "2026-09-01",
+  "2026-09-05",
+  "2026-09-06",
+  "2026-09-09",
+  "2026-09-12",
+  "2026-09-15",
+  "2026-09-17",
+  "2026-09-26"
+ ],
+ "reviews": [
+  {
+   "changes": [],
+   "date": "2026-09-29",
+   "flags": [],
+   "gameweek": 11,
+   "label": "Weekend \u00b7 Sat 26 Sep",
+   "matches": 204,
+   "round": "2026-09-26"
+  }
+ ],
+ "version": ""
+}

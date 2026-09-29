@@ -149,12 +149,16 @@ class CardModel:
         f = self.refs.get(ref)
         return kh * f, ka * f, f
 
-    def predict(self, fx, ref=None):
+    def predict(self, fx, ref=None, adjust=None):
         e = self.expect(fx, ref)
         if not e:
             return None
         kh, ka, f = e
+        raw = [kh, ka]
+        if adjust:                        # the self-review's corrections, if any
+            kh, ka = adjust("cards", fx["league"], kh, ka)
         mk = card_markets(kh, ka, self.p["total_size"], self.p["split_kappa"])
+        mk["raw"] = raw
         base = self.red_base.get(fx["league"], 0.13)
         red_rate = base * (self.refs.red.get(ref, 1.0) if ref else 1.0) * (kh + ka) / max(sum(self.cards.mu[fx["league"]]), 0.1)
         mk.update(ref=ref or "", ref_factor=f, ref_n=self.refs.n.get(ref, 0) if ref else 0,

@@ -47,7 +47,7 @@ FIELDS = (["model", "made", "round", "date", "time", "league", "home", "away",
            "ph", "pa", "lh", "la", "p_home", "p_draw", "p_away", "btts", "o25",
            "cs_home", "cs_away", "sample",
            "ref", "ref_f", "kh", "ka", "kt", "k25", "k35", "k45", "k55", "k65",
-           "khome2", "kaway2", "red", "kph", "kpa", "kline",
+           "khome2", "kaway2", "red", "kph", "kpa", "kline", "raw", "cal",
            "line", "calls", "hc", "ac", "hg", "ag", "hk", "ak", "hred"])
 CARD_LINES = (2.5, 3.5, 4.5, 5.5, 6.5)
 
@@ -95,7 +95,12 @@ def book_lines(rates):
             CARD_LINE[lg] = 3.5 if abs(r["k35"] - 0.5) <= abs(r["k45"] - 0.5) else 4.5
 
 
-def to_row(fx, pred, made, model="v3", cards=None):
+def to_row(fx, pred, made, model="v3", cards=None, cal=""):
+    """
+    cal: the self-review's correction version in force when this was made
+    ("" = none). "raw" keeps the expectations before any correction, so the
+    review can always judge a correction against what it replaced.
+    """
     c, g = pred["corners"], pred["goals"]
     row = {"model": model, "made": made.isoformat(), "round": fx.get("round", ""),
            "date": fx["date"].isoformat(), "time": fx.get("time", ""),
@@ -119,6 +124,11 @@ def to_row(fx, pred, made, model="v3", cards=None):
                    kpa=";".join(f"{x:.4f}" for x in cards["kpa"]))
         for l in CARD_LINES:
             row[_kk(l)] = cards["ktotals"][l]
+    raw = {k: [round(x, 4) for x in v] for k, v in (pred.get("raw") or {}).items()}
+    if cards and cards.get("raw"):
+        raw["k"] = [round(x, 4) for x in cards["raw"]]
+    row["raw"] = json.dumps(raw, separators=(",", ":")) if raw else ""
+    row["cal"] = cal
     freeze_calls(row)
     return row
 

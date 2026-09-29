@@ -215,6 +215,10 @@ dl.terms dd{margin:0;color:var(--muted);max-width:70ch}
 .minis{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--surface)}
 .minis button{border:0;background:none;padding:2px 9px;cursor:pointer;font-size:12px;font-weight:600}
 .minis button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.rvgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+ul.rv{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;max-width:75ch}
+details.rvh summary{cursor:pointer;font-size:13px;color:var(--muted);margin-top:6px}
+.chip.meh{background:var(--warn-soft);color:var(--warn);font-weight:600}
 .chip.strict{background:var(--warn-soft);color:var(--warn);font-weight:600}
 .chip.lenient{background:var(--blue-soft);color:var(--blue);font-weight:600}
 th.grp.k{box-shadow:inset 0 3px 0 var(--warn)}
@@ -390,6 +394,11 @@ details.dd>summary:hover{border-color:var(--muted)}
       <p>Calls and predictions are marked separately, across the whole season and every division. Calls are judged on whether they landed. Predictions are judged on whether they beat simply using the league average.</p>
     </div>
 
+    <details class="dd" id="trReviewSec" open>
+      <summary><span class="dd-t"><span class="tag pred">Self-review</span><h2>How the model is doing</h2></span><span class="dd-s" id="trReviewSum"></span></summary>
+      <div class="dd-b" id="trReview"></div>
+    </details>
+
     <details class="dd" id="trCallsSec" open>
       <summary><span class="dd-t"><span class="tag call">Calls</span><h2>Did they land?</h2></span><span class="dd-s" id="trCallsSum"></span></summary>
       <div class="dd-b" id="trCalls"></div>
@@ -557,6 +566,7 @@ $("#updated").textContent = `Updated ${new Date(DATA.meta.updated.replace(" UTC"
 $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
   `<span class="fresh">${esc(k)} results in to ${new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`).join("")
   + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "")
+  + (((DATA.selfreview || {}).active || []).length ? `<span class="fresh chip meh" title="${esc(DATA.selfreview.active.map(a => a.text).join("\n"))}">${DATA.selfreview.active.length} self-correction${DATA.selfreview.active.length > 1 ? "s" : ""} in force</span>` : "")
   + ((DATA.meta.skipped||[]).length ? `<span class="fresh chip warn" title="${esc(DATA.meta.skipped.join("\n"))}">${DATA.meta.skipped.length} Flashscore row${DATA.meta.skipped.length>1?"s":""} not used: team name not recognised</span>` : "");
 const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
 $("#defCall").textContent = `A prediction the model is confident enough to recommend. The bar: ${pc(CALL.total)} for over or under the usual corners line, ${pc(CALL.dom)} for one side to win more corners, ${pc(CALL.cards)} for cards, ${pc(CALL.both4)} for both teams 4+ corners, and ${pc(CALL.btts)} for goals markets. Most matches don't reach it, and that's intended.`;
@@ -885,7 +895,43 @@ const trTile = (k, v, sub) => `<div class="tile"><span class="k">${k}</span><spa
 // green when a market lands at (or near) the chance the model gave it, amber when it's above a coin flip but short of that, red below
 const rateClass = (rate, said) => rate >= said - 0.05 ? "good" : rate >= 0.5 ? "meh" : "bad";
 
+// ---- the weekly self-review (tracker/review.py)
+function renderSelfReview(){
+  const sr = DATA.selfreview;
+  if (!sr){ setSum("trReviewSum", "not run yet"); $("#trReview").innerHTML = ""; return; }
+  const L = sr.latest, H = sr.health || {markets: [], counts: [], calls: []};
+  const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+  setSum("trReviewSum", (L ? `After gameweek ${L.gameweek}: ${L.flags.length ? plural(L.flags.length, "thing") + " flagged" : "nothing beyond normal variation"}` : "first review after the next marked gameweek")
+    + (sr.active.length ? ` · ${plural(sr.active.length, "correction")} in force` : ""));
+  const chip = (t, c) => `<span class="verdict ${c}">${esc(t)}</span>`;
+  const due = new Date(sr.next_checkin).toLocaleDateString("en-GB", {day: "numeric", month: "short"});
+  const latest = L ? `<div class="panel"><h3>Latest review <span class="eyebrow">after gameweek ${L.gameweek} · ${esc(dm(L.date))}</span></h3>
+      ${L.flags.length ? `<ul class="rv">${L.flags.map(t => `<li>${esc(t)}</li>`).join("")}</ul>`
+        : `<p>Every market is within the range luck alone would explain. Nothing needed changing.</p>`}
+      ${L.changes.length ? `<h3 style="margin-top:6px">Changed this week</h3><ul class="rv">${L.changes.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+      <p class="small muted">Next check-in with you: <b>${due}</b>${sr.checkin_due ? " (due now)" : ""}.</p></div>`
+    : `<div class="panel"><p class="empty">The first review runs once the next gameweek has been marked.</p></div>`;
+  const corr = `<div class="panel"><h3>Corrections in force</h3>
+      ${sr.active.length ? `<ul class="rv">${sr.active.map(a => `<li>${esc(a.text)}${a.since ? ` <span class="small muted">since ${esc(dm(a.since))}</span>` : ""}</li>`).join("")}</ul>`
+        : `<p>None. Every prediction on the board is the model's own, uncorrected.</p>`}
+      ${sr.history.length ? `<details class="rvh"><summary>History (${sr.history.length})</summary><ul class="rv">${[...sr.history].reverse().map(h =>
+          `<li><b>${esc(dm(h.date))}</b> · ${esc(h.league === "all" ? "" : h.league + " ")}${esc(h.component)} ${esc(h.kind)} ${h.from} → ${h.to}: ${esc(h.why)}</li>`).join("")}</ul></details>` : ""}</div>`;
+  const mkt = H.markets.map(m => `<tr><td class="l">${esc(m.market)}</td><td>${m.n}</td><td>${pc(m.said)}</td><td><b>${pc(m.happened)}</b></td><td class="l">${chip(m.verdict, m.cls)}</td></tr>`).join("");
+  const cnt = H.counts.map(c => `<tr><td class="l">${esc(c.league)}</td><td class="l">${esc(c.what)}</td><td>${c.n}</td><td>${f2(c.expected)}</td><td><b>${f2(c.actual)}</b></td><td class="l">${chip(c.verdict, c.cls)}</td></tr>`).join("");
+  const cl = H.calls.map(c => `<tr><td class="l">${esc(mName(c.market))}</td><td>${c.n}</td><td>${c.hits}</td><td>${pc(c.said)}</td><td><b>${pc(c.rate)}</b></td><td class="l">${chip(c.verdict, c.cls)}</td></tr>`).join("");
+  $("#trReview").innerHTML = `<div class="rvgrid">${latest}${corr}</div>
+    <div class="panel"><h3>Every market <span class="eyebrow">most recent ${H.markets.length ? Math.max(...H.markets.map(m => m.n)) : 0} predictions at most</span></h3>
+      <div class="tablebox" style="border:0"><table><thead><tr><th class="l">Market</th><th>Predictions</th><th>Model said</th><th>Happened</th><th class="l">Verdict</th></tr></thead><tbody>${mkt}</tbody></table></div>
+      <p class="small muted">"Model said" is the average chance it gave; "happened" is how often it came off. "Too confident" or "too cautious" means its strongest predictions went too far, or not far enough, even when the average is right.</p></div>
+    <div class="panel"><h3>Expected against actual, by division</h3>
+      <div class="tablebox" style="border:0"><table><thead><tr><th class="l">Division</th><th class="l">Per match</th><th>Matches</th><th>Expected</th><th>Actual</th><th class="l">Verdict</th></tr></thead><tbody>${cnt}</tbody></table></div></div>
+    <div class="panel"><h3>Calls</h3>
+      <div class="tablebox" style="border:0"><table><thead><tr><th class="l">Market</th><th>Calls</th><th>Landed</th><th>Model said</th><th>Rate</th><th class="l">Verdict</th></tr></thead><tbody>${cl}</tbody></table></div></div>
+    <p class="small muted">After each gameweek the model checks itself. Nothing is flagged unless it's beyond what luck would explain over at least 100 predictions, because a single gameweek is far too small to judge. It may make two cautious corrections to future predictions: raising or lowering a division's expected corners, cards or goals (at most 10%, after 150+ matches), or making its predictions bolder or more cautious (after 300+). Each needs the older and newer halves of the evidence to agree, is rolled back automatically if the next 100 matches go worse with it, and never changes a prediction already frozen at kick-off. Bigger changes wait for our check-in.</p>`;
+}
+
 function renderTrack(){
+  renderSelfReview();
   const cs = settledCalls();
   const rv = DATA.reviews.filter(r => r.model === "v3").sort((a,b) => a.round.localeCompare(b.round));
   const pending = allCalls(v3).filter(c => c.hit == null && c.x.hc == null).length;

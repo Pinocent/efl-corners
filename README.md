@@ -40,6 +40,31 @@ To run it by hand: "Run now" on the task in the Claude app's Scheduled list,
 or double-click `Send Flashscore Results.command` after editing the CSVs
 yourself.
 
+## The weekly self-review
+
+After each gameweek is marked, the model checks itself (`tracker/review.py`)
+and shows the result at the top of the Track record page:
+
+- every market: how often it happened against the chance the model gave, and
+  whether its confident predictions were too confident or too timid
+- expected corners, cards and goals against what happened, per division
+- calls: landing at the rate the model gave them, or not
+
+Nothing is flagged unless it's beyond chance over at least 100 predictions:
+one gameweek is far too few matches to judge anything.
+
+It may make two cautious corrections to **future** predictions (frozen ones
+are never touched): raising or lowering a division's expected corners, cards
+or goals (at most 10%, after 150+ matches), or making predictions bolder or
+more cautious (after 300+). Both need the older and newer halves of the
+evidence to agree, are rolled back automatically if the next 100 matches go
+worse, and are listed on the page while in force. The tests in `tests/` check
+this behaviour, and the cloud won't publish if they fail.
+
+Bigger changes wait for a check-in between us, every seven weeks or when the
+review flags something. `python3 self_review.py` prints the latest review;
+`python3 self_review.py --checked-in` records a check-in.
+
 ## Files
 
 | File | What it is |
@@ -50,6 +75,7 @@ yourself.
 | `referees.csv` | Referee appointments for upcoming matches (filled nightly by the scheduled task) |
 | `docs/index.html` | The dashboard: Gameweek, Track record, Teams and Referees views, every section a dropdown |
 | `backtest.py` | Replays every season since 2018-19: `python3 backtest.py` (corners and goals), `cards`, or `tune` / `cards-tune` to re-tune |
+| `data/self_review.json` | The self-review's state: corrections in force, their history, a snapshot per reviewed gameweek |
 | `tracker/` | The code: `rounds.py` gameweeks, `model.py` corners and goals, `cards.py` cards and referees, `markets.py` probabilities, `evaluate.py` calls and marking, `flags.py` warnings |
 
 The old spreadsheet version is in `old version/`, untouched.

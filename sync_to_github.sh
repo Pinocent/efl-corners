@@ -17,7 +17,7 @@ if ! git pull -q --rebase --autostash origin main; then
     exit 1
 fi
 
-git add manual_results.csv referees.csv 2>/dev/null
+git add manual_results.csv referees.csv checkin.txt 2>/dev/null
 if git diff --cached --quiet; then
     echo "Nothing new to send."
     exit 0

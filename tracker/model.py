@@ -303,15 +303,23 @@ class Model:
                 "shots": season_priors(self.shots),
                 "goals": season_priors(self.goals)}
 
-    def predict(self, fx):
-        """fx: fixture dict (league, home, away). -> dict or None."""
+    def predict(self, fx, adjust=None):
+        """
+        fx: fixture dict (league, home, away). -> dict or None.
+        adjust: optional (component, league, home, away) -> (home, away), the
+        self-review's corrections to the expected counts (tracker/review.py).
+        The expectations before any correction are kept in "raw".
+        """
         p = self.p
         lg, h, a = fx["league"], fx["home"], fx["away"]
         ch, ca = self.expect_corners(fx)
         if ch is None:
             return None
+        raw = {"c": [ch, ca]}
+        if adjust:
+            ch, ca = adjust("corners", lg, ch, ca)
         corners = markets.corner_markets(ch, ca, lg, p["total_size"], p["split_kappa"])
-        return self._with_goals(fx, corners)
+        return self._with_goals(fx, corners, adjust, raw)
 
     def expect_corners(self, fx):
         """Expected corners for each side, after the shots blend."""
@@ -331,11 +339,15 @@ class Model:
 
         return ch, ca
 
-    def _with_goals(self, fx, corners):
+    def _with_goals(self, fx, corners, adjust=None, raw=None):
         p = self.p
         lg, h, a = fx["league"], fx["home"], fx["away"]
         gh, ga = self.goals.expect(lg, h, a)
+        gh, ga = max(gh, 0.15), max(ga, 0.15)
+        raw = dict(raw or {}, g=[gh, ga])
+        if adjust:
+            gh, ga = adjust("goals", lg, gh, ga)
         goals = markets.goal_markets(max(gh, 0.15), max(ga, 0.15), p["dc_rho"])
         n = min(self.corners.n.get(h, 0), self.corners.n.get(a, 0))
-        return {"corners": corners, "goals": goals, "sample": n}
+        return {"corners": corners, "goals": goals, "sample": n, "raw": raw}
 
