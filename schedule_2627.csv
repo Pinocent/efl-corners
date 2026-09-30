@@ -263,14 +263,10 @@ date,time,league,home,away
 2026-09-20,12:00,Championship,Wolves,West Brom
 2026-09-26,15:00,League 1,Bradford,Barnsley
 2026-09-26,15:00,League 1,Cambridge Utd,AFC Wimbledon
-2026-09-26,15:00,League 1,Doncaster,Oxford Utd
-2026-09-26,15:00,League 1,Huddersfield,Luton
-2026-09-26,15:00,League 1,Leicester,Wigan
 2026-09-26,15:00,League 1,MK Dons,Bromley
 2026-09-26,15:00,League 1,Mansfield,Leyton Orient
 2026-09-26,15:00,League 1,Notts County,Blackpool
 2026-09-26,15:00,League 1,Plymouth,Burton
-2026-09-26,15:00,League 1,Stevenage,Sheffield Wed
 2026-09-26,15:00,League 1,Stockport,Peterborough
 2026-09-26,15:00,League 1,Wycombe,Reading
 2026-09-26,15:00,League 2,Bristol Rovers,Exeter
@@ -287,14 +283,12 @@ date,time,league,home,away
 2026-09-26,15:00,League 2,York,Gillingham
 2026-10-03,15:00,League 1,AFC Wimbledon,Stevenage
 2026-10-03,15:00,League 1,Barnsley,MK Dons
-2026-10-03,15:00,League 1,Blackpool,Leicester
 2026-10-03,15:00,League 1,Bromley,Wycombe
 2026-10-03,15:00,League 1,Burton,Huddersfield
 2026-10-03,15:00,League 1,Leyton Orient,Plymouth
 2026-10-03,15:00,League 1,Luton,Doncaster
 2026-10-03,15:00,League 1,Peterborough,Notts County
 2026-10-03,15:00,League 1,Reading,Bradford
-2026-10-03,15:00,League 1,Sheffield Wed,Cambridge Utd
 2026-10-03,15:00,League 1,Wigan,Mansfield
 2026-10-03,15:00,League 2,Accrington,Cheltenham
 2026-10-03,15:00,League 2,Barnet,York
@@ -453,7 +447,9 @@ date,time,league,home,away
 2026-10-24,15:00,League 2,Rotherham,Shrewsbury
 2026-10-24,15:00,League 2,York,Port Vale
 2026-10-26,20:00,League 2,Walsall,Salford
+2026-10-27,19:45,League 1,Leicester,Wigan
 2026-10-27,19:45,League 1,Oxford Utd,Stockport
+2026-10-27,19:45,League 1,Sheffield Wed,Cambridge Utd
 2026-10-30,20:00,Championship,Sheffield Utd,Wrexham
 2026-10-30,19:45,League 2,Newport,Chesterfield
 2026-10-31,15:00,Championship,Bolton,Bristol City
@@ -499,6 +495,7 @@ date,time,league,home,away
 2026-11-03,19:45,Championship,QPR,Burnley
 2026-11-03,19:45,Championship,Watford,Lincoln
 2026-11-03,20:00,Championship,West Brom,Southampton
+2026-11-03,19:45,League 1,Huddersfield,Luton
 2026-11-04,20:00,Championship,Bristol City,Wolves
 2026-11-04,19:45,Championship,Cardiff,West Ham
 2026-11-04,19:45,Championship,Wrexham,Middlesbrough
@@ -583,6 +580,8 @@ date,time,league,home,away
 2026-11-24,19:45,Championship,Portsmouth,West Ham
 2026-11-24,19:45,Championship,Sheffield Utd,Southampton
 2026-11-24,20:00,Championship,Wolves,Derby
+2026-11-24,19:45,League 1,Blackpool,Leicester
+2026-11-24,19:45,League 1,Stevenage,Sheffield Wed
 2026-11-25,19:45,Championship,Bolton,West Brom
 2026-11-25,19:45,Championship,Burnley,Birmingham
 2026-11-25,20:00,Championship,Stoke,Millwall
@@ -707,6 +706,7 @@ date,time,league,home,away
 2026-12-12,15:00,League 2,Shrewsbury,Port Vale
 2026-12-12,12:30,League 2,Tranmere,York
 2026-12-13,14:00,Championship,Lincoln,Norwich
+2026-12-15,19:45,League 1,Doncaster,Oxford Utd
 2026-12-17,20:00,League 2,Crewe,Salford
 2026-12-18,20:00,Championship,West Brom,Sheffield Utd
 2026-12-18,19:45,League 1,Cambridge Utd,Stevenage
