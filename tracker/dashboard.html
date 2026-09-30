@@ -205,6 +205,9 @@ tr.detail td > div{position:sticky;left:14px;max-width:min(1120px, calc(100vw - 
 .wklabels span{flex:1;min-width:20px;max-width:46px;font-size:10.5px;color:var(--muted);text-align:center;line-height:1.2}
 details.glossary{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
 details.glossary summary{cursor:pointer;font-weight:600}
+details.offnote{margin-top:14px}
+details.offnote p{margin:8px 0 0;font-size:13.5px;color:var(--muted);max-width:70ch}
+details.offnote ul{margin:8px 0 0;padding-left:18px;font-size:13.5px;columns:2 220px}
 .notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 28px;font-size:13.5px;margin-top:12px}
 .notes p{max-width:65ch}
 .notes b{font-weight:600}
@@ -550,7 +553,9 @@ function outcome(c, x){
 // ---- state
 const S = { round: null, league: store.get("league") || "All", hi: +(store.get("hi") || 6), teamSort: {k:"cf", dir:-1}, open: new Set() };
 const rounds = DATA.rounds;
-const v3 = DATA.fixtures.filter(x => x.model === "v3");
+const v3 = DATA.fixtures.filter(x => x.model === "v3" && !x.off);
+// fixtures the EFL's referee appointments leave out: called off or moved (run.py)
+const OFF = DATA.fixtures.filter(x => x.model === "v3" && x.off);
 const gwOf = id => (rounds.find(r => r.id === id) || {}).n;
 
 function defaultRound(){
@@ -572,6 +577,7 @@ $("#fresh").innerHTML = Object.entries(DATA.meta.latest).map(([k,v]) =>
   + (DATA.meta.manual ? `<span class="fresh">${DATA.meta.manual} entered from Flashscore</span>` : "")
   + (((DATA.meta.fixtures_source || {}).source || "download") !== "download" ? `<span class="fresh chip warn" title="fixturedownload.com refused the download; the board is using the fixture list saved on the last good download">${DATA.meta.fixtures_source.source === "saved copy" ? "Fixture list from the saved copy" : "Fixture list unavailable"}: ${esc((DATA.meta.fixtures_source.missing || []).join(", "))}</span>` : "")
   + (((DATA.selfreview || {}).active || []).length ? `<span class="fresh chip meh" title="${esc(DATA.selfreview.active.map(a => a.text).join("\n"))}">${DATA.selfreview.active.length} self-correction${DATA.selfreview.active.length > 1 ? "s" : ""} in force</span>` : "")
+  + (((DATA.meta.referees_source || {}).unknown || []).length ? `<span class="fresh chip warn" title="The EFL's referee appointments name a club the board doesn't recognise, so called-off fixtures aren't worked out for that day and division. Add the spelling to tracker/teams.py.">EFL appointments: ${esc(DATA.meta.referees_source.unknown.join(", "))} not recognised</span>` : "")
   + (syncLate ? `<span class="fresh chip warn" title="The Claude task on the Mac adds Flashscore stats and referees at 22:30 each night, then refreshes this board. Nothing has come from it for over two days: check the Mac is on, the task isn't stuck, and the GitHub login hasn't expired.">Nightly Flashscore check: nothing since ${synced.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}</span>` : "")
   + ((DATA.meta.skipped||[]).length ? `<span class="fresh chip warn" title="${esc(DATA.meta.skipped.join("\n"))}">${DATA.meta.skipped.length} Flashscore row${DATA.meta.skipped.length>1?"s":""} not used: team name not recognised</span>` : "");
 const lines = Object.entries(BOOK).map(([k,v]) => `${v} in the ${k}`).join(", ");
@@ -651,9 +657,20 @@ function renderLede(){
     <div class="duo">
       <div class="stat calls"><div><span class="tag call">Calls</span></div>${callCard}</div>
       <div class="stat preds"><div><span class="tag pred">Predictions</span></div>${predCard}</div>
-    </div>`;
+    </div>${offNote()}`;
   $("#fxTitle").textContent = S.league === "All" ? "Every match" : `Every ${S.league} match`;
   setSum("fxSum", `${xs.length} match${xs.length === 1 ? "" : "es"}${played.length ? ` · ${played.length} played` : ""}`);
+}
+
+function offNote(){
+  const off = OFF.filter(x => x.round === S.round && inLeague(x))
+    .sort((a,b) => (a.date + a.league + a.home).localeCompare(b.date + b.league + b.home));
+  if (!off.length) return "";
+  const day = d => new Date(d).toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+  const days = [...new Set(off.map(x => x.date))];
+  return `<details class="glossary offnote"><summary>${off.length} fixture${off.length > 1 ? "s" : ""} called off</summary>
+    <p>On the fixture list for ${days.map(day).join(" and ")}, but not in the EFL's referee appointments for ${days.length > 1 ? "those days" : "that day"}, so ${off.length > 1 ? "they've" : "it's"} been postponed or moved. Left out of this gameweek; ${off.length > 1 ? "they get" : "it gets"} a fresh prediction once rearranged.</p>
+    <ul>${off.map(x => `<li>${esc(x.home)} v ${esc(x.away)}${days.length > 1 ? ` <span class="muted">${day(x.date)}</span>` : ""}${S.league === "All" ? ` <span class="muted">· ${esc(x.league)}</span>` : ""}</li>`).join("")}</ul></details>`;
 }
 
 // ---- the calls list
@@ -756,8 +773,10 @@ function renderCardsSection(){
   const xs = rows().filter(x => x.kt != null).sort((a,b) => b.kt - a.kt);
   const known = xs.filter(x => x.ref).length;
   const lines = [...new Set(Object.values(CARD_LINE))].join(" or ");
+  const art = ((DATA.meta.referees_source || {}).articles || []).slice().sort((a,b) => (a.published||"").localeCompare(b.published||"")).pop();
   $("#cardsIntro").textContent = `Yellow and red cards shown to each side, with the referee. The usual line is ${lines} cards. `
-    + (xs.length ? (known === xs.length ? "Every referee has been announced." : `${known} of ${xs.length} referees announced so far; they're usually published the day before, and until then a match assumes an average referee.`) : "");
+    + (xs.length ? (known === xs.length ? "Every referee has been announced." : `${known} of ${xs.length} referees announced so far. The EFL publishes them one to five days before; until then a match assumes an average referee.`) : "")
+    + (art ? ` Latest from the EFL: "${art.title}", ${new Date(art.published).toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}.` : "");
   setSum("cardsSum", xs.length ? `${known} of ${xs.length} referees announced` : "");
   const played = xs.some(x => x.hk != null);
   let h = `<thead><tr><th class="l">Match</th><th class="l">Referee</th><th>Expected cards<br>home–away</th><th>Usual line</th><th>Each side 2+<br>home / away</th><th>Red card</th>${played ? "<th>Result</th>" : ""}</tr></thead><tbody>`;

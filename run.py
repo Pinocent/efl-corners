@@ -16,6 +16,7 @@ import os
 import sys
 from datetime import date, datetime, timedelta, timezone
 
+from tracker import efl
 from tracker import evaluate as ev
 from tracker import markets
 from tracker import sources
@@ -305,8 +306,14 @@ def main():
     if last:
         card_prior = CardModel().fit(last, max(m["date"] for m in last) + timedelta(days=1),
                                      [m for _, ms in past[:-1] for m in ms]).priors()
-    # referee appointments: the Cowork file first, football-data's (official, later) wins
+    # referee appointments: the Cowork file first, then the EFL's announcements
+    # (one to five days ahead), then football-data's fixtures file (the day before)
+    efl_status = {}
+    apps = efl.get_appointments(os.path.join(HERE, efl.FILE), status=efl_status)
+    print(f"  EFL referee appointments: {sum(a['date'] >= today for a in apps)} matches to come "
+          f"(from {efl_status.get('source')})")
     refs_up = sources.get_manual_referees(REFEREE_FILE)
+    refs_up.update(efl.referees(apps, today, {m.get("ref") for m in hist + results}))
     refs_up.update(sources.get_upcoming_referees())
 
     # the usual corners line, as things stand today (last season's until this
@@ -317,6 +324,10 @@ def main():
     played = {(m["home"], m["away"]) for m in results}
     todo = [f for f in schedule if (f["home"], f["away"]) not in played
             and f["date"] >= today - timedelta(days=3)]
+    # a fixture the EFL's appointments leave out isn't going ahead that day; the
+    # fixture list keeps it on the old date until it's rearranged
+    called_off = efl.postponed(apps, todo, played)
+    todo = [f for f in todo if (f["home"], f["away"], f["date"]) not in called_off]
     rounds = detect_rounds(results + todo)
     model = Model().fit(results, today + timedelta(days=1), prior, movers)
     card_model = CardModel().fit(results, today + timedelta(days=1), hist, card_prior)
@@ -357,7 +368,11 @@ def main():
             recorded = fh.read().strip()
         if recorded and recorded > state.get("last_checkin", ""):
             state["last_checkin"] = recorded
-    season_v3 = [r for r in store.values() if r["model"] == "v3" and date.fromisoformat(r["date"]) >= season_start]
+    # predictions for matches called off (as above) aren't counted or shown
+    off = efl.postponed(apps, [r for r in store.values() if date.fromisoformat(r["date"]) >= season_start
+                               and not ev.result(r)], played)
+    season_v3 = [r for r in store.values() if r["model"] == "v3" and date.fromisoformat(r["date"]) >= season_start
+                 and (r["home"], r["away"], date.fromisoformat(r["date"])) not in off]
     marked_v3 = [dict(r, calls=ev.mark(r)) for r in season_v3]
     snap = review.weekly(state, season_v3, marked_v3, rounds, today)
     if snap:
@@ -436,6 +451,9 @@ def main():
         return out
 
     fixtures = [clean(r) for r in rows if r["round"] in shown]
+    for x in fixtures:
+        if x.get("hc") is None and (x["home"], x["away"], date.fromisoformat(x["date"])) in off:
+            x["off"] = True
     # warnings about each side's recent matches, as they stood before kick-off
     cache = {}
     for x in fixtures:
@@ -469,7 +487,7 @@ def main():
                  "manual": n_manual, "skipped": skipped, "matches": len(results),
                  "call": ev.CALL, "tag": ev.TAG, "book_line": ev.BOOK_LINE,
                  "card_line": ev.CARD_LINE, "strict": STRICT, "lenient": LENIENT,
-                 "fixtures_source": fixture_status,
+                 "fixtures_source": fixture_status, "referees_source": efl_status,
                  "last_sync": last_sync()},
         "rounds": rinfo, "fixtures": fixtures, "reviews": reviews, "skill": skill,
         "rates": rates_now, "teams": team_table(results, model),

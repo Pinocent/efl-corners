@@ -50,6 +50,25 @@ To run it by hand: "Run now" on the task in the Claude app's Scheduled list,
 or double-click `Send Flashscore Results.command` after editing the CSVs
 yourself.
 
+## Referee appointments and called-off matches
+
+The EFL announces each round's officials in a news article ("Referee
+appointments: 3-6 October", one to five days before). Every run reads the
+articles linked from efl.com/news (`tracker/efl.py`) and saves them to
+`efl_referees.csv`, so the cards predictions use the appointed referee as soon
+as it's out, and a blocked download falls back on the saved copy.
+football-data's fixtures file, the day before, still wins if it differs.
+
+The article is also the earliest sign of a postponement: the fixture list keeps
+a called-off match on its old date until it's rearranged, but the appointments
+list only the matches going ahead (on 26 Sep, exactly the 14 of 24 that were
+played). So a fixture on a date and division the article covers, but not in
+it, is taken as called off: it isn't predicted or counted, and the gameweek
+lists it under "fixtures called off". It gets a fresh prediction once
+rearranged. If the article names a club the board doesn't recognise, that day
+and division are left alone and the page says which name to add to
+`tracker/teams.py`.
+
 ## The weekly self-review
 
 After each gameweek is marked, the model checks itself (`tracker/review.py`)
@@ -85,6 +104,7 @@ review flags something. `python3 self_review.py` prints the latest review;
 | `referees.csv` | Referee appointments for upcoming matches (filled nightly by the scheduled task) |
 | `schedule_2627.csv` | The season's fixture list, saved on every good download; used when fixturedownload.com refuses the cloud |
 | `last_sync.txt` | When the Mac last synced (written by `sync_to_github.sh`); pushing it rebuilds the board |
+| `efl_referees.csv` | The EFL's referee appointments, read from its news articles and saved (`tracker/efl.py`) |
 | `docs/index.html` | The dashboard: Gameweek, Track record, Teams and Referees views, every section a dropdown |
 | `backtest.py` | Replays every season since 2018-19: `python3 backtest.py` (corners and goals), `cards`, or `tune` / `cards-tune` to re-tune |
 | `data/self_review.json` | The self-review's state: corrections in force, their history, a snapshot per reviewed gameweek |
