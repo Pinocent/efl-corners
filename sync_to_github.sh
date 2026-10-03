@@ -21,8 +21,12 @@ if ! git pull -q --rebase --autostash origin main; then
     exit 1
 fi
 
-git add manual_results.csv referees.csv checkin.txt 2>/dev/null
-git add schedule_*.csv efl_referees.csv 2>/dev/null   # fixture list and EFL appointments, refreshed from this Mac
+# add each file separately: one missing file (e.g. checkin.txt) makes a combined
+# "git add" fail and stage nothing
+for f in manual_results.csv referees.csv checkin.txt \
+         schedule_*.csv efl_referees.csv; do   # fixture list and EFL appointments, refreshed from this Mac
+    [ -e "$f" ] && git add "$f"
+done
 if git diff --cached --quiet; then
     sent="No new data, so just asked GitHub to rebuild the board."
     msg="Nightly refresh $(date '+%Y-%m-%d %H:%M')"
