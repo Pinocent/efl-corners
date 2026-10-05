@@ -261,7 +261,6 @@ date,time,league,home,away
 2026-09-19,12:30,League 2,Walsall,Port Vale
 2026-09-20,13:30,Championship,Norwich,Bolton
 2026-09-20,12:00,Championship,Wolves,West Brom
-2026-09-26,15:00,League 1,Bradford,Barnsley
 2026-09-26,15:00,League 1,Cambridge Utd,AFC Wimbledon
 2026-09-26,15:00,League 1,MK Dons,Bromley
 2026-09-26,15:00,League 1,Mansfield,Leyton Orient
@@ -581,6 +580,7 @@ date,time,league,home,away
 2026-11-24,19:45,Championship,Sheffield Utd,Southampton
 2026-11-24,20:00,Championship,Wolves,Derby
 2026-11-24,19:45,League 1,Blackpool,Leicester
+2026-11-24,19:45,League 1,Bradford,Barnsley
 2026-11-24,19:45,League 1,Stevenage,Sheffield Wed
 2026-11-25,19:45,Championship,Bolton,West Brom
 2026-11-25,19:45,Championship,Burnley,Birmingham
