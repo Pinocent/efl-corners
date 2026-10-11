@@ -285,7 +285,6 @@ date,time,league,home,away
 2026-10-03,15:00,League 1,Bromley,Wycombe
 2026-10-03,15:00,League 1,Burton,Huddersfield
 2026-10-03,15:00,League 1,Leyton Orient,Plymouth
-2026-10-03,15:00,League 1,Luton,Doncaster
 2026-10-03,15:00,League 1,Peterborough,Notts County
 2026-10-03,15:00,League 1,Reading,Bradford
 2026-10-03,15:00,League 1,Wigan,Mansfield
@@ -447,6 +446,7 @@ date,time,league,home,away
 2026-10-24,15:00,League 2,York,Port Vale
 2026-10-26,20:00,League 2,Walsall,Salford
 2026-10-27,19:45,League 1,Leicester,Wigan
+2026-10-27,19:45,League 1,Luton,Doncaster
 2026-10-27,19:45,League 1,Oxford Utd,Stockport
 2026-10-27,19:45,League 1,Sheffield Wed,Cambridge Utd
 2026-10-30,20:00,Championship,Sheffield Utd,Wrexham
