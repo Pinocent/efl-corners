@@ -32,6 +32,23 @@ except Exception:                        # very old Python: treat times as UTC
 # which it hadn't seen, 17% qualified and 75% landed.
 CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60, "cards": 0.60, "dom": 0.65}
 
+# Calls are only made in markets Sky Bet offers for the division, as listed on
+# oddschecker for the 17 Oct 2026 matches. Cards (total, per team, most cards)
+# are priced for the Championship only; no bookmaker prices League 1 or 2 match
+# cards. Sky Bet's home/away corners (needed for both 4+, via a bet builder) and
+# corner unders are Championship and League 1 only. League 2 corner overs come
+# from the user's own Sky Bet check: oddschecker's feed doesn't carry them.
+# Most corners, BTTS and goals over/under are in all three.
+SKYBET = {
+    "Championship": {"corners_over", "corners_under", "side_corners", "dominance", "cards", "btts", "o25"},
+    "League 1": {"corners_over", "corners_under", "side_corners", "dominance", "btts", "o25"},
+    "League 2": {"corners_over", "dominance", "btts", "o25"},
+}
+
+
+def offered(league, market):
+    return market in SKYBET.get(league, ())
+
 # Prediction tags - not calls. Each marks where the model says something
 # clearly different from the norm (rates from replaying 2024-25 and 2025-26).
 TAG = {
@@ -152,35 +169,35 @@ def calls_for(p):
     # corner totals, against the league's usual line; unders only where offered
     l = f(p.get("line")) or BOOK_LINE.get(lg, 10.5)
     q = f(p.get(_k(l)))
-    if q is not None and q >= CALL["total"]:
+    if q is not None and q >= CALL["total"] and offered(lg, "corners_over"):
         out.append(("Corners total", f"Over {l}", q))
-    elif q is not None and lg != "League 2" and 1 - q >= CALL["total"]:
+    elif q is not None and 1 - q >= CALL["total"] and offered(lg, "corners_under"):
         out.append(("Corners total", f"Under {l}", 1 - q))
 
     # cards, against the league's usual cards line (over and under both offered)
     kl = f(p.get("kline"))
-    kq = f(p.get(_kk(kl))) if kl else None
+    kq = f(p.get(_kk(kl))) if kl and offered(lg, "cards") else None
     if kq is not None and kq >= CALL["cards"]:
         out.append(("Cards total", f"Over {kl}", kq))
     elif kq is not None and 1 - kq >= CALL["cards"]:
         out.append(("Cards total", f"Under {kl}", 1 - kq))
 
     # corner dominance: which side takes more corners than the other
-    d = dominance_call(p)
+    d = dominance_call(p) if offered(lg, "dominance") else None
     if d:
         out.append(d)
 
     b4 = f(p.get("both4"))
-    if b4 is not None and b4 >= CALL["both4"]:
+    if b4 is not None and b4 >= CALL["both4"] and offered(lg, "side_corners"):
         out.append(("Both 4+ corners", "Yes", b4))
 
-    bt = f(p.get("btts"))
+    bt = f(p.get("btts")) if offered(lg, "btts") else None
     if bt is not None:
         if bt >= CALL["btts"]:
             out.append(("BTTS", "Yes", bt))
         elif 1 - bt >= CALL["btts"]:
             out.append(("BTTS", "No", 1 - bt))
-    o = f(p.get("o25"))
+    o = f(p.get("o25")) if offered(lg, "o25") else None
     if o is not None:
         if o >= CALL["o25"]:
             out.append(("Goals 2.5", "Over", o))
