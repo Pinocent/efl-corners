@@ -9,6 +9,9 @@ What the scheduled collection task should fetch right now. Prints JSON:
                    file or referees.csv)
   called_off       matches in that window the EFL's referee appointments leave
                    out: not going ahead that day, so nothing to collect
+  prices_needed    the board's calls for matches in the next 3 days (from
+                   docs/data.json): if any, collect Sky Bet's prices for them
+                   with skybet_prices.js
 
 Team names are the board's own spellings - write them into the CSVs exactly
 as given here so every row is recognised.
@@ -24,6 +27,20 @@ from datetime import date, timedelta
 from tracker import efl, sources
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def prices_needed(today):
+    """'date home v away: market pick' for the board's calls in the next 3 days."""
+    try:
+        with open(os.path.join(HERE, "docs", "data.json")) as fh:
+            board = json.load(fh)
+    except (OSError, ValueError):
+        return []
+    end = (today + timedelta(days=3)).isoformat()
+    return [f"{x['date']} {x['home']} v {x['away']}: {c['market']} {c['pick']}"
+            for x in board.get("fixtures", [])
+            if x.get("model") == "v3" and not x.get("off") and x.get("hc") is None
+            and today.isoformat() <= x["date"] <= end for c in x.get("calls") or []]
 
 
 def main():
@@ -55,7 +72,8 @@ def main():
                        if f["date"] >= today and (f["home"], f["away"]) not in have | set(refs) and not is_off(f)]
     called_off = [row(f) for f in window if is_off(f)]
     json.dump({"today": today.isoformat(), "results_needed": results_needed,
-               "referees_needed": referees_needed, "called_off": called_off}, sys.stdout, indent=1)
+               "referees_needed": referees_needed, "called_off": called_off,
+               "prices_needed": prices_needed(today)}, sys.stdout, indent=1)
     print()
 
 

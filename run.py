@@ -38,6 +38,7 @@ REFEREE_FILE = os.path.join(HERE, sources.REFEREE_FILE)
 STRICT, LENIENT = 1.10, 0.90   # referee factor at which the page calls a referee strict / lenient
 LEGACY_XLSX = os.path.join(HERE, "old version", "corners_tracker.xlsx")
 REVIEW_FILE = os.path.join(DATA, "self_review.json")
+PRICES_FILE = os.path.join(HERE, "skybet_prices.json")   # Sky Bet prices, from the nightly task
 LAST_SYNC_FILE = os.path.join(HERE, "last_sync.txt")   # written by sync_to_github.sh on the Mac
 TEMPLATE = os.path.join(HERE, "tracker", "dashboard.html")
 LOOKAHEAD_DAYS = 10     # predict every gameweek starting within this many days
@@ -394,7 +395,19 @@ def main():
                 ref = refs_up.get((f["home"], f["away"]))
                 cards = card_model.predict(f, ref, adjust=adjust if adjust.any() else None)
                 new_rows.append(ev.to_row(f, p, today, cards=cards, cal=adjust.version if adjust.any() else ""))
+    # a re-made prediction keeps the Sky Bet prices already collected for it
+    kept = {k: r["sb"] for k, r in store.items() if r.get("sb")}
     ev.upsert(store, new_rows, now)
+    for k, sb in kept.items():
+        if k in store and not store[k].get("sb"):
+            store[k]["sb"] = sb
+    prices = None
+    if os.path.exists(PRICES_FILE):
+        with open(PRICES_FILE) as fh:
+            prices = json.load(fh)
+    n = ev.attach_prices(store, prices, now)
+    if n:
+        print(f"  Sky Bet prices for {n} calls (collected {prices.get('fetched', '?')[:16]})")
     review.save(REVIEW_FILE, state)
     sources.write_csv(PRED_FILE, sorted(store.values(), key=lambda r: (r["date"], r["model"], r["home"])),
                       ev.FIELDS)
@@ -443,6 +456,8 @@ def main():
         for k, v in r.items():
             if k in ("ph", "pa", "kph", "kpa"):
                 out[k] = [float(x) for x in v.split(";")] if v else None
+            elif k == "sb":
+                continue                          # already on each call, by mark()
             elif k in text_keys:
                 out[k] = v
             else:

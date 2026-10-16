@@ -32,6 +32,7 @@ from tracker.cards import CARD_PARAMS, CardModel, card_markets, cards_of
 from tracker.legacy import predict_v2
 from tracker.model import PARAMS, Model, learn_movers
 from tracker.rounds import detect_rounds
+from tracker.managers import get_changes
 from tracker.sources import get_results
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -41,6 +42,8 @@ TRAIN = ["1819", "2122", "2223", "2324"]
 TEST = ["2425", "2526"]
 
 _loaded = {}
+# manager changes for every season, from the saved copy (tracker/managers.py)
+CHANGES = get_changes(ALL, os.path.join(HERE, "managers.csv"), log=lambda *_: None)
 
 
 def load(season):
@@ -66,7 +69,7 @@ def evaluate(season, predictor, params=PARAMS, first=3, last=999):
     prior, movers = context(season, params)
     rounds = detect_rounds(matches)
     s = {k: 0.0 for k in ("n", "mae", "ll", "b95", "b105", "bboth", "bbtts", "bo25",
-                          "bcs", "gmae", "ng", "o95_n", "o95_hit")}
+                          "bcs", "gmae", "ng", "o95_n", "o95_hit", "bdom", "dom_n", "dom_hit")}
     for rid in list(rounds)[first:last]:
         batch = [m for m in matches if m["round"] == rid and m.get("hc") is not None]
         if not batch:
@@ -85,6 +88,10 @@ def evaluate(season, predictor, params=PARAMS, first=3, last=999):
             s["b95"] += (c["totals"][9.5] - (tot > 9.5)) ** 2
             s["b105"] += (c["totals"][10.5] - (tot > 10.5)) ** 2
             s["bboth"] += (c["both4"] - (hc >= 4 and ac >= 4)) ** 2
+            s["bdom"] += (c["dom_home"] - (hc > ac)) ** 2
+            for pd, won in ((c["dom_home"], hc > ac), (c["dom_away"], ac > hc)):
+                if pd >= 0.65:                                # a corner dominance call
+                    s["dom_n"] += 1; s["dom_hit"] += won
             if c["totals"][9.5] >= 0.65 or c["totals"][9.5] <= 0.35:
                 s["o95_n"] += 1
                 s["o95_hit"] += (c["totals"][9.5] >= 0.5) == (tot > 9.5)
@@ -108,6 +115,7 @@ def summarise(parts):
     return {"n": int(t["n"]), "MAE tot": t["mae"] / n, "LL team": t["ll"] / n / 2,
             "Brier O9.5": t["b95"] / n, "Brier O10.5": t["b105"] / n,
             "Brier both4": t["bboth"] / n, "strong O9.5 hit%": 100 * t["o95_hit"] / (t["o95_n"] or 1),
+            "Brier dom": t["bdom"] / n, "dom calls": int(t["dom_n"]), "dom hit%": 100 * t["dom_hit"] / (t["dom_n"] or 1),
             "strong n": int(t["o95_n"]),
             "Goals MAE": t["gmae"] / ng, "Brier BTTS": t["bbtts"] / ng,
             "Brier O2.5": t["bo25"] / ng, "Brier CS": t["bcs"] / ng}
@@ -116,7 +124,7 @@ def summarise(parts):
 # ---- predictors: (matches, asof, prior, movers, params) -> fixture -> prediction
 
 def v3(matches, asof, prior, movers, params):
-    return Model(params).fit(matches, asof, prior, movers).predict
+    return Model(params).fit(matches, asof, prior, movers, CHANGES).predict
 
 
 def v3_no_movers(matches, asof, prior, movers, params):
@@ -145,7 +153,7 @@ def baseline(matches, asof, prior, movers, params):
 
 
 KEYS = ["n", "MAE tot", "LL team", "Brier O9.5", "Brier O10.5", "Brier both4",
-        "strong O9.5 hit%", "strong n", "Goals MAE", "Brier BTTS", "Brier O2.5", "Brier CS"]
+        "strong O9.5 hit%", "strong n", "Brier dom", "dom calls", "dom hit%", "Goals MAE", "Brier BTTS", "Brier O2.5", "Brier CS"]
 
 
 def show(name, res=None):
@@ -153,7 +161,7 @@ def show(name, res=None):
         print(f'{name:30}' + "".join(f"{k:>12}" for k in KEYS))
         return
     print(f"{name:30}" + "".join(
-        f"{res[k]:>12.0f}" if k in ("n", "strong n") else f"{res[k]:>12.4f}" for k in KEYS))
+        f"{res[k]:>12.0f}" if k in ("n", "strong n", "dom calls") else f"{res[k]:>12.4f}" for k in KEYS))
 
 
 # ---- tuning (parallel: one job per setting per season)
@@ -240,7 +248,7 @@ def evaluate_cards(season, cp=CARD_PARAMS, mode="ref", first=3, last=999):
             if len(past) < 30:
                 continue
         else:
-            mdl = CardModel(cp).fit(matches, start, hist, prior)
+            mdl = CardModel(cp).fit(matches, start, hist, prior, CHANGES)
         for m in batch:
             if mode == "league":
                 lp = [x for x in past if x["league"] == m["league"]]

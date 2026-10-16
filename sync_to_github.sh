@@ -23,7 +23,7 @@ fi
 
 # add each file separately: one missing file (e.g. checkin.txt) makes a combined
 # "git add" fail and stage nothing
-for f in manual_results.csv referees.csv checkin.txt \
+for f in manual_results.csv referees.csv checkin.txt skybet_prices.json \
          schedule_*.csv efl_referees.csv; do   # fixture list and EFL appointments, refreshed from this Mac
     [ -e "$f" ] && git add "$f"
 done

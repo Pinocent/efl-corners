@@ -18,6 +18,7 @@ on:
       - checkin.txt            # our check-ins with the model (self_review.py)
       - schedule_*.csv         # the fixture list, refreshed from the Mac
       - efl_referees.csv       # the EFL's referee appointments, refreshed from the Mac
+      - skybet_prices.json     # Sky Bet's prices for the calls, from the nightly task
       - run.py                 # a change to the model or the page rebuilds the
       - tracker/**             # board straight away, not at the next slot
 

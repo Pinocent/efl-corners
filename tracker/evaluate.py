@@ -30,7 +30,10 @@ except Exception:                        # very old Python: treat times as UTC
 # Chosen on 2018-19 to 2023-24: at 65% about 12% of matches qualified and the
 # favoured side won more corners 72% of the time; on 2024-25 and 2025-26,
 # which it hadn't seen, 17% qualified and 75% landed.
-CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60, "cards": 0.60, "dom": 0.65}
+# cards: 0.62 since Oct 2026, when card calls became Championship-only. Over
+# 2024-26 Championship card calls at 0.60 landed 60.5% (model said 64.3%); at
+# 0.62, 65.7% (said 66.0%), about 90 a season
+CALL = {"total": 0.58, "both4": 0.60, "btts": 0.60, "o25": 0.60, "cards": 0.62, "dom": 0.65}
 
 # Calls are only made in markets Sky Bet offers for the division, as listed on
 # oddschecker for the 17 Oct 2026 matches. Cards (total, per team, most cards)
@@ -65,7 +68,7 @@ FIELDS = (["model", "made", "round", "date", "time", "league", "home", "away",
            "cs_home", "cs_away", "sample",
            "ref", "ref_f", "kh", "ka", "kt", "k25", "k35", "k45", "k55", "k65",
            "khome2", "kaway2", "red", "kph", "kpa", "kline", "raw", "cal",
-           "line", "calls", "hc", "ac", "hg", "ag", "hk", "ak", "hred"])
+           "line", "calls", "sb", "hc", "ac", "hg", "ag", "hk", "ak", "hred"])
 CARD_LINES = (2.5, 3.5, 4.5, 5.5, 6.5)
 
 
@@ -293,8 +296,14 @@ def cards_result(p):
 
 
 def mark(p):
-    """Stored calls, each with hit/miss once the result is in."""
+    """Stored calls, each with hit/miss once the result is in, and Sky Bet's price if known."""
     calls = json.loads(p["calls"]) if p.get("calls") else []
+    sb = json.loads(p["sb"]) if p.get("sb") else {}
+    for c in calls:
+        v = sb.get(f"{c['market']}|{c['pick']}")
+        if v:
+            # edge: what the model expects back per 1 staked at that price, less the stake
+            c.update(sb=v["odds"], sb_dec=v["dec"], edge=round(c["p"] * v["dec"] - 1, 3))
     res = result(p)
     if res:
         kr = cards_result(p) or (None, None)
@@ -303,6 +312,30 @@ def mark(p):
             if hit is not None:
                 c["hit"] = bool(hit)
     return calls
+
+
+def attach_prices(store, prices, now):
+    """
+    Sky Bet's price for each call (skybet_prices.json, collected in the browser
+    by the nightly task: skybet_prices.js) onto the stored predictions, as
+    {"market|pick": {odds, dec, at}}. The latest price before kick-off is
+    kept; from kick-off it's frozen with the rest of the row.
+    """
+    if not prices:
+        return 0
+    idx = {(r["date"], r["home"], r["away"]): r for r in store.values() if r["model"] == "v3"}
+    n = 0
+    for row in prices.get("rows", []):
+        d = dict(zip(prices["fields"], row))
+        r = idx.get((d["date"], d["home"], d["away"]))
+        if not r or started(r, now):
+            continue
+        sb = json.loads(r["sb"]) if r.get("sb") else {}
+        sb[f"{d['market']}|{d['pick']}"] = {"odds": d["odds"], "dec": round(float(d["decimal"]), 3),
+                                            "at": prices.get("fetched", "")}
+        r["sb"] = json.dumps(sb, separators=(",", ":"))
+        n += 1
+    return n
 
 
 def brier_block(rows, rates_for):

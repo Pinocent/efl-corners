@@ -1,0 +1,1084 @@
+season,league,team,date,kind
+1718,Championship,Norwich,2017-05-07,vacancy
+1718,Championship,Middlesbrough,2017-05-21,vacancy
+1718,Championship,Sunderland,2017-05-22,vacancy
+1718,Championship,Hull,2017-05-25,vacancy
+1718,Championship,Leeds,2017-05-25,vacancy
+1718,Championship,Norwich,2017-05-25,appointment
+1718,Championship,Wolves,2017-05-30,vacancy
+1718,Championship,Wolves,2017-05-31,appointment
+1718,Championship,Hull,2017-06-09,appointment
+1718,Championship,Middlesbrough,2017-06-09,appointment
+1718,Championship,Leeds,2017-06-15,appointment
+1718,Championship,Preston,2017-06-29,vacancy
+1718,Championship,Sunderland,2017-06-29,appointment
+1718,Championship,Preston,2017-07-04,appointment
+1718,Championship,Birmingham,2017-09-16,vacancy
+1718,Championship,Birmingham,2017-09-29,appointment
+1718,Championship,Sunderland,2017-10-31,vacancy
+1718,Championship,Sunderland,2017-11-17,appointment
+1718,Championship,Hull,2017-12-03,vacancy
+1718,Championship,Hull,2017-12-07,appointment
+1718,Championship,Middlesbrough,2017-12-23,vacancy
+1718,Championship,Sheffield Wed,2017-12-24,vacancy
+1718,Championship,Middlesbrough,2017-12-26,appointment
+1718,Championship,Nottm Forest,2017-12-31,vacancy
+1718,Championship,Sheffield Wed,2018-01-05,appointment
+1718,Championship,Nottm Forest,2018-01-08,appointment
+1718,Championship,Leeds,2018-02-04,vacancy
+1718,Championship,Barnsley,2018-02-06,vacancy
+1718,Championship,Leeds,2018-02-06,appointment
+1718,Championship,Barnsley,2018-02-16,appointment
+1718,Championship,Birmingham,2018-03-03,vacancy
+1718,Championship,Birmingham,2018-03-04,appointment
+1718,Championship,Reading,2018-03-21,vacancy
+1718,Championship,Reading,2018-03-23,appointment
+1718,Championship,Ipswich,2018-04-10,vacancy
+1718,Championship,Sunderland,2018-04-29,vacancy
+1718,Championship,Sunderland,2018-05-25,appointment
+1718,Championship,Ipswich,2018-05-30,appointment
+1718,League 1,Wigan,2017-05-30,vacancy
+1718,League 1,Portsmouth,2017-05-31,vacancy
+1718,League 1,Wigan,2017-05-31,appointment
+1718,League 1,Portsmouth,2017-06-02,appointment
+1718,League 1,Oxford Utd,2017-06-20,vacancy
+1718,League 1,Oxford Utd,2017-07-01,appointment
+1718,League 1,Northampton,2017-08-31,vacancy
+1718,League 1,Northampton,2017-09-04,appointment
+1718,League 1,Gillingham,2017-09-25,vacancy
+1718,League 1,Oldham,2017-09-25,vacancy
+1718,League 1,Oldham,2017-10-18,appointment
+1718,League 1,Bury,2017-10-30,vacancy
+1718,League 1,Gillingham,2017-11-16,appointment
+1718,League 1,Bury,2017-11-22,appointment
+1718,League 1,Bury,2018-01-15,vacancy
+1718,League 1,Bury,2018-01-15,appointment
+1718,League 1,Southend,2018-01-17,vacancy
+1718,League 1,MK Dons,2018-01-20,vacancy
+1718,League 1,Oxford Utd,2018-01-22,vacancy
+1718,League 1,MK Dons,2018-01-23,appointment
+1718,League 1,Southend,2018-01-23,appointment
+1718,League 1,Bradford,2018-02-05,vacancy
+1718,League 1,Bradford,2018-02-11,appointment
+1718,League 1,Fleetwood,2018-02-16,vacancy
+1718,League 1,Fleetwood,2018-02-22,appointment
+1718,League 1,Peterborough,2018-02-25,vacancy
+1718,League 1,Peterborough,2018-02-28,appointment
+1718,League 1,Walsall,2018-03-12,vacancy
+1718,League 1,Walsall,2018-03-16,appointment
+1718,League 1,Charlton,2018-03-22,vacancy
+1718,League 1,Charlton,2018-03-22,appointment
+1718,League 1,Oxford Utd,2018-03-22,appointment
+1718,League 1,Scunthorpe,2018-03-24,vacancy
+1718,League 1,Northampton,2018-04-02,vacancy
+1718,League 1,Northampton,2018-04-02,appointment
+1718,League 1,Scunthorpe,2018-04-11,appointment
+1718,League 1,MK Dons,2018-04-22,vacancy
+1718,League 1,MK Dons,2018-06-06,appointment
+1718,League 2,Swindon,2017-05-05,vacancy
+1718,League 2,Swindon,2017-06-05,appointment
+1718,League 2,Chesterfield,2017-09-16,vacancy
+1718,League 2,Port Vale,2017-09-16,vacancy
+1718,League 2,Chesterfield,2017-09-29,appointment
+1718,League 2,Port Vale,2017-10-04,appointment
+1718,League 2,Barnet,2017-11-13,vacancy
+1718,League 2,Barnet,2017-11-14,appointment
+1718,League 2,Barnet,2018-01-15,vacancy
+1718,League 2,Barnet,2018-01-15,appointment
+1718,League 2,Cambridge Utd,2018-02-09,vacancy
+1718,League 2,Grimsby,2018-02-11,vacancy
+1718,League 2,Mansfield,2018-02-27,vacancy
+1718,League 2,Mansfield,2018-03-01,appointment
+1718,League 2,Swindon,2018-03-01,vacancy
+1718,League 2,Grimsby,2018-03-02,appointment
+1718,League 2,Swindon,2018-03-12,appointment
+1718,League 2,Stevenage,2018-03-18,vacancy
+1718,League 2,Barnet,2018-03-19,vacancy
+1718,League 2,Barnet,2018-03-19,appointment
+1718,League 2,Stevenage,2018-03-20,appointment
+1718,League 2,Chesterfield,2018-04-24,vacancy
+1718,League 2,Cambridge Utd,2018-05-02,appointment
+1718,League 2,Chesterfield,2018-05-15,appointment
+1819,Championship,Ipswich,2018-05-06,vacancy
+1819,Championship,QPR,2018-05-10,vacancy
+1819,Championship,QPR,2018-05-18,appointment
+1819,Championship,Stoke,2018-05-18,vacancy
+1819,Championship,Swansea,2018-05-18,vacancy
+1819,Championship,Derby,2018-05-22,vacancy
+1819,Championship,Stoke,2018-05-22,appointment
+1819,Championship,Ipswich,2018-05-30,appointment
+1819,Championship,Derby,2018-05-31,appointment
+1819,Championship,Leeds,2018-06-01,vacancy
+1819,Championship,Swansea,2018-06-11,appointment
+1819,Championship,Leeds,2018-06-15,appointment
+1819,Championship,Aston Villa,2018-10-03,vacancy
+1819,Championship,Aston Villa,2018-10-10,appointment
+1819,Championship,Brentford,2018-10-10,vacancy
+1819,Championship,Brentford,2018-10-16,appointment
+1819,Championship,Ipswich,2018-10-25,vacancy
+1819,Championship,Ipswich,2018-10-27,appointment
+1819,Championship,Reading,2018-12-06,vacancy
+1819,Championship,Sheffield Wed,2018-12-21,vacancy
+1819,Championship,Reading,2018-12-22,appointment
+1819,Championship,Sheffield Wed,2019-01-02,appointment
+1819,Championship,Stoke,2019-01-08,vacancy
+1819,Championship,Stoke,2019-01-09,appointment
+1819,Championship,Nottm Forest,2019-01-11,vacancy
+1819,Championship,Nottm Forest,2019-01-14,appointment
+1819,Championship,West Brom,2019-03-09,vacancy
+1819,Championship,QPR,2019-04-01,vacancy
+1819,Championship,QPR,2019-05-08,appointment
+1819,Championship,West Brom,2019-06-13,appointment
+1819,League 1,Barnsley,2018-05-06,vacancy
+1819,League 1,Bradford,2018-05-08,vacancy
+1819,League 1,Sunderland,2018-05-25,vacancy
+1819,League 1,Sunderland,2018-05-25,appointment
+1819,League 1,Shrewsbury,2018-05-30,vacancy
+1819,League 1,Shrewsbury,2018-06-01,appointment
+1819,League 1,Fleetwood,2018-06-02,vacancy
+1819,League 1,Fleetwood,2018-06-02,appointment
+1819,League 1,Doncaster,2018-06-04,vacancy
+1819,League 1,Barnsley,2018-06-06,appointment
+1819,League 1,Bradford,2018-06-18,appointment
+1819,League 1,Doncaster,2018-06-27,appointment
+1819,League 1,Blackpool,2018-08-06,vacancy
+1819,League 1,Blackpool,2018-08-06,appointment
+1819,League 1,Scunthorpe,2018-08-24,vacancy
+1819,League 1,Scunthorpe,2018-08-27,appointment
+1819,League 1,Bradford,2018-09-03,vacancy
+1819,League 1,Bradford,2018-09-04,appointment
+1819,League 1,AFC Wimbledon,2018-11-12,vacancy
+1819,League 1,Shrewsbury,2018-11-12,vacancy
+1819,League 1,Shrewsbury,2018-12-03,appointment
+1819,League 1,AFC Wimbledon,2018-12-04,appointment
+1819,League 1,Bristol Rovers,2018-12-13,vacancy
+1819,League 1,Bristol Rovers,2019-01-06,appointment
+1819,League 1,Luton,2019-01-09,vacancy
+1819,League 1,Luton,2019-01-10,appointment
+1819,League 1,Peterborough,2019-01-26,vacancy
+1819,League 1,Peterborough,2019-01-26,appointment
+1819,League 1,Bradford,2019-02-25,vacancy
+1819,League 1,Bradford,2019-03-04,appointment
+1819,League 1,Rochdale,2019-03-04,vacancy
+1819,League 1,Rochdale,2019-03-04,appointment
+1819,League 1,Scunthorpe,2019-03-24,vacancy
+1819,League 1,Scunthorpe,2019-03-24,appointment
+1819,League 1,Southend,2019-03-26,vacancy
+1819,League 1,Southend,2019-04-02,appointment
+1819,League 1,Walsall,2019-04-06,vacancy
+1819,League 1,Walsall,2019-04-08,appointment
+1819,League 1,Gillingham,2019-04-26,vacancy
+1819,League 1,Gillingham,2019-04-26,appointment
+1819,League 1,Plymouth,2019-04-28,vacancy
+1819,League 1,Plymouth,2019-06-05,appointment
+1819,League 2,Carlisle,2018-05-05,vacancy
+1819,League 2,MK Dons,2018-05-05,vacancy
+1819,League 2,Exeter,2018-06-01,vacancy
+1819,League 2,Exeter,2018-06-01,appointment
+1819,League 2,Macclesfield,2018-06-01,vacancy
+1819,League 2,Carlisle,2018-06-05,appointment
+1819,League 2,MK Dons,2018-06-06,appointment
+1819,League 2,Oldham,2018-06-08,vacancy
+1819,League 2,Oldham,2018-06-13,appointment
+1819,League 2,Macclesfield,2018-06-19,appointment
+1819,League 2,Cheltenham,2018-08-21,vacancy
+1819,League 2,Notts County,2018-08-26,vacancy
+1819,League 2,Crawley,2018-08-31,vacancy
+1819,League 2,Notts County,2018-08-31,appointment
+1819,League 2,Crawley,2018-09-07,appointment
+1819,League 2,Cheltenham,2018-09-10,appointment
+1819,League 2,Northampton,2018-10-01,vacancy
+1819,League 2,Northampton,2018-10-01,appointment
+1819,League 2,Macclesfield,2018-10-08,vacancy
+1819,League 2,Swindon,2018-11-12,vacancy
+1819,League 2,Notts County,2018-11-13,vacancy
+1819,League 2,Swindon,2018-11-13,appointment
+1819,League 2,Notts County,2018-11-24,appointment
+1819,League 2,Macclesfield,2018-11-27,appointment
+1819,League 2,Cambridge Utd,2018-12-01,vacancy
+1819,League 2,Cambridge Utd,2018-12-19,appointment
+1819,League 2,Oldham,2018-12-27,vacancy
+1819,League 2,Carlisle,2019-01-04,vacancy
+1819,League 2,Carlisle,2019-01-16,appointment
+1819,League 2,Port Vale,2019-01-30,vacancy
+1819,League 2,Port Vale,2019-02-04,appointment
+1819,League 2,Oldham,2019-02-10,appointment
+1819,League 2,Oldham,2019-03-14,vacancy
+1819,League 2,Oldham,2019-03-15,appointment
+1819,League 2,Yeovil,2019-03-24,vacancy
+1819,League 2,Yeovil,2019-06-19,appointment
+1920,Championship,Luton,2019-05-04,vacancy
+1920,Championship,QPR,2019-05-05,vacancy
+1920,Championship,Luton,2019-05-07,appointment
+1920,Championship,QPR,2019-05-08,appointment
+1920,Championship,West Brom,2019-05-14,vacancy
+1920,Championship,Middlesbrough,2019-05-17,vacancy
+1920,Championship,Swansea,2019-05-20,vacancy
+1920,Championship,Hull,2019-06-08,vacancy
+1920,Championship,Swansea,2019-06-13,appointment
+1920,Championship,West Brom,2019-06-13,appointment
+1920,Championship,Middlesbrough,2019-06-14,appointment
+1920,Championship,Birmingham,2019-06-18,vacancy
+1920,Championship,Hull,2019-06-21,appointment
+1920,Championship,Nottm Forest,2019-06-28,vacancy
+1920,Championship,Nottm Forest,2019-06-28,appointment
+1920,Championship,Derby,2019-07-04,vacancy
+1920,Championship,Derby,2019-07-05,appointment
+1920,Championship,Sheffield Wed,2019-07-15,vacancy
+1920,Championship,Huddersfield,2019-08-16,vacancy
+1920,Championship,Sheffield Wed,2019-09-06,appointment
+1920,Championship,Huddersfield,2019-09-09,appointment
+1920,Championship,Millwall,2019-10-03,vacancy
+1920,Championship,Barnsley,2019-10-08,vacancy
+1920,Championship,Reading,2019-10-09,vacancy
+1920,Championship,Reading,2019-10-14,appointment
+1920,Championship,Millwall,2019-10-21,appointment
+1920,Championship,Stoke,2019-11-01,vacancy
+1920,Championship,Stoke,2019-11-08,appointment
+1920,Championship,Cardiff,2019-11-11,vacancy
+1920,Championship,Cardiff,2019-11-16,appointment
+1920,Championship,Barnsley,2019-11-20,appointment
+1920,Championship,Birmingham,2019-12-04,appointment
+1920,Championship,Luton,2020-04-24,vacancy
+1920,Championship,Luton,2020-05-28,appointment
+1920,Championship,Middlesbrough,2020-06-23,vacancy
+1920,Championship,Middlesbrough,2020-06-23,appointment
+1920,Championship,Bristol City,2020-07-04,vacancy
+1920,Championship,Birmingham,2020-07-08,vacancy
+1920,Championship,Huddersfield,2020-07-19,vacancy
+1920,Championship,Huddersfield,2020-07-23,appointment
+1920,Championship,Birmingham,2020-07-31,appointment
+1920,Championship,Bristol City,2020-08-10,appointment
+1920,League 1,Gillingham,2019-05-04,vacancy
+1920,League 1,Gillingham,2019-05-21,appointment
+1920,League 1,Bury,2019-06-05,vacancy
+1920,League 1,Doncaster,2019-06-21,vacancy
+1920,League 1,Bury,2019-07-02,appointment
+1920,League 1,Blackpool,2019-07-05,vacancy
+1920,League 1,Blackpool,2019-07-06,appointment
+1920,League 1,Doncaster,2019-07-10,appointment
+1920,League 1,Bolton,2019-08-21,vacancy
+1920,League 1,Bolton,2019-08-31,appointment
+1920,League 1,Southend,2019-09-06,vacancy
+1920,League 1,Lincoln,2019-09-09,vacancy
+1920,League 1,Lincoln,2019-09-20,appointment
+1920,League 1,Sunderland,2019-10-08,vacancy
+1920,League 1,Sunderland,2019-10-17,appointment
+1920,League 1,AFC Wimbledon,2019-10-20,vacancy
+1920,League 1,Southend,2019-10-22,appointment
+1920,League 1,AFC Wimbledon,2019-10-23,appointment
+1920,League 1,MK Dons,2019-11-02,vacancy
+1920,League 1,MK Dons,2019-11-03,appointment
+1920,League 1,Bristol Rovers,2019-12-17,vacancy
+1920,League 1,Bristol Rovers,2019-12-23,appointment
+1920,League 1,Blackpool,2020-02-12,vacancy
+1920,League 1,Blackpool,2020-03-02,appointment
+1920,League 1,Burton,2020-05-18,vacancy
+1920,League 1,Burton,2020-05-18,appointment
+1920,League 2,Oldham,2019-05-04,vacancy
+1920,League 2,Plymouth,2019-05-04,vacancy
+1920,League 2,Scunthorpe,2019-05-04,vacancy
+1920,League 2,Walsall,2019-05-04,vacancy
+1920,League 2,Walsall,2019-05-10,appointment
+1920,League 2,Scunthorpe,2019-05-13,appointment
+1920,League 2,Mansfield,2019-05-14,vacancy
+1920,League 2,Mansfield,2019-05-14,appointment
+1920,League 2,Plymouth,2019-06-05,appointment
+1920,League 2,Leyton Orient,2019-06-08,vacancy
+1920,League 2,Oldham,2019-06-11,appointment
+1920,League 2,Macclesfield,2019-08-15,vacancy
+1920,League 2,Macclesfield,2019-08-19,appointment
+1920,League 2,Stevenage,2019-09-09,vacancy
+1920,League 2,Oldham,2019-09-19,vacancy
+1920,League 2,Oldham,2019-09-19,appointment
+1920,League 2,Leyton Orient,2019-10-16,appointment
+1920,League 2,Morecambe,2019-10-28,vacancy
+1920,League 2,Morecambe,2019-11-07,appointment
+1920,League 2,Carlisle,2019-11-13,vacancy
+1920,League 2,Leyton Orient,2019-11-14,vacancy
+1920,League 2,Grimsby,2019-11-15,vacancy
+1920,League 2,Carlisle,2019-11-26,appointment
+1920,League 2,Crawley,2019-12-02,vacancy
+1920,League 2,Crawley,2019-12-05,appointment
+1920,League 2,Mansfield,2019-12-14,vacancy
+1920,League 2,Stevenage,2019-12-15,appointment
+1920,League 2,Mansfield,2019-12-17,appointment
+1920,League 2,Grimsby,2019-12-31,appointment
+1920,League 2,Macclesfield,2020-01-02,vacancy
+1920,League 2,Leyton Orient,2020-01-07,appointment
+1920,League 2,Macclesfield,2020-01-16,appointment
+1920,League 2,Cambridge Utd,2020-01-29,vacancy
+1920,League 2,Scunthorpe,2020-01-29,vacancy
+1920,League 2,Bradford,2020-02-03,vacancy
+1920,League 2,Bradford,2020-02-04,appointment
+1920,League 2,Scunthorpe,2020-02-12,appointment
+1920,League 2,Stevenage,2020-02-16,vacancy
+1920,League 2,Stevenage,2020-02-16,appointment
+1920,League 2,Cambridge Utd,2020-03-09,appointment
+2021,Championship,Birmingham,2020-07-22,vacancy
+2021,Championship,Huddersfield,2020-07-22,vacancy
+2021,Championship,Huddersfield,2020-07-23,appointment
+2021,Championship,Watford,2020-07-26,vacancy
+2021,Championship,Birmingham,2020-07-31,appointment
+2021,Championship,Bournemouth,2020-08-01,vacancy
+2021,Championship,Bournemouth,2020-08-08,appointment
+2021,Championship,Watford,2020-08-15,appointment
+2021,Championship,Reading,2020-08-29,vacancy
+2021,Championship,Reading,2020-08-29,appointment
+2021,Championship,Barnsley,2020-10-06,vacancy
+2021,Championship,Nottm Forest,2020-10-06,vacancy
+2021,Championship,Nottm Forest,2020-10-06,appointment
+2021,Championship,Barnsley,2020-10-23,appointment
+2021,Championship,Sheffield Wed,2020-11-09,vacancy
+2021,Championship,Sheffield Wed,2020-11-13,appointment
+2021,Championship,Derby,2020-11-14,vacancy
+2021,Championship,Derby,2020-11-27,appointment
+2021,Championship,Watford,2020-12-19,vacancy
+2021,Championship,Watford,2020-12-20,appointment
+2021,Championship,Sheffield Wed,2020-12-28,vacancy
+2021,Championship,Cardiff,2021-01-21,vacancy
+2021,Championship,Cardiff,2021-01-22,appointment
+2021,Championship,Bournemouth,2021-02-03,vacancy
+2021,Championship,Bristol City,2021-02-16,vacancy
+2021,Championship,Bournemouth,2021-02-21,appointment
+2021,Championship,Bristol City,2021-02-22,appointment
+2021,Championship,Sheffield Wed,2021-03-01,appointment
+2021,Championship,Birmingham,2021-03-16,vacancy
+2021,Championship,Birmingham,2021-03-16,appointment
+2021,Championship,Preston,2021-03-21,vacancy
+2021,Championship,Preston,2021-05-10,appointment
+2021,League 1,Ipswich,2020-03-02,appointment
+2021,League 1,Wigan,2020-07-29,vacancy
+2021,League 1,Wigan,2020-09-11,appointment
+2021,League 1,Swindon,2020-11-04,vacancy
+2021,League 1,Swindon,2020-11-13,appointment
+2021,League 1,Wigan,2020-11-13,vacancy
+2021,League 1,Wigan,2020-11-13,appointment
+2021,League 1,Bristol Rovers,2020-11-14,vacancy
+2021,League 1,Bristol Rovers,2020-11-19,appointment
+2021,League 1,Shrewsbury,2020-11-25,vacancy
+2021,League 1,Shrewsbury,2020-11-27,appointment
+2021,League 1,Sunderland,2020-11-29,vacancy
+2021,League 1,Sunderland,2020-12-05,appointment
+2021,League 1,Burton,2020-12-29,vacancy
+2021,League 1,Burton,2021-01-01,appointment
+2021,League 1,Fleetwood,2021-01-04,vacancy
+2021,League 1,AFC Wimbledon,2021-01-30,vacancy
+2021,League 1,Fleetwood,2021-01-31,appointment
+2021,League 1,Bristol Rovers,2021-02-10,vacancy
+2021,League 1,Northampton,2021-02-10,vacancy
+2021,League 1,Northampton,2021-02-11,appointment
+2021,League 1,AFC Wimbledon,2021-02-17,appointment
+2021,League 1,Bristol Rovers,2021-02-22,appointment
+2021,League 1,Ipswich,2021-02-28,vacancy
+2021,League 1,Doncaster,2021-03-01,vacancy
+2021,League 1,Doncaster,2021-03-01,appointment
+2021,League 1,Portsmouth,2021-03-14,vacancy
+2021,League 1,Charlton,2021-03-15,vacancy
+2021,League 1,Charlton,2021-03-18,appointment
+2021,League 1,Portsmouth,2021-03-19,appointment
+2021,League 1,Swindon,2021-04-18,vacancy
+2021,League 1,Swindon,2021-04-18,appointment
+2021,League 2,Bolton,2020-06-12,vacancy
+2021,League 2,Southend,2020-06-30,vacancy
+2021,League 2,Barrow,2020-07-01,vacancy
+2021,League 2,Bolton,2020-07-01,appointment
+2021,League 2,Tranmere,2020-07-06,vacancy
+2021,League 2,Barrow,2020-07-09,appointment
+2021,League 2,Colchester,2020-07-14,vacancy
+2021,League 2,Tranmere,2020-07-18,appointment
+2021,League 2,Colchester,2020-07-28,appointment
+2021,League 2,Oldham,2020-07-31,vacancy
+2021,League 2,Oldham,2020-08-01,appointment
+2021,League 2,Scunthorpe,2020-08-07,vacancy
+2021,League 2,Scunthorpe,2020-08-07,appointment
+2021,League 2,Southend,2020-08-13,appointment
+2021,League 2,Salford,2020-10-12,vacancy
+2021,League 2,Mansfield,2020-10-27,vacancy
+2021,League 2,Tranmere,2020-10-31,vacancy
+2021,League 2,Salford,2020-11-04,appointment
+2021,League 2,Mansfield,2020-11-06,appointment
+2021,League 2,Tranmere,2020-11-21,appointment
+2021,League 2,Barrow,2020-12-13,vacancy
+2021,League 2,Bradford,2020-12-13,vacancy
+2021,League 2,Barrow,2020-12-23,appointment
+2021,League 2,Grimsby,2020-12-23,vacancy
+2021,League 2,Grimsby,2020-12-30,appointment
+2021,League 2,Port Vale,2021-01-04,vacancy
+2021,League 2,Port Vale,2021-02-15,appointment
+2021,League 2,Walsall,2021-02-15,vacancy
+2021,League 2,Walsall,2021-02-15,appointment
+2021,League 2,Barrow,2021-02-21,vacancy
+2021,League 2,Barrow,2021-02-21,appointment
+2021,League 2,Bradford,2021-02-22,appointment
+2021,League 2,Colchester,2021-02-24,vacancy
+2021,League 2,Colchester,2021-02-24,appointment
+2021,League 2,Leyton Orient,2021-02-27,vacancy
+2021,League 2,Leyton Orient,2021-02-28,appointment
+2021,League 2,Oldham,2021-03-07,vacancy
+2021,League 2,Oldham,2021-03-08,appointment
+2021,League 2,Salford,2021-03-22,vacancy
+2021,League 2,Salford,2021-03-23,appointment
+2021,League 2,Colchester,2021-03-31,vacancy
+2021,League 2,Colchester,2021-03-31,appointment
+2021,League 2,Southend,2021-04-09,vacancy
+2021,League 2,Southend,2021-04-09,appointment
+2021,League 2,Forest Green,2021-04-11,vacancy
+2021,League 2,Forest Green,2021-04-11,appointment
+2021,League 2,Tranmere,2021-05-11,vacancy
+2021,League 2,Tranmere,2021-05-11,appointment
+2122,Championship,Sheffield Utd,2021-05-23,vacancy
+2122,Championship,West Brom,2021-05-23,vacancy
+2122,Championship,Sheffield Utd,2021-05-27,appointment
+2122,Championship,Barnsley,2021-06-24,vacancy
+2122,Championship,West Brom,2021-06-24,appointment
+2122,Championship,Bournemouth,2021-06-28,vacancy
+2122,Championship,Bournemouth,2021-06-28,appointment
+2122,Championship,Fulham,2021-06-28,vacancy
+2122,Championship,Barnsley,2021-06-29,appointment
+2122,Championship,Fulham,2021-07-01,appointment
+2122,Championship,Swansea,2021-07-21,vacancy
+2122,Championship,Swansea,2021-08-01,appointment
+2122,Championship,Nottm Forest,2021-09-16,vacancy
+2122,Championship,Nottm Forest,2021-09-21,appointment
+2122,Championship,Cardiff,2021-10-23,vacancy
+2122,Championship,Barnsley,2021-11-01,vacancy
+2122,Championship,Middlesbrough,2021-11-06,vacancy
+2122,Championship,Middlesbrough,2021-11-07,appointment
+2122,Championship,Cardiff,2021-11-12,appointment
+2122,Championship,Barnsley,2021-11-17,appointment
+2122,Championship,Sheffield Utd,2021-11-25,vacancy
+2122,Championship,Sheffield Utd,2021-11-25,appointment
+2122,Championship,Preston,2021-12-06,vacancy
+2122,Championship,Preston,2021-12-07,appointment
+2122,Championship,Hull,2022-01-25,vacancy
+2122,Championship,Hull,2022-01-27,appointment
+2122,Championship,West Brom,2022-02-02,vacancy
+2122,Championship,West Brom,2022-02-03,appointment
+2122,Championship,Reading,2022-02-19,vacancy
+2122,Championship,Reading,2022-02-19,appointment
+2122,Championship,Peterborough,2022-02-20,vacancy
+2122,Championship,Peterborough,2022-02-24,appointment
+2122,Championship,Barnsley,2022-04-24,vacancy
+2122,Championship,Barnsley,2022-04-24,appointment
+2122,League 1,Doncaster,2021-05-17,vacancy
+2122,League 1,Doncaster,2021-05-17,appointment
+2122,League 1,Morecambe,2021-06-03,vacancy
+2122,League 1,Morecambe,2021-06-07,appointment
+2122,League 1,MK Dons,2021-08-01,vacancy
+2122,League 1,MK Dons,2021-08-13,appointment
+2122,League 1,Charlton,2021-10-21,vacancy
+2122,League 1,Fleetwood,2021-11-24,vacancy
+2122,League 1,Doncaster,2021-12-02,vacancy
+2122,League 1,Ipswich,2021-12-04,vacancy
+2122,League 1,Plymouth,2021-12-07,vacancy
+2122,League 1,Plymouth,2021-12-07,appointment
+2122,League 1,Ipswich,2021-12-16,appointment
+2122,League 1,Charlton,2021-12-17,appointment
+2122,League 1,Fleetwood,2021-12-21,appointment
+2122,League 1,Doncaster,2021-12-29,appointment
+2122,League 1,Gillingham,2022-01-09,vacancy
+2122,League 1,Sunderland,2022-01-30,vacancy
+2122,League 1,Gillingham,2022-01-31,appointment
+2122,League 1,Sunderland,2022-02-11,appointment
+2122,League 1,Morecambe,2022-02-22,vacancy
+2122,League 1,Morecambe,2022-02-24,appointment
+2122,League 1,AFC Wimbledon,2022-03-28,vacancy
+2122,League 1,AFC Wimbledon,2022-03-30,appointment
+2122,League 1,Crewe,2022-04-11,vacancy
+2122,League 1,Crewe,2022-04-11,appointment
+2122,League 2,Colchester,2021-01-19,vacancy
+2122,League 2,Leyton Orient,2021-05-08,vacancy
+2122,League 2,Swindon,2021-05-08,vacancy
+2122,League 2,Bradford,2021-05-10,vacancy
+2122,League 2,Walsall,2021-05-10,vacancy
+2122,League 2,Barrow,2021-05-14,vacancy
+2122,League 2,Walsall,2021-05-19,appointment
+2122,League 2,Leyton Orient,2021-05-21,appointment
+2122,League 2,Forest Green,2021-05-23,vacancy
+2122,League 2,Tranmere,2021-05-23,vacancy
+2122,League 2,Swindon,2021-05-26,appointment
+2122,League 2,Forest Green,2021-05-27,appointment
+2122,League 2,Barrow,2021-05-28,appointment
+2122,League 2,Tranmere,2021-06-01,appointment
+2122,League 2,Bradford,2021-06-04,appointment
+2122,League 2,Swindon,2021-06-25,vacancy
+2122,League 2,Rochdale,2021-06-30,vacancy
+2122,League 2,Rochdale,2021-07-10,appointment
+2122,League 2,Swindon,2021-07-21,appointment
+2122,League 2,Newport,2021-10-01,vacancy
+2122,League 2,Carlisle,2021-10-10,vacancy
+2122,League 2,Newport,2021-10-19,appointment
+2122,League 2,Carlisle,2021-10-26,appointment
+2122,League 2,Hartlepool,2021-11-01,vacancy
+2122,League 2,Scunthorpe,2021-11-01,vacancy
+2122,League 2,Scunthorpe,2021-11-05,appointment
+2122,League 2,Stevenage,2021-11-15,vacancy
+2122,League 2,Oldham,2021-11-24,vacancy
+2122,League 2,Oldham,2021-11-24,appointment
+2122,League 2,Stevenage,2021-11-28,appointment
+2122,League 2,Hartlepool,2021-12-01,appointment
+2122,League 2,Colchester,2022-01-22,appointment
+2122,League 2,Oldham,2022-01-22,vacancy
+2122,League 2,Oldham,2022-01-22,appointment
+2122,League 2,Walsall,2022-02-09,vacancy
+2122,League 2,Bradford,2022-02-15,vacancy
+2122,League 2,Walsall,2022-02-15,appointment
+2122,League 2,Leyton Orient,2022-02-22,vacancy
+2122,League 2,Carlisle,2022-02-23,vacancy
+2122,League 2,Carlisle,2022-02-23,appointment
+2122,League 2,Bradford,2022-02-24,appointment
+2122,League 2,Leyton Orient,2022-03-09,appointment
+2122,League 2,Stevenage,2022-03-16,vacancy
+2122,League 2,Stevenage,2022-03-16,appointment
+2122,League 2,Barrow,2022-03-20,vacancy
+2122,League 2,Barrow,2022-03-21,appointment
+2122,League 2,Hartlepool,2022-05-05,vacancy
+2122,League 2,Hartlepool,2022-05-05,appointment
+2122,League 2,Crawley,2022-05-06,vacancy
+2122,League 2,Crawley,2022-05-06,appointment
+2223,Championship,Blackburn,2022-05-07,vacancy
+2223,Championship,QPR,2022-05-07,vacancy
+2223,Championship,Burnley,2022-05-22,vacancy
+2223,Championship,Watford,2022-05-22,vacancy
+2223,Championship,Watford,2022-05-23,appointment
+2223,Championship,QPR,2022-06-01,appointment
+2223,Championship,Blackpool,2022-06-02,vacancy
+2223,Championship,Blackburn,2022-06-14,appointment
+2223,Championship,Burnley,2022-06-14,appointment
+2223,Championship,Blackpool,2022-06-17,appointment
+2223,Championship,Birmingham,2022-07-02,vacancy
+2223,Championship,Birmingham,2022-07-03,appointment
+2223,Championship,Huddersfield,2022-07-07,vacancy
+2223,Championship,Huddersfield,2022-07-07,appointment
+2223,Championship,Stoke,2022-08-25,vacancy
+2223,Championship,Stoke,2022-08-28,appointment
+2223,Championship,Sunderland,2022-08-28,vacancy
+2223,Championship,Sunderland,2022-08-30,appointment
+2223,Championship,Huddersfield,2022-09-14,vacancy
+2223,Championship,Cardiff,2022-09-18,vacancy
+2223,Championship,Cardiff,2022-09-18,appointment
+2223,Championship,Rotherham,2022-09-22,vacancy
+2223,Championship,Watford,2022-09-26,vacancy
+2223,Championship,Watford,2022-09-26,appointment
+2223,Championship,Huddersfield,2022-09-28,appointment
+2223,Championship,Hull,2022-09-30,vacancy
+2223,Championship,Middlesbrough,2022-10-03,vacancy
+2223,Championship,Rotherham,2022-10-04,appointment
+2223,Championship,West Brom,2022-10-10,vacancy
+2223,Championship,Middlesbrough,2022-10-24,appointment
+2223,Championship,West Brom,2022-10-25,appointment
+2223,Championship,Hull,2022-11-03,appointment
+2223,Championship,Luton,2022-11-10,vacancy
+2223,Championship,Wigan,2022-11-10,vacancy
+2223,Championship,Luton,2022-11-17,appointment
+2223,Championship,QPR,2022-11-28,vacancy
+2223,Championship,Wigan,2022-11-29,appointment
+2223,Championship,QPR,2022-12-11,appointment
+2223,Championship,Norwich,2022-12-27,vacancy
+2223,Championship,Norwich,2023-01-06,appointment
+2223,Championship,Cardiff,2023-01-14,vacancy
+2223,Championship,Blackpool,2023-01-18,vacancy
+2223,Championship,Blackpool,2023-01-19,appointment
+2223,Championship,Wigan,2023-01-26,vacancy
+2223,Championship,Cardiff,2023-01-27,appointment
+2223,Championship,Wigan,2023-01-28,appointment
+2223,Championship,Huddersfield,2023-02-08,vacancy
+2223,Championship,Huddersfield,2023-02-13,appointment
+2223,Championship,QPR,2023-02-19,vacancy
+2223,Championship,QPR,2023-02-21,appointment
+2223,Championship,Watford,2023-03-07,vacancy
+2223,Championship,Watford,2023-03-07,appointment
+2223,Championship,Blackpool,2023-04-08,vacancy
+2223,Championship,Blackpool,2023-04-08,appointment
+2223,Championship,Reading,2023-04-11,vacancy
+2223,Championship,Reading,2023-04-11,appointment
+2223,League 1,Lincoln,2022-04-30,vacancy
+2223,League 1,Charlton,2022-05-03,vacancy
+2223,League 1,Fleetwood,2022-05-04,vacancy
+2223,League 1,Barnsley,2022-05-08,vacancy
+2223,League 1,Forest Green,2022-05-11,vacancy
+2223,League 1,Fleetwood,2022-05-12,appointment
+2223,League 1,Lincoln,2022-05-12,appointment
+2223,League 1,Forest Green,2022-05-27,appointment
+2223,League 1,Charlton,2022-06-08,appointment
+2223,League 1,Cheltenham,2022-06-13,vacancy
+2223,League 1,Barnsley,2022-06-15,appointment
+2223,League 1,Derby,2022-06-24,vacancy
+2223,League 1,Derby,2022-06-26,appointment
+2223,League 1,Cheltenham,2022-06-27,appointment
+2223,League 1,Burton,2022-09-05,vacancy
+2223,League 1,Burton,2022-09-06,appointment
+2223,League 1,Derby,2022-09-22,vacancy
+2223,League 1,Derby,2022-09-22,appointment
+2223,League 1,Exeter,2022-10-04,vacancy
+2223,League 1,Exeter,2022-10-24,appointment
+2223,League 1,Charlton,2022-12-05,vacancy
+2223,League 1,MK Dons,2022-12-11,vacancy
+2223,League 1,Charlton,2022-12-20,appointment
+2223,League 1,MK Dons,2022-12-23,appointment
+2223,League 1,Portsmouth,2023-01-02,vacancy
+2223,League 1,Peterborough,2023-01-04,vacancy
+2223,League 1,Peterborough,2023-01-04,appointment
+2223,League 1,Portsmouth,2023-01-20,appointment
+2223,League 1,Forest Green,2023-01-25,vacancy
+2223,League 1,Forest Green,2023-01-26,appointment
+2223,League 1,Wycombe,2023-02-21,vacancy
+2223,League 1,Wycombe,2023-02-21,appointment
+2223,League 1,Oxford Utd,2023-02-26,vacancy
+2223,League 1,Oxford Utd,2023-03-11,appointment
+2223,League 1,Port Vale,2023-04-17,vacancy
+2223,League 1,Port Vale,2023-04-17,appointment
+2223,League 2,AFC Wimbledon,2022-05-07,vacancy
+2223,League 2,Crawley,2022-05-08,vacancy
+2223,League 2,Hartlepool,2022-05-08,vacancy
+2223,League 2,Barrow,2022-05-12,vacancy
+2223,League 2,AFC Wimbledon,2022-05-16,appointment
+2223,League 2,Salford,2022-05-17,vacancy
+2223,League 2,Salford,2022-05-20,appointment
+2223,League 2,Barrow,2022-05-27,appointment
+2223,League 2,Hartlepool,2022-06-03,appointment
+2223,League 2,Crawley,2022-06-06,appointment
+2223,League 2,Swindon,2022-06-08,vacancy
+2223,League 2,Swindon,2022-06-20,appointment
+2223,League 2,Rochdale,2022-08-18,vacancy
+2223,League 2,Rochdale,2022-08-29,appointment
+2223,League 2,Colchester,2022-09-18,vacancy
+2223,League 2,Hartlepool,2022-09-18,vacancy
+2223,League 2,Hartlepool,2022-09-18,appointment
+2223,League 2,Colchester,2022-09-30,appointment
+2223,League 2,Crawley,2022-10-09,vacancy
+2223,League 2,Newport,2022-10-10,vacancy
+2223,League 2,Doncaster,2022-10-17,vacancy
+2223,League 2,Doncaster,2022-10-20,appointment
+2223,League 2,Newport,2022-10-20,appointment
+2223,League 2,Crewe,2022-11-04,vacancy
+2223,League 2,Crewe,2022-11-04,appointment
+2223,League 2,Crawley,2022-11-27,appointment
+2223,League 2,Crawley,2022-12-29,vacancy
+2223,League 2,Crawley,2023-01-11,appointment
+2223,League 2,Swindon,2023-01-11,vacancy
+2223,League 2,Swindon,2023-01-31,appointment
+2223,League 2,Colchester,2023-02-21,vacancy
+2223,League 2,Hartlepool,2023-02-22,vacancy
+2223,League 2,Hartlepool,2023-02-23,appointment
+2223,League 2,Colchester,2023-03-02,appointment
+2223,League 2,Tranmere,2023-03-19,vacancy
+2223,League 2,Rochdale,2023-03-27,vacancy
+2223,League 2,Rochdale,2023-03-27,appointment
+2223,League 2,Walsall,2023-04-19,vacancy
+2223,League 2,Walsall,2023-04-19,appointment
+2223,League 2,Swindon,2023-05-01,vacancy
+2223,League 2,Swindon,2023-05-01,appointment
+2223,League 2,Tranmere,2023-05-04,appointment
+2324,Championship,Watford,2023-05-08,vacancy
+2324,Championship,Watford,2023-05-10,appointment
+2324,Championship,Cardiff,2023-05-16,vacancy
+2324,Championship,Southampton,2023-05-28,vacancy
+2324,Championship,Leeds,2023-06-02,vacancy
+2324,Championship,Cardiff,2023-06-03,appointment
+2324,Championship,Leicester,2023-06-16,vacancy
+2324,Championship,Leicester,2023-06-16,appointment
+2324,Championship,Sheffield Wed,2023-06-19,vacancy
+2324,Championship,Southampton,2023-06-21,appointment
+2324,Championship,Swansea,2023-06-21,vacancy
+2324,Championship,Swansea,2023-06-22,appointment
+2324,Championship,Leeds,2023-07-04,appointment
+2324,Championship,Sheffield Wed,2023-07-04,appointment
+2324,Championship,Huddersfield,2023-09-20,vacancy
+2324,Championship,Huddersfield,2023-09-21,appointment
+2324,Championship,Sheffield Wed,2023-10-04,vacancy
+2324,Championship,Birmingham,2023-10-09,vacancy
+2324,Championship,Birmingham,2023-10-11,appointment
+2324,Championship,Sheffield Wed,2023-10-13,appointment
+2324,Championship,Millwall,2023-10-18,vacancy
+2324,Championship,QPR,2023-10-28,vacancy
+2324,Championship,Bristol City,2023-10-29,vacancy
+2324,Championship,QPR,2023-10-30,appointment
+2324,Championship,Millwall,2023-11-06,appointment
+2324,Championship,Bristol City,2023-11-07,appointment
+2324,Championship,Rotherham,2023-11-13,vacancy
+2324,Championship,Sunderland,2023-12-04,vacancy
+2324,Championship,Swansea,2023-12-04,vacancy
+2324,Championship,Stoke,2023-12-10,vacancy
+2324,Championship,Rotherham,2023-12-11,appointment
+2324,Championship,Sunderland,2023-12-18,appointment
+2324,Championship,Plymouth,2023-12-19,vacancy
+2324,Championship,Stoke,2023-12-19,appointment
+2324,Championship,Birmingham,2024-01-02,vacancy
+2324,Championship,Plymouth,2024-01-05,appointment
+2324,Championship,Swansea,2024-01-05,appointment
+2324,Championship,Birmingham,2024-01-08,appointment
+2324,Championship,Huddersfield,2024-01-29,vacancy
+2324,Championship,Blackburn,2024-02-09,vacancy
+2324,Championship,Blackburn,2024-02-09,appointment
+2324,Championship,Huddersfield,2024-02-15,appointment
+2324,Championship,Sunderland,2024-02-19,vacancy
+2324,Championship,Sunderland,2024-02-19,appointment
+2324,Championship,Millwall,2024-02-21,vacancy
+2324,Championship,Millwall,2024-02-21,appointment
+2324,Championship,Watford,2024-03-09,vacancy
+2324,Championship,Watford,2024-03-09,appointment
+2324,Championship,Birmingham,2024-03-19,vacancy
+2324,Championship,Birmingham,2024-03-19,appointment
+2324,Championship,Plymouth,2024-04-01,vacancy
+2324,Championship,Plymouth,2024-04-01,appointment
+2324,Championship,Rotherham,2024-04-17,vacancy
+2324,Championship,Rotherham,2024-04-17,appointment
+2324,League 1,Blackpool,2023-05-08,vacancy
+2324,League 1,Reading,2023-05-08,vacancy
+2324,League 1,Blackpool,2023-05-23,appointment
+2324,League 1,Shrewsbury,2023-06-06,vacancy
+2324,League 1,Barnsley,2023-06-22,vacancy
+2324,League 1,Reading,2023-06-26,appointment
+2324,League 1,Shrewsbury,2023-06-26,appointment
+2324,League 1,Barnsley,2023-07-06,appointment
+2324,League 1,Charlton,2023-08-27,vacancy
+2324,League 1,Fleetwood,2023-09-03,vacancy
+2324,League 1,Charlton,2023-09-08,appointment
+2324,League 1,Fleetwood,2023-09-10,appointment
+2324,League 1,Cheltenham,2023-09-20,vacancy
+2324,League 1,Cheltenham,2023-09-29,appointment
+2324,League 1,Lincoln,2023-10-18,vacancy
+2324,League 1,Bristol Rovers,2023-10-26,vacancy
+2324,League 1,Oxford Utd,2023-11-07,vacancy
+2324,League 1,Lincoln,2023-11-13,appointment
+2324,League 1,Oxford Utd,2023-11-16,appointment
+2324,League 1,Cambridge Utd,2023-11-29,vacancy
+2324,League 1,Bristol Rovers,2023-12-01,appointment
+2324,League 1,Cambridge Utd,2023-12-06,appointment
+2324,League 1,Burton,2023-12-09,vacancy
+2324,League 1,Fleetwood,2023-12-30,vacancy
+2324,League 1,Fleetwood,2023-12-31,appointment
+2324,League 1,Burton,2024-01-11,appointment
+2324,League 1,Shrewsbury,2024-01-21,vacancy
+2324,League 1,Charlton,2024-01-23,vacancy
+2324,League 1,Shrewsbury,2024-01-24,appointment
+2324,League 1,Charlton,2024-02-04,appointment
+2324,League 1,Port Vale,2024-02-05,vacancy
+2324,League 1,Port Vale,2024-02-13,appointment
+2324,League 1,Cambridge Utd,2024-02-21,vacancy
+2324,League 1,Cambridge Utd,2024-03-04,appointment
+2324,League 1,Stevenage,2024-04-17,vacancy
+2324,League 1,Stevenage,2024-04-17,appointment
+2324,League 1,Barnsley,2024-04-22,vacancy
+2324,League 1,Barnsley,2024-04-22,appointment
+2324,League 2,Swindon,2023-05-08,vacancy
+2324,League 2,Swindon,2023-05-08,appointment
+2324,League 2,Doncaster,2023-05-09,vacancy
+2324,League 2,MK Dons,2023-05-09,vacancy
+2324,League 2,Doncaster,2023-05-12,appointment
+2324,League 2,MK Dons,2023-05-27,appointment
+2324,League 2,Forest Green,2023-07-04,vacancy
+2324,League 2,Forest Green,2023-07-17,appointment
+2324,League 2,Tranmere,2023-09-10,vacancy
+2324,League 2,Tranmere,2023-09-10,appointment
+2324,League 2,Bradford,2023-10-04,vacancy
+2324,League 2,Gillingham,2023-10-05,vacancy
+2324,League 2,MK Dons,2023-10-16,vacancy
+2324,League 2,MK Dons,2023-10-17,appointment
+2324,League 2,Colchester,2023-10-21,vacancy
+2324,League 2,Colchester,2023-10-21,appointment
+2324,League 2,Grimsby,2023-10-28,vacancy
+2324,League 2,Gillingham,2023-11-01,appointment
+2324,League 2,Bradford,2023-11-06,appointment
+2324,League 2,Morecambe,2023-11-20,vacancy
+2324,League 2,Grimsby,2023-11-27,appointment
+2324,League 2,Morecambe,2023-11-27,appointment
+2324,League 2,Sutton,2023-12-19,vacancy
+2324,League 2,Forest Green,2023-12-20,vacancy
+2324,League 2,Forest Green,2023-12-20,appointment
+2324,League 2,Salford,2023-12-27,vacancy
+2324,League 2,Colchester,2024-01-01,vacancy
+2324,League 2,Colchester,2024-01-04,appointment
+2324,League 2,Notts County,2024-01-05,vacancy
+2324,League 2,Salford,2024-01-05,appointment
+2324,League 2,Sutton,2024-01-06,appointment
+2324,League 2,Swindon,2024-01-15,vacancy
+2324,League 2,Swindon,2024-01-15,appointment
+2324,League 2,Forest Green,2024-01-18,vacancy
+2324,League 2,Notts County,2024-01-18,appointment
+2324,League 2,Forest Green,2024-01-25,appointment
+2324,League 2,Accrington,2024-03-03,vacancy
+2324,League 2,Accrington,2024-03-04,appointment
+2324,League 2,Gillingham,2024-04-29,vacancy
+2324,League 2,Morecambe,2024-04-30,vacancy
+2324,League 2,Gillingham,2024-05-07,appointment
+2425,Championship,Plymouth,2024-05-04,vacancy
+2425,Championship,Sunderland,2024-05-04,vacancy
+2425,Championship,Hull,2024-05-07,vacancy
+2425,Championship,Norwich,2024-05-17,vacancy
+2425,Championship,Plymouth,2024-05-25,appointment
+2425,Championship,Burnley,2024-05-29,vacancy
+2425,Championship,Norwich,2024-05-30,appointment
+2425,Championship,Hull,2024-05-31,appointment
+2425,Championship,Sunderland,2024-06-22,appointment
+2425,Championship,Burnley,2024-07-05,appointment
+2425,Championship,Preston,2024-08-12,vacancy
+2425,Championship,Preston,2024-08-20,appointment
+2425,Championship,Stoke,2024-09-16,vacancy
+2425,Championship,Stoke,2024-09-18,appointment
+2425,Championship,Cardiff,2024-09-22,vacancy
+2425,Championship,Cardiff,2024-09-23,appointment
+2425,Championship,Coventry,2024-11-07,vacancy
+2425,Championship,Hull,2024-11-27,vacancy
+2425,Championship,Coventry,2024-11-28,appointment
+2425,Championship,Hull,2024-12-06,appointment
+2425,Championship,Millwall,2024-12-14,vacancy
+2425,Championship,Oxford Utd,2024-12-15,vacancy
+2425,Championship,Oxford Utd,2024-12-20,appointment
+2425,Championship,West Brom,2024-12-24,vacancy
+2425,Championship,Stoke,2024-12-27,vacancy
+2425,Championship,Millwall,2024-12-30,appointment
+2425,Championship,Plymouth,2024-12-31,vacancy
+2425,Championship,Stoke,2025-01-01,appointment
+2425,Championship,Luton,2025-01-09,vacancy
+2425,Championship,Plymouth,2025-01-10,appointment
+2425,Championship,Luton,2025-01-14,appointment
+2425,Championship,West Brom,2025-01-17,appointment
+2425,Championship,Derby,2025-02-07,vacancy
+2425,Championship,Blackburn,2025-02-13,vacancy
+2425,Championship,Derby,2025-02-13,appointment
+2425,Championship,Swansea,2025-02-17,vacancy
+2425,Championship,Swansea,2025-02-18,appointment
+2425,Championship,Blackburn,2025-02-25,appointment
+2425,Championship,Cardiff,2025-04-19,vacancy
+2425,Championship,Cardiff,2025-04-19,appointment
+2425,Championship,West Brom,2025-04-21,vacancy
+2425,Championship,West Brom,2025-04-21,appointment
+2425,Championship,Norwich,2025-04-22,vacancy
+2425,Championship,Norwich,2025-04-22,appointment
+2425,League 1,Barnsley,2024-05-07,vacancy
+2425,League 1,Birmingham,2024-05-07,vacancy
+2425,League 1,Birmingham,2024-05-07,appointment
+2425,League 1,Huddersfield,2024-05-10,vacancy
+2425,League 1,Huddersfield,2024-05-13,appointment
+2425,League 1,Birmingham,2024-05-21,vacancy
+2425,League 1,Barnsley,2024-05-23,appointment
+2425,League 1,Burton,2024-05-31,vacancy
+2425,League 1,Burton,2024-06-04,appointment
+2425,League 1,Birmingham,2024-06-06,appointment
+2425,League 1,Blackpool,2024-08-21,vacancy
+2425,League 1,Blackpool,2024-09-03,appointment
+2425,League 1,Crawley,2024-09-25,vacancy
+2425,League 1,Crawley,2024-10-01,appointment
+2425,League 1,Burton,2024-10-23,vacancy
+2425,League 1,Shrewsbury,2024-11-03,vacancy
+2425,League 1,Shrewsbury,2024-11-13,appointment
+2425,League 1,Northampton,2024-12-05,vacancy
+2425,League 1,Reading,2024-12-06,vacancy
+2425,League 1,Reading,2024-12-06,appointment
+2425,League 1,Bristol Rovers,2024-12-16,vacancy
+2425,League 1,Burton,2024-12-17,appointment
+2425,League 1,Northampton,2024-12-23,appointment
+2425,League 1,Bristol Rovers,2024-12-26,appointment
+2425,League 1,Wycombe,2025-01-14,vacancy
+2425,League 1,Bolton,2025-01-22,vacancy
+2425,League 1,Bolton,2025-01-30,appointment
+2425,League 1,Wycombe,2025-02-02,appointment
+2425,League 1,Cambridge Utd,2025-02-16,vacancy
+2425,League 1,Cambridge Utd,2025-02-19,appointment
+2425,League 1,Wigan,2025-03-02,vacancy
+2425,League 1,Huddersfield,2025-03-09,vacancy
+2425,League 1,Huddersfield,2025-03-09,appointment
+2425,League 1,Barnsley,2025-03-12,vacancy
+2425,League 1,Barnsley,2025-03-12,appointment
+2425,League 1,Wigan,2025-03-12,appointment
+2425,League 1,Crawley,2025-03-19,vacancy
+2425,League 1,Crawley,2025-03-21,appointment
+2425,League 1,Shrewsbury,2025-03-25,vacancy
+2425,League 1,Shrewsbury,2025-03-26,appointment
+2425,League 1,Rotherham,2025-03-30,vacancy
+2425,League 1,Rotherham,2025-03-30,appointment
+2425,League 2,Swindon,2024-04-27,vacancy
+2425,League 2,Gillingham,2024-04-29,vacancy
+2425,League 2,Morecambe,2024-04-30,vacancy
+2425,League 2,Gillingham,2024-05-07,appointment
+2425,League 2,Cheltenham,2024-05-23,vacancy
+2425,League 2,Barrow,2024-05-24,vacancy
+2425,League 2,Swindon,2024-05-29,appointment
+2425,League 2,Barrow,2024-05-31,appointment
+2425,League 2,Morecambe,2024-06-03,appointment
+2425,League 2,Cheltenham,2024-06-05,appointment
+2425,League 2,Newport,2024-06-20,vacancy
+2425,League 2,Newport,2024-07-16,appointment
+2425,League 2,Carlisle,2024-08-31,vacancy
+2425,League 2,Carlisle,2024-09-19,appointment
+2425,League 2,MK Dons,2024-09-19,vacancy
+2425,League 2,MK Dons,2024-09-25,appointment
+2425,League 2,Swindon,2024-10-25,vacancy
+2425,League 2,Swindon,2024-10-25,appointment
+2425,League 2,Fleetwood,2024-12-22,vacancy
+2425,League 2,Fleetwood,2024-12-24,appointment
+2425,League 2,Gillingham,2025-01-05,vacancy
+2425,League 2,Gillingham,2025-01-05,appointment
+2425,League 2,Barrow,2025-01-18,vacancy
+2425,League 2,Barrow,2025-01-20,appointment
+2425,League 2,Carlisle,2025-02-03,vacancy
+2425,League 2,Carlisle,2025-02-06,appointment
+2425,League 2,Tranmere,2025-02-26,vacancy
+2425,League 2,Tranmere,2025-02-26,appointment
+2425,League 2,MK Dons,2025-03-02,vacancy
+2425,League 2,MK Dons,2025-03-02,appointment
+2425,League 2,Gillingham,2025-03-25,vacancy
+2425,League 2,Gillingham,2025-03-25,appointment
+2425,League 2,MK Dons,2025-04-15,vacancy
+2425,League 2,MK Dons,2025-04-15,appointment
+2425,League 2,Newport,2025-04-24,vacancy
+2425,League 2,Newport,2025-04-25,appointment
+2526,Championship,Norwich,2025-05-03,vacancy
+2526,Championship,West Brom,2025-05-03,vacancy
+2526,Championship,Watford,2025-05-06,vacancy
+2526,Championship,Watford,2025-05-13,appointment
+2526,Championship,Hull,2025-05-15,vacancy
+2526,Championship,Southampton,2025-05-25,vacancy
+2526,Championship,Southampton,2025-05-25,appointment
+2526,Championship,West Brom,2025-06-02,appointment
+2526,Championship,Bristol City,2025-06-03,vacancy
+2526,Championship,Norwich,2025-06-03,appointment
+2526,Championship,Middlesbrough,2025-06-04,vacancy
+2526,Championship,Hull,2025-06-11,appointment
+2526,Championship,Sheffield Utd,2025-06-18,vacancy
+2526,Championship,Sheffield Utd,2025-06-18,appointment
+2526,Championship,Bristol City,2025-06-19,appointment
+2526,Championship,Middlesbrough,2025-06-24,appointment
+2526,Championship,QPR,2025-06-24,vacancy
+2526,Championship,QPR,2025-06-25,appointment
+2526,Championship,Leicester,2025-06-27,vacancy
+2526,Championship,Leicester,2025-07-15,appointment
+2526,Championship,Sheffield Wed,2025-07-29,vacancy
+2526,Championship,Sheffield Wed,2025-07-31,appointment
+2526,Championship,Sheffield Utd,2025-09-14,vacancy
+2526,Championship,Sheffield Utd,2025-09-15,appointment
+2526,Championship,Watford,2025-10-08,vacancy
+2526,Championship,Watford,2025-10-08,appointment
+2526,Championship,Southampton,2025-11-02,vacancy
+2526,Championship,Southampton,2025-11-02,appointment
+2526,Championship,Norwich,2025-11-08,vacancy
+2526,Championship,Swansea,2025-11-11,vacancy
+2526,Championship,Middlesbrough,2025-11-12,vacancy
+2526,Championship,Norwich,2025-11-18,appointment
+2526,Championship,Middlesbrough,2025-11-24,appointment
+2526,Championship,Swansea,2025-11-24,appointment
+2526,Championship,Oxford Utd,2025-12-23,vacancy
+2526,Championship,West Brom,2026-01-06,vacancy
+2526,Championship,Oxford Utd,2026-01-09,appointment
+2526,Championship,West Brom,2026-01-11,appointment
+2526,Championship,Leicester,2026-01-25,vacancy
+2526,Championship,Watford,2026-02-01,vacancy
+2526,Championship,Blackburn,2026-02-02,vacancy
+2526,Championship,Watford,2026-02-09,appointment
+2526,Championship,Blackburn,2026-02-13,appointment
+2526,Championship,Leicester,2026-02-18,appointment
+2526,Championship,West Brom,2026-02-24,vacancy
+2526,Championship,West Brom,2026-02-24,appointment
+2526,Championship,Bristol City,2026-03-27,vacancy
+2526,Championship,Bristol City,2026-03-27,appointment
+2526,League 1,Cardiff,2025-05-03,vacancy
+2526,League 1,Huddersfield,2025-05-03,vacancy
+2526,League 1,Huddersfield,2025-05-28,appointment
+2526,League 1,Plymouth,2025-05-31,vacancy
+2526,League 1,Plymouth,2025-06-13,appointment
+2526,League 1,Cardiff,2025-06-16,appointment
+2526,League 1,Wycombe,2025-09-18,vacancy
+2526,League 1,Wycombe,2025-09-18,appointment
+2526,League 1,Blackpool,2025-10-04,vacancy
+2526,League 1,Luton,2025-10-06,vacancy
+2526,League 1,Luton,2025-10-13,appointment
+2526,League 1,Blackpool,2025-10-21,appointment
+2526,League 1,Peterborough,2025-10-25,vacancy
+2526,League 1,Reading,2025-10-26,vacancy
+2526,League 1,Reading,2025-10-28,appointment
+2526,League 1,Peterborough,2025-10-29,appointment
+2526,League 1,Port Vale,2025-12-28,vacancy
+2526,League 1,Port Vale,2026-01-06,appointment
+2526,League 1,Huddersfield,2026-01-17,vacancy
+2526,League 1,Huddersfield,2026-01-20,appointment
+2526,League 1,Wigan,2026-02-07,vacancy
+2526,League 1,Exeter,2026-02-16,vacancy
+2526,League 1,Wigan,2026-02-16,appointment
+2526,League 1,Exeter,2026-03-03,appointment
+2526,League 1,Northampton,2026-03-09,vacancy
+2526,League 1,Northampton,2026-03-09,appointment
+2526,League 1,Rotherham,2026-03-18,vacancy
+2526,League 1,Rotherham,2026-03-18,appointment
+2526,League 2,Newport,2025-05-03,vacancy
+2526,League 2,Bristol Rovers,2025-05-04,vacancy
+2526,League 2,Bristol Rovers,2025-05-06,appointment
+2526,League 2,Notts County,2025-05-22,vacancy
+2526,League 2,Newport,2025-05-23,appointment
+2526,League 2,Notts County,2025-06-22,appointment
+2526,League 2,Cheltenham,2025-09-20,vacancy
+2526,League 2,Cheltenham,2025-09-30,appointment
+2526,League 2,Newport,2025-11-15,vacancy
+2526,League 2,Newport,2025-11-20,appointment
+2526,League 2,Barrow,2025-12-10,vacancy
+2526,League 2,Bristol Rovers,2025-12-13,vacancy
+2526,League 2,Bristol Rovers,2025-12-16,appointment
+2526,League 2,Barrow,2026-01-02,appointment
+2526,League 2,Fleetwood,2026-01-25,vacancy
+2526,League 2,Fleetwood,2026-01-26,appointment
+2526,League 2,Shrewsbury,2026-01-28,vacancy
+2526,League 2,Shrewsbury,2026-01-29,appointment
+2526,League 2,Barrow,2026-02-11,vacancy
+2526,League 2,Barrow,2026-02-11,appointment
+2526,League 2,Tranmere,2026-03-04,vacancy
+2526,League 2,Tranmere,2026-03-10,appointment
+2526,League 2,Barrow,2026-03-11,vacancy
+2526,League 2,Barrow,2026-03-11,appointment
+2526,League 2,Walsall,2026-03-11,vacancy
+2526,League 2,Walsall,2026-03-11,appointment
+2526,League 2,Crawley,2026-03-22,vacancy
+2526,League 2,Crawley,2026-03-24,appointment
+2627,Championship,Blackburn,2026-05-02,vacancy
+2627,Championship,Bristol City,2026-05-02,vacancy
+2627,Championship,Watford,2026-05-03,vacancy
+2627,Championship,Burnley,2026-05-24,vacancy
+2627,Championship,Bristol City,2026-05-29,appointment
+2627,Championship,Lincoln,2026-05-29,vacancy
+2627,Championship,Lincoln,2026-05-29,appointment
+2627,Championship,Blackburn,2026-06-05,appointment
+2627,Championship,Wolves,2026-06-11,vacancy
+2627,Championship,Watford,2026-06-15,appointment
+2627,Championship,Wolves,2026-06-15,appointment
+2627,Championship,Burnley,2026-07-10,appointment
+2627,Championship,Preston,2026-09-13,vacancy
+2627,Championship,Preston,2026-09-28,appointment
+2627,League 1,Barnsley,2026-05-02,vacancy
+2627,League 1,Leicester,2026-05-02,vacancy
+2627,League 1,Huddersfield,2026-05-11,vacancy
+2627,League 1,Barnsley,2026-05-12,appointment
+2627,League 1,Huddersfield,2026-05-27,appointment
+2627,League 1,Stockport,2026-06-01,vacancy
+2627,League 1,Stockport,2026-06-05,appointment
+2627,League 1,Leicester,2026-06-15,appointment
+2627,League 1,Oxford Utd,2026-06-20,vacancy
+2627,League 1,Oxford Utd,2026-06-23,appointment
+2627,League 1,Wycombe,2026-09-08,vacancy
+2627,League 1,Wycombe,2026-09-09,appointment
+2627,League 1,Peterborough,2026-09-19,vacancy
+2627,League 1,Peterborough,2026-09-19,appointment
+2627,League 1,Bradford,2026-09-28,vacancy
+2627,League 1,Bradford,2026-09-28,appointment
+2627,League 1,Peterborough,2026-10-02,vacancy
+2627,League 1,Peterborough,2026-10-02,appointment
+2627,League 1,Bradford,2026-10-06,vacancy
+2627,League 1,Bradford,2026-10-06,appointment
+2627,League 2,Northampton,2026-05-02,vacancy
+2627,League 2,Rotherham,2026-05-02,vacancy
+2627,League 2,Tranmere,2026-05-02,vacancy
+2627,League 2,Walsall,2026-05-02,vacancy
+2627,League 2,Walsall,2026-05-14,appointment
+2627,League 2,Northampton,2026-05-18,appointment
+2627,League 2,Tranmere,2026-05-26,appointment
+2627,League 2,Salford,2026-06-02,vacancy
+2627,League 2,Rochdale,2026-06-05,vacancy
+2627,League 2,Rochdale,2026-06-09,appointment
+2627,League 2,Salford,2026-06-18,appointment
+2627,League 2,Newport,2026-06-27,vacancy
+2627,League 2,Newport,2026-06-28,appointment
+2627,League 2,Rotherham,2026-06-29,appointment
+2627,League 2,York,2026-07-26,vacancy
+2627,League 2,York,2026-07-27,appointment
+2627,League 2,Newport,2026-07-31,vacancy
+2627,League 2,Newport,2026-07-31,appointment

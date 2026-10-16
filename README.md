@@ -69,6 +69,34 @@ rearranged. If the article names a club the board doesn't recognise, that day
 and division are left alone and the page says which name to add to
 `tracker/teams.py`.
 
+## Sky Bet price check
+
+Calls are made from the statistics alone, and only in markets Sky Bet offers for
+the division (`SKYBET` in `tracker/evaluate.py`: cards in the Championship only,
+no corner unders or home/away corners in League 2). On any night with calls in
+the next three days, the nightly task runs `skybet_prices.js` in the browser on
+oddschecker (which refuses anything but a browser) and saves Sky Bet's price for
+each call to `skybet_prices.json`. The cloud puts each price on its call, keeps
+the latest before kick-off and freezes it then, and the page shows whether the
+model's chance beats the price ("value") or not ("short"). The track record adds
+what £1 on each priced call would have made. "Both 4+ corners" has no single
+price: it's a bet builder of both sides' corners.
+
+## Model changes, October 2026
+
+Tested with `backtest.py`: chosen on 2018-19 and 2021-24, checked on 2024-26.
+
+- **Game state** (`state_k` -0.15, `tracker/model.py`): the side expected to
+  score more takes even more of the corners than its corner ratings say. On
+  2024-26, corner dominance calls went from 529 to 806 at 73.6% landed (74.9%
+  before), and every corner score improved. Kept.
+- **Championship cards bar** 62% (was 60%): card calls are Championship-only now,
+  and at 60% they landed 60.5% on 2024-26 when the model said 64%. Kept.
+- **Manager changes** (`tracker/managers.py`, `managers.csv` from Wikipedia):
+  counting a club's matches before a recent manager change for less gave a tiny
+  gain on 2018-24 that didn't hold on 2024-26, for corners or cards. Left off
+  (`mgr_weight` 1.0); the data is kept so it can be retested.
+
 ## The weekly self-review
 
 After each gameweek is marked, the model checks itself (`tracker/review.py`)
@@ -103,6 +131,8 @@ review flags something. `python3 self_review.py` prints the latest review;
 | `manual_results.csv` | Flashscore numbers for matches the feed hasn't published yet (filled nightly by the scheduled task) |
 | `referees.csv` | Referee appointments for upcoming matches (filled nightly by the scheduled task) |
 | `schedule_2627.csv` | The season's fixture list, saved on every good download; used when fixturedownload.com refuses the cloud |
+| `skybet_prices.json` | Sky Bet's latest prices for the upcoming calls (nightly task, `skybet_prices.js`) |
+| `managers.csv` | Manager changes since 2017-18, from Wikipedia (`tracker/managers.py`); used by `backtest.py` |
 | `last_sync.txt` | When the Mac last synced (written by `sync_to_github.sh`); pushing it rebuilds the board |
 | `efl_referees.csv` | The EFL's referee appointments, read from its news articles and saved (`tracker/efl.py`) |
 | `docs/index.html` | The dashboard: Gameweek, Track record, Teams and Referees views, every section a dropdown |

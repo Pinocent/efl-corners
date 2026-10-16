@@ -457,6 +457,7 @@ details.dd>summary:hover{border-color:var(--muted)}
         <dt>Landed / missed</dt><dd>Whether a call came off once the result was in. A call is made together with its prediction, against the corners line of the day, and both freeze at kick-off. Changing a threshold later never rewrites a past call.</dd>
         <dt>Chance</dt><dd>How likely the model thinks something is. 60% means it should happen about 6 times in 10.</dd>
         <dt>Fair odds</dt><dd>The chance written as decimal odds (1 ÷ chance). 60% is 1.67. A price higher than this would be good value if the model is right.</dd>
+        <dt>Sky Bet price</dt><dd>Sky Bet's price for a call, read from oddschecker by the nightly task for matches in the next three days, and frozen at kick-off. The calls come from the statistics alone; the price is a check on them. "Value" means the price is longer than the model's fair odds, so if the model is right it pays back more than it costs on average. "Short" means Sky Bet rates it more likely than the model does.</dd>
         <dt>Corner dominance</dt><dd id="defDom"></dd>
         <dt>Big gap</dt><dd id="defGap"></dd>
         <dt>High corners</dt><dd>A side the model expects to take at least the chosen number of corners (5+, 6+ or 7+; switch it on the High-corner sides panel). 6+ is the default. Over six seasons about 1 side in 8 was tagged 6+, and 60% of them reached it, against 40% of all sides. At 5+ half of all sides qualify, so the tag picks out much less. A prediction, not a call.</dd>
@@ -662,6 +663,16 @@ function renderLede(){
   setSum("fxSum", `${xs.length} match${xs.length === 1 ? "" : "es"}${played.length ? ` · ${played.length} played` : ""}`);
 }
 
+// Sky Bet's price for a call, if the nightly task found one: the call stands on
+// the statistics either way; the price says whether it's worth backing there
+function priceLine(c){
+  if (!c.sb) return c.x.hc == null && c.market === "Both 4+ corners" ? `<div class="lg">No single Sky Bet price: a bet builder of both sides' corners</div>` : "";
+  const implied = 1 / c.sb_dec;
+  return `<div class="lg">Sky Bet ${esc(c.sb)} (${pc(implied)} implied): <b class="${c.edge > 0 ? "good" : "muted"}">${c.edge > 0
+    ? `value: the model says ${pc(c.p)}, so about ${Math.round(c.edge * 100)}p profit per £1 staked, on average`
+    : `no value, priced shorter than the model's ${pc(c.p)}`}</b></div>`;
+}
+
 function offNote(){
   const off = OFF.filter(x => x.round === S.round && inLeague(x))
     .sort((a,b) => (a.date + a.league + a.home).localeCompare(b.date + b.league + b.home));
@@ -686,12 +697,12 @@ function renderCalls(){
     $("#calls").innerHTML = `<div class="callrow"><span class="empty" style="grid-column:1/-1">No calls this gameweek. Nothing reached the confidence bar, which is common for corner totals. See the predictions below for the closest cases.</span></div>`;
     return;
   }
-  $("#calls").innerHTML = `<div class="callrow head"><span>Match</span><span>Call</span><span class="r">Chance</span><span class="r fairc">Fair odds</span><span class="r">Result</span></div>` +
+  $("#calls").innerHTML = `<div class="callrow head"><span>Match</span><span>Call</span><span class="r">Chance</span><span class="r fairc">Sky Bet</span><span class="r">Result</span></div>` +
     calls.map(c => { const d = describe(c, c.x);
       return `<div class="callrow">
         <span class="m">${tn(c.x.home, 1)} v ${tn(c.x.away, 1)}<div class="lg">${new Date(c.x.date).toLocaleDateString("en-GB",{weekday:"short"})} ${esc(c.x.time||"")} · ${esc(c.x.league)}</div></span>
-        <span class="pick">${esc(d.text)}<div class="why">${esc(d.why)}</div></span>
-        <span class="r big">${pc(c.p)}</span><span class="r fairc muted">${fair(c.p)}</span>
+        <span class="pick">${esc(d.text)}<div class="why">${esc(d.why)}</div>${priceLine(c)}</span>
+        <span class="r big">${pc(c.p)}</span><span class="r fairc">${c.sb ? `${esc(c.sb)}<div class="lg ${c.edge > 0 ? "good" : "muted"}">${c.edge > 0 ? "value" : "short"}</div>` : `<span class="muted">${fair(c.p)}</span><div class="lg">fair</div>`}</span>
         <span class="r">${outcome(c, c.x)}${c.x.hc!=null?`<div class="lg">${esc(callResult(c, c.x))}</div>`:""}</span></div>`; }).join("");
 }
 
@@ -982,10 +993,15 @@ function renderTrack(){
         return `<div class="wk" title="GW${g.r.n}: ${g.h} of ${g.n}"><span>${pc(q)}</span><i style="height:${Math.max(q * maxH, 2)}px"></i></div>`; }).join("")}</div>
       <div class="wklabels">${gw.map(g => `<span>GW${g.r.n}<br>${g.n} call${g.n === 1 ? "" : "s"}</span>`).join("")}</div>`;
     const dom = by["Corner dominance"];
+    // settled calls with a Sky Bet price: what £1 on each would have made
+    const priced = cs.filter(c => c.sb_dec), val = priced.filter(c => c.edge > 0);
+    const ret = xs => xs.reduce((s, c) => s + (c.hit ? c.sb_dec - 1 : -1), 0);
+    const money = v => `${v >= 0 ? "+" : "−"}£${Math.abs(v).toFixed(2)}`;
     $("#trCalls").innerHTML = `
       <div class="tiles">
         ${trTile("Calls landed", `${h} of ${n}`, `${pc(h / n)} of the calls that have been played`)}
         ${trTile("The model said", pc(said), "its average chance on those calls")}
+        ${priced.length ? trTile("At Sky Bet prices", money(ret(priced)), `£1 on each of ${priced.length} priced call${priced.length === 1 ? "" : "s"}${val.length ? `; the ${val.length} with value: ${money(ret(val))}` : ""}`) : ""}
         ${dom ? trTile("Corner dominance", `${dom.h} of ${dom.n}`, `${pc(dom.h / dom.n)} · model said ${pc(dom.p / dom.n)}`) : ""}
         ${by["Cards total"] ? trTile("Card totals", `${by["Cards total"].h} of ${by["Cards total"].n}`, `${pc(by["Cards total"].h / by["Cards total"].n)} · model said ${pc(by["Cards total"].p / by["Cards total"].n)}`) : ""}
         ${trTile("Still to play", pending, "calls waiting on results")}

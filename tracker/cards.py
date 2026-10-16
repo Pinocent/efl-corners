@@ -44,6 +44,8 @@ CARD_PARAMS = {
     "total_size": 50.0,      # spread of the match total
     "split_kappa": 150.0,    # spread of the split (high = even split)
     "red_k": 80.0,           # referees' red-card rates barely persist: shrink hard
+    "mgr_weight": 1.0,       # a club's matches before a manager change count this much
+    "mgr_days": 90,          # ... for this many days after it (tracker/managers.py)
 }
 LINES = (2.5, 3.5, 4.5, 5.5, 6.5)
 
@@ -112,17 +114,18 @@ class CardModel:
     def __init__(self, p=CARD_PARAMS):
         self.p = p
 
-    def fit(self, matches, asof, history, prior=None):
+    def fit(self, matches, asof, history, prior=None, changes=None):
         """
         matches: this season's results. history: every earlier season's results
         (for the referees). prior: last season's card ratings (season_priors).
+        changes: {team: [manager change dates]}, optional.
         """
         p = self.p
         self.refs = RefereeFactors().fit(list(history) + list(matches), asof, p)
         adj = _adjusted(matches, self.refs)
         pr = prior or {}
-        self.cards = Ratings("khx", "kax", p).fit(adj, asof, *pr.get("cards", (None, None)))
-        self.fouls = Ratings("hf", "af", p).fit(matches, asof, *pr.get("fouls", (None, None)))
+        self.cards = Ratings("khx", "kax", p).fit(adj, asof, *pr.get("cards", (None, None)), changes=changes)
+        self.fouls = Ratings("hf", "af", p).fit(matches, asof, *pr.get("fouls", (None, None)), changes=changes)
         means = _league_means([m for m in matches if m["date"] < asof] or list(history))
         self.red_base = {lg: r for (_, lg), (_, r) in means.items()}
         return self

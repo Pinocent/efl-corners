@@ -55,6 +55,18 @@ PARAMS = {
     "goal_mix": (0.1, 0.45, 0.45),  # goals, xG, shots on target x conversion
     "goal_k_team": 15.0,     # goals need more pulling towards average
     "goal_half_life": 120,
+    # a manager change: a club's matches from before it count this much
+    # (1.0 = no different) for this many days after it (tracker/managers.py).
+    # Tested Oct 2026: a small gain on 2018-24 that didn't hold on 2024-26, for
+    # corners or cards, so it's off; `backtest.py` can retest it later
+    "mgr_weight": 1.0,
+    "mgr_days": 90,
+    # game state: move the corner split by this much (log-odds) per goal of
+    # expected goal difference. Negative: the expected winner takes even more
+    # of the corners than the corner ratings alone say. Chosen on 2018-24
+    # (-0.15 to -0.2 best); on 2024-26 corner dominance calls went from 529 to
+    # 806 at 73.6% landed (74.9% before), and every corner score improved
+    "state_k": -0.15,
 }
 
 
@@ -85,6 +97,19 @@ def _w(age, half_life):
     return 0.5 ** (max(age, 0) / half_life) if half_life else 1.0
 
 
+def manager_factor(changes, p, asof):
+    """team, match date -> weight, lowering a club's matches from before a recent manager change."""
+    if not changes or p.get("mgr_weight", 1.0) == 1.0:
+        return lambda team, d: 1.0
+    last = {}
+    for t, ds in changes.items():
+        before = [c for c in ds if c < asof]
+        if before and (asof - before[-1]).days <= p["mgr_days"]:
+            last[t] = before[-1]
+    mw = p["mgr_weight"]
+    return lambda team, d: mw if team in last and d < last[team] else 1.0
+
+
 class Ratings:
     """Multiplicative attack/defence ratings for one statistic, per league."""
 
@@ -106,16 +131,18 @@ class Ratings:
             return 1 + rg * (pa_ - 1), 1 + rg * (pd_ - 1)
         return self.movers.get((league, cls), (1.0, 1.0))
 
-    def fit(self, matches, asof, priors=None, league_prior=None, movers=None):
+    def fit(self, matches, asof, priors=None, league_prior=None, movers=None, changes=None):
         p = self.p
         self.priors, self.movers = priors or {}, movers or {}
+        mf = manager_factor(changes, p, asof)
         rows = []
         for m in matches:
             x, y = m.get(self.hkey), m.get(self.akey)
             if x is None or y is None or m["date"] >= asof:
                 continue
-            rows.append((m["league"], m["home"], m["away"], x, y,
-                         _w((asof - m["date"]).days, p["half_life"])))
+            w = _w((asof - m["date"]).days, p["half_life"])
+            rows.append((m["league"], m["home"], m["away"], x, y, w,
+                         w * mf(m["home"], m["date"]), w * mf(m["away"], m["date"])))
         teams = {}
         for lg, h, a, *_ in rows:
             teams[h] = lg
@@ -152,18 +179,18 @@ class Ratings:
 
         for _ in range(12):
             num = {t: [0.0] * 8 for t in teams}   # obs / exp for att, dfn, ah, aa, dh, da
-            for lg, h, a, x, y, w in rows:
+            for lg, h, a, x, y, _, wh, wa in rows:
                 mh, ma = self.mu[lg]
                 eh_base = mh * dfn[a] * da[a]            # before home attack
                 ea_base = ma * dfn[h] * dh[h]
-                num[h][0] += w * x; num[h][1] += w * eh_base * ah[h]
-                num[a][0] += w * y; num[a][1] += w * ea_base * aa[a]
+                num[h][0] += wh * x; num[h][1] += wh * eh_base * ah[h]
+                num[a][0] += wa * y; num[a][1] += wa * ea_base * aa[a]
                 # defence: what the side concedes vs what the attacker would expect
-                num[a][2] += w * x; num[a][3] += w * mh * att[h] * ah[h] * da[a]
-                num[h][2] += w * y; num[h][3] += w * ma * att[a] * aa[a] * dh[h]
+                num[a][2] += wa * x; num[a][3] += wa * mh * att[h] * ah[h] * da[a]
+                num[h][2] += wh * y; num[h][3] += wh * ma * att[a] * aa[a] * dh[h]
                 # venue adjustments
-                num[h][4] += w * x; num[h][5] += w * eh_base * att[h]
-                num[a][6] += w * y; num[a][7] += w * ea_base * att[a]
+                num[h][4] += wh * x; num[h][5] += wh * eh_base * att[h]
+                num[a][6] += wa * y; num[a][7] += wa * ea_base * att[a]
             for t, v in num.items():
                 lg = teams[t]
                 mbar = sum(self.mu[lg]) / 2
@@ -173,10 +200,10 @@ class Ratings:
                 aa[t] = (v[6] + kv * mbar) / (v[7] + kv * mbar)
             # defensive venue adjustments, same pattern
             vd = {t: [0.0] * 4 for t in teams}
-            for lg, h, a, x, y, w in rows:
+            for lg, h, a, x, y, _, wh, wa in rows:
                 mh, ma = self.mu[lg]
-                vd[a][0] += w * x; vd[a][1] += w * mh * att[h] * ah[h] * dfn[a]
-                vd[h][2] += w * y; vd[h][3] += w * ma * att[a] * aa[a] * dfn[h]
+                vd[a][0] += wa * x; vd[a][1] += wa * mh * att[h] * ah[h] * dfn[a]
+                vd[h][2] += wh * y; vd[h][3] += wh * ma * att[a] * aa[a] * dfn[h]
             for t, v in vd.items():
                 mbar = sum(self.mu[teams[t]]) / 2
                 da[t] = (v[0] + kv * mbar) / (v[1] + kv * mbar)
@@ -285,17 +312,18 @@ class Model:
     def __init__(self, p=PARAMS):
         self.p = p
 
-    def fit(self, matches, asof, prior_model=None, movers=None):
+    def fit(self, matches, asof, prior_model=None, movers=None, changes=None):
+        """changes: {team: [manager change dates]} (tracker/managers.py), optional."""
         p = self.p
         pri, mv = prior_model or {}, movers or {}
         self.corners = Ratings("hc", "ac", p).fit(
-            matches, asof, *pri.get("corners", (None, None)), movers=mv.get("corners"))
+            matches, asof, *pri.get("corners", (None, None)), movers=mv.get("corners"), changes=changes)
         self.shots = Ratings("hs", "as_", p).fit(
-            matches, asof, *pri.get("shots", (None, None)), movers=mv.get("shots"))
+            matches, asof, *pri.get("shots", (None, None)), movers=mv.get("shots"), changes=changes)
         gp = dict(p, k_team=p["goal_k_team"], half_life=p["goal_half_life"])
         self.goals = Ratings("gsh", "gsa", gp).fit(
             _goal_signal(matches, p["goal_mix"]), asof, *pri.get("goals", (None, None)),
-            movers=mv.get("goals"))
+            movers=mv.get("goals"), changes=changes)
         return self
 
     def priors(self):
@@ -336,7 +364,16 @@ class Model:
             # same relative strength, read from shots instead of corners
             ch = mh * (ch / mh) ** (1 - b) * (sh / smh) ** b
             ca = ma * (ca / ma) ** (1 - b) * (sa / sma) ** b
-
+        k = p.get("state_k", 0.0)
+        if k:
+            # game state: move the split towards (k < 0) the side expected to
+            # score more, keeping the total
+            gh, ga = self.goals.expect(lg, h, a)
+            if gh is not None:
+                t = ch + ca
+                lo = math.log(ch / ca) - k * (gh - ga)
+                ch = t / (1 + math.exp(-lo))
+                ca = t - ch
         return ch, ca
 
     def _with_goals(self, fx, corners, adjust=None, raw=None):
