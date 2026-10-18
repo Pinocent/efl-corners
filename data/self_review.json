@@ -30,7 +30,8 @@
   "2026-09-17",
   "2026-09-26",
   "2026-10-03",
-  "2026-10-09"
+  "2026-10-09",
+  "2026-10-13"
  ],
  "reviews": [
   {
@@ -59,6 +60,15 @@
    "label": "Weekend \u00b7 Fri 9 \u2013 Sun 11 Oct",
    "matches": 251,
    "round": "2026-10-09"
+  },
+  {
+   "changes": [],
+   "date": "2026-10-19",
+   "flags": [],
+   "gameweek": 14,
+   "label": "Midweek \u00b7 Tue 13 \u2013 Wed 14 Oct",
+   "matches": 263,
+   "round": "2026-10-13"
   }
  ],
  "version": ""
