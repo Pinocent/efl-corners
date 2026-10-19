@@ -92,3 +92,39 @@ Date,League,Home,Away,HomeGoals,AwayGoals,HomeCorners,AwayCorners,HomePossession
 2026-10-10,League 2,Tranmere,Rochdale,1,1,5,3,41,59,14,28,0,1,0,0,8,11,Sunny Singh Gill
 2026-10-10,League 2,York,Northampton,1,1,8,4,77,23,37,17,2,1,0,0,8,13,Michael Barlow
 2026-10-11,Championship,Southampton,Portsmouth,1,0,2,4,51,49,15,22,4,3,1,0,11,15,Adam Herczeg
+2026-10-16,Championship,Burnley,Wolves,1,2,3,6,47,53,11,18,2,1,0,0,13,9,Lewis Smith
+2026-10-17,Championship,Middlesbrough,Cardiff,2,2,11,4,57,43,27,8,0,2,0,1,9,10,Tom Nield
+2026-10-17,Championship,Millwall,Lincoln,2,2,12,2,69,31,38,12,6,4,0,1,14,10,Ruebyn Ricardo
+2026-10-17,Championship,Watford,Charlton,2,0,4,3,49,51,11,20,3,5,0,0,10,21,Tom Bramall
+2026-10-17,Championship,Birmingham,QPR,3,0,0,4,53,47,10,14,2,2,0,0,13,7,Tom Kirk
+2026-10-17,Championship,Bristol City,Sheffield Utd,0,1,3,5,53,47,21,18,1,1,0,0,16,10,Ben Speedie
+2026-10-17,Championship,Derby,Stoke,0,1,6,4,54,46,24,16,1,0,0,0,12,10,Oliver Langford
+2026-10-17,Championship,Norwich,Portsmouth,0,1,1,1,50,50,13,6,3,2,0,0,13,13,Gavin Ward
+2026-10-17,Championship,Southampton,Bolton,0,0,5,3,63,37,26,12,2,4,0,0,8,9,Matt Donohue
+2026-10-17,Championship,Swansea,West Ham,0,1,6,1,69,31,19,7,0,2,0,0,9,8,Josh Smith
+2026-10-17,Championship,West Brom,Blackburn,3,2,8,4,64,36,36,14,2,3,0,0,9,16,Adam Herczeg
+2026-10-17,Championship,Wrexham,Preston,4,1,8,2,61,39,22,14,2,4,0,0,9,14,Simon Hooper
+2026-10-15,League 1,Mansfield,Oxford Utd,1,1,11,3,51,49,49,10,2,2,0,0,13,12,T Parsons
+2026-10-17,League 1,MK Dons,Luton,2,1,5,6,38,62,22,28,2,0,0,0,11,13,Martin Coy
+2026-10-17,League 1,Peterborough,Burton,2,2,8,4,55,45,24,17,2,1,0,0,11,10,C Hicks
+2026-10-17,League 1,Barnsley,Cambridge Utd,1,2,11,11,59,41,26,26,5,3,0,0,15,10,David Rock
+2026-10-17,League 1,Bradford,Stevenage,2,0,9,2,56,44,52,12,1,1,0,0,17,12,Simon Mather
+2026-10-17,League 1,Leicester,Doncaster,2,1,6,7,54,46,23,25,1,3,0,0,12,10,Carl Brook
+2026-10-17,League 1,Leyton Orient,Blackpool,2,0,3,11,38,62,19,31,1,4,0,0,15,12,John Busby
+2026-10-17,League 1,Plymouth,Huddersfield,0,2,2,8,57,43,22,26,0,0,0,0,11,11,O Yates
+2026-10-17,League 1,Sheffield Wed,AFC Wimbledon,5,0,2,4,58,42,25,19,2,1,0,0,7,13,E Heaslip
+2026-10-17,League 1,Stockport,Bromley,1,0,7,3,75,25,27,12,1,2,0,0,13,6,S Stockbridge
+2026-10-17,League 1,Wigan,Reading,1,0,5,5,55,45,4,23,2,2,0,0,10,13,Edward Duckworth
+2026-10-17,League 1,Wycombe,Notts County,2,0,9,3,55,45,34,12,1,2,0,0,18,11,Lewis Sandoe
+2026-10-17,League 2,Fleetwood,Rotherham,2,0,9,5,55,45,30,18,4,4,0,0,9,14,S Copeland
+2026-10-17,League 2,Shrewsbury,Bristol Rovers,1,0,6,3,45,55,20,18,2,3,2,0,15,15,Ben Toner
+2026-10-17,League 2,Accrington,Gillingham,3,1,11,1,54,46,33,13,2,3,0,0,8,15,Will Finnie
+2026-10-17,League 2,Colchester,Exeter,0,0,5,2,51,49,11,24,2,2,0,0,16,11,Ben Atkinson
+2026-10-17,League 2,Crewe,Rochdale,3,2,1,7,40,60,16,29,1,0,0,0,7,7,A Jackson
+2026-10-17,League 2,Grimsby,Northampton,0,2,3,7,52,48,18,15,4,3,1,0,9,14,M Woods
+2026-10-17,League 2,Newport,York,1,1,6,0,53,47,38,7,3,2,0,1,12,10,N Hair
+2026-10-17,League 2,Oldham,Cheltenham,4,1,4,5,47,53,18,23,0,2,0,0,6,11,Scott Oldham
+2026-10-17,League 2,Port Vale,Chesterfield,1,0,0,10,36,64,8,29,3,2,0,0,14,6,Harrison Blair
+2026-10-17,League 2,Salford,Crawley,2,1,5,4,57,43,16,14,0,0,0,0,8,15,S Jackson
+2026-10-17,League 2,Swindon,Walsall,1,1,2,10,38,62,13,36,1,0,0,0,5,9,A Chilowicz
+2026-10-17,League 2,Tranmere,Barnet,1,2,1,6,44,56,10,21,2,2,0,0,15,11,Jamie Robinson
