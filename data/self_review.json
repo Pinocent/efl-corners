@@ -32,7 +32,8 @@
   "2026-10-03",
   "2026-10-09",
   "2026-10-13",
-  "2026-10-16"
+  "2026-10-16",
+  "2026-10-20"
  ],
  "reviews": [
   {
@@ -81,6 +82,17 @@
    "label": "Weekend \u00b7 Fri 16 \u2013 Sat 17 Oct",
    "matches": 299,
    "round": "2026-10-16"
+  },
+  {
+   "changes": [],
+   "date": "2026-10-22",
+   "flags": [
+    "Each side 2+ cards: happened 64% of the time when the model said 56%, over 400 predictions. The model is too low here."
+   ],
+   "gameweek": 16,
+   "label": "Midweek \u00b7 Tue 20 \u2013 Wed 21 Oct",
+   "matches": 324,
+   "round": "2026-10-20"
   }
  ],
  "version": ""
