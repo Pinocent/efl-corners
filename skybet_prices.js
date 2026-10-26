@@ -24,7 +24,7 @@ window.skybetPrices = null;
   // club names: the board's spelling against oddschecker's address for the match
   const FILL = new Set(["fc", "afc", "utd", "united", "city", "town", "county", "rovers", "athletic", "wanderers", "albion"]);
   const words = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(Boolean)
-    .map(w => ({ wed: "wednesday", qpr: "qpr", mk: "mk" }[w] || w));
+    .map(w => ({ wed: "wednesday", qpr: "qpr", mk: "mk", wolves: "wolverhampton" }[w] || w));
   const same = (board, oc) => {
     const b = words(board), o = words(oc.replace(/-/g, " "));
     const core = b.filter(w => !FILL.has(w));

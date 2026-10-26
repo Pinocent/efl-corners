@@ -88,10 +88,11 @@ def evaluate(season, predictor, params=PARAMS, first=3, last=999):
             s["b95"] += (c["totals"][9.5] - (tot > 9.5)) ** 2
             s["b105"] += (c["totals"][10.5] - (tot > 10.5)) ** 2
             s["bboth"] += (c["both4"] - (hc >= 4 and ac >= 4)) ** 2
-            s["bdom"] += (c["dom_home"] - (hc > ac)) ** 2
-            for pd, won in ((c["dom_home"], hc > ac), (c["dom_away"], ac > hc)):
-                if pd >= 0.65:                                # a corner dominance call
-                    s["dom_n"] += 1; s["dom_hit"] += won
+            if "dom_home" in c:                               # the old v2 has no dominance
+                s["bdom"] += (c["dom_home"] - (hc > ac)) ** 2
+                for pd, won in ((c["dom_home"], hc > ac), (c["dom_away"], ac > hc)):
+                    if pd >= 0.65:                            # a corner dominance call
+                        s["dom_n"] += 1; s["dom_hit"] += won
             if c["totals"][9.5] >= 0.65 or c["totals"][9.5] <= 0.35:
                 s["o95_n"] += 1
                 s["o95_hit"] += (c["totals"][9.5] >= 0.5) == (tot > 9.5)
