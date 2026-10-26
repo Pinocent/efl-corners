@@ -262,7 +262,6 @@ date,time,league,home,away
 2026-09-20,13:30,Championship,Norwich,Bolton
 2026-09-20,12:00,Championship,Wolves,West Brom
 2026-09-26,15:00,League 1,Cambridge Utd,AFC Wimbledon
-2026-09-26,15:00,League 1,MK Dons,Bromley
 2026-09-26,15:00,League 1,Mansfield,Leyton Orient
 2026-09-26,15:00,League 1,Notts County,Blackpool
 2026-09-26,15:00,League 1,Plymouth,Burton
@@ -278,14 +277,12 @@ date,time,league,home,away
 2026-09-26,15:00,League 2,Swindon,Accrington
 2026-09-26,15:00,League 2,Tranmere,Walsall
 2026-09-26,15:00,League 2,York,Gillingham
-2026-10-03,15:00,League 1,AFC Wimbledon,Stevenage
 2026-10-03,15:00,League 1,Barnsley,MK Dons
 2026-10-03,15:00,League 1,Bromley,Wycombe
 2026-10-03,15:00,League 1,Burton,Huddersfield
 2026-10-03,15:00,League 1,Leyton Orient,Plymouth
 2026-10-03,15:00,League 1,Peterborough,Notts County
 2026-10-03,15:00,League 1,Reading,Bradford
-2026-10-03,15:00,League 1,Wigan,Mansfield
 2026-10-03,15:00,League 2,Accrington,Cheltenham
 2026-10-03,12:30,League 2,Chesterfield,Tranmere
 2026-10-03,15:00,League 2,Crewe,Bristol Rovers
@@ -442,6 +439,7 @@ date,time,league,home,away
 2026-10-26,20:00,League 2,Walsall,Salford
 2026-10-27,19:45,League 1,Leicester,Wigan
 2026-10-27,19:45,League 1,Luton,Doncaster
+2026-10-27,19:45,League 1,MK Dons,Bromley
 2026-10-27,19:45,League 1,Oxford Utd,Stockport
 2026-10-27,19:45,League 1,Sheffield Wed,Cambridge Utd
 2026-10-27,19:45,League 2,Barnet,York
@@ -491,6 +489,7 @@ date,time,league,home,away
 2026-11-03,19:45,Championship,Watford,Lincoln
 2026-11-03,20:00,Championship,West Brom,Southampton
 2026-11-03,19:45,League 1,Huddersfield,Luton
+2026-11-03,19:45,League 1,Wigan,Mansfield
 2026-11-03,19:45,League 2,Northampton,Oldham
 2026-11-04,20:00,Championship,Bristol City,Wolves
 2026-11-04,19:45,Championship,Cardiff,West Ham
@@ -979,6 +978,7 @@ date,time,league,home,away
 2027-01-26,19:45,Championship,Sheffield Utd,Preston
 2027-01-26,19:45,Championship,Southampton,West Brom
 2027-01-26,19:45,Championship,Stoke,Blackburn
+2027-01-26,19:45,League 1,AFC Wimbledon,Stevenage
 2027-01-27,19:45,Championship,Middlesbrough,Wrexham
 2027-01-27,19:45,Championship,Swansea,Portsmouth
 2027-01-27,19:45,Championship,West Ham,Cardiff
