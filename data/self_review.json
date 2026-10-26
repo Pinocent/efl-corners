@@ -33,7 +33,8 @@
   "2026-10-09",
   "2026-10-13",
   "2026-10-16",
-  "2026-10-20"
+  "2026-10-20",
+  "2026-10-23"
  ],
  "reviews": [
   {
@@ -93,6 +94,18 @@
    "label": "Midweek \u00b7 Tue 20 \u2013 Wed 21 Oct",
    "matches": 324,
    "round": "2026-10-20"
+  },
+  {
+   "changes": [],
+   "date": "2026-10-26",
+   "flags": [
+    "Each side 2+ cards: happened 64% of the time when the model said 57%, over 400 predictions. The model is too low here.",
+    "League 1 corners: 11.44 a match against 10.55 expected (+8%) over 114 matches."
+   ],
+   "gameweek": 17,
+   "label": "Weekend \u00b7 Fri 23 \u2013 Sat 24 Oct",
+   "matches": 359,
+   "round": "2026-10-23"
   }
  ],
  "version": ""
