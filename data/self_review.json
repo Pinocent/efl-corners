@@ -34,7 +34,8 @@
   "2026-10-13",
   "2026-10-16",
   "2026-10-20",
-  "2026-10-23"
+  "2026-10-23",
+  "2026-10-26"
  ],
  "reviews": [
   {
@@ -106,6 +107,17 @@
    "label": "Weekend \u00b7 Fri 23 \u2013 Sat 24 Oct",
    "matches": 359,
    "round": "2026-10-23"
+  },
+  {
+   "changes": [],
+   "date": "2026-10-29",
+   "flags": [
+    "League 1 corners: 11.45 a match against 10.58 expected (+8%) over 119 matches."
+   ],
+   "gameweek": 18,
+   "label": "Midweek \u00b7 Mon 26 \u2013 Tue 27 Oct",
+   "matches": 366,
+   "round": "2026-10-26"
   }
  ],
  "version": ""
