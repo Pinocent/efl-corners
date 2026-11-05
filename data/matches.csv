@@ -473,3 +473,19 @@ round,date,time,league,home,away,ref,hg,ag,hc,ac,hxg,axg,hs,as_,hst,ast,hy,ay,hr
 2026-10-30,2026-10-31,15:00,League 2,Swindon,Rotherham,I Searle,2.0,1.0,7.0,0.0,0.99,0.36,15.0,3.0,4.0,2.0,0.0,2.0,0.0,2.0,10.0,10.0,,,,,football-data
 2026-10-30,2026-10-31,15:00,League 2,Tranmere,Cheltenham,R Martin,3.0,1.0,1.0,4.0,1.03,0.56,17.0,10.0,9.0,2.0,2.0,2.0,0.0,0.0,7.0,8.0,,,,,football-data
 2026-10-30,2026-11-01,14:00,League 1,Sheffield Wed,Blackpool,S Mather,1.0,1.0,10.0,9.0,0.67,1.19,17.0,18.0,5.0,4.0,3.0,3.0,1.0,0.0,12.0,11.0,,,,,football-data
+2026-11-03,2026-11-03,20:00,Championship,Birmingham,Millwall,D Webb,3.0,0.0,6.0,2.0,1.35,1.42,19.0,16.0,9.0,2.0,1.0,1.0,0.0,0.0,12.0,9.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,Championship,Blackburn,Stoke,A Kitchen,1.0,2.0,6.0,5.0,1.82,1.22,14.0,11.0,3.0,3.0,3.0,4.0,0.0,0.0,12.0,19.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,Championship,Charlton,Bolton,S Martin,0.0,1.0,4.0,3.0,0.79,0.78,14.0,11.0,2.0,3.0,1.0,1.0,0.0,0.0,9.0,13.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,Championship,Derby,Norwich,S Allison,0.0,4.0,4.0,5.0,0.69,2.4,6.0,19.0,2.0,8.0,1.0,0.0,0.0,0.0,10.0,8.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,Championship,Portsmouth,Swansea,M Corlett,3.0,1.0,5.0,5.0,1.35,2.25,13.0,10.0,5.0,3.0,2.0,0.0,0.0,0.0,12.0,8.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,Championship,Preston,Sheffield Utd,J Busby,2.0,3.0,3.0,3.0,0.88,1.96,6.0,18.0,2.0,5.0,1.0,0.0,0.0,0.0,12.0,7.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,Championship,QPR,Burnley,T Reeves,1.0,1.0,8.0,1.0,1.76,0.15,20.0,4.0,5.0,1.0,1.0,2.0,0.0,0.0,5.0,7.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,Championship,Watford,Lincoln,J Bell,1.0,0.0,7.0,6.0,0.63,0.77,18.0,12.0,2.0,1.0,5.0,2.0,0.0,0.0,17.0,10.0,,,,,football-data
+2026-11-03,2026-11-03,20:00,Championship,West Brom,Southampton,J Smith,1.0,1.0,3.0,5.0,2.46,1.38,17.0,10.0,5.0,3.0,2.0,1.0,0.0,0.0,13.0,10.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,League 1,Huddersfield,Luton,M Donohue,1.0,1.0,9.0,1.0,0.96,0.61,12.0,9.0,6.0,4.0,0.0,1.0,0.0,0.0,12.0,10.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,League 1,Wigan,Mansfield,S Oldham,0.0,0.0,5.0,2.0,1.51,1.16,16.0,7.0,2.0,3.0,0.0,4.0,0.0,0.0,6.0,20.0,,,,,football-data
+2026-11-03,2026-11-03,19:45,League 2,Northampton,Oldham,C Brook,0.0,1.0,3.0,2.0,1.03,0.78,13.0,10.0,4.0,3.0,1.0,0.0,0.0,0.0,13.0,8.0,,,,,football-data
+2026-11-03,2026-11-04,20:00,Championship,Bristol City,Wolves,T Nield,1.0,2.0,2.0,5.0,0.69,2.21,5.0,17.0,3.0,8.0,2.0,1.0,0.0,0.0,8.0,9.0,,,,,football-data
+2026-11-03,2026-11-04,19:45,Championship,Cardiff,West Ham,E Duckworth,3.0,3.0,4.0,6.0,1.15,2.62,7.0,18.0,4.0,10.0,0.0,3.0,0.0,0.0,9.0,11.0,,,,,football-data
+2026-11-03,2026-11-04,19:45,Championship,Wrexham,Middlesbrough,O Langford,2.0,0.0,3.0,2.0,1.42,0.91,15.0,12.0,4.0,2.0,1.0,0.0,0.0,0.0,9.0,6.0,,,,,football-data
+2026-11-03,2026-11-04,19:45,League 1,Oxford Utd,Reading,D Drysdale,2.0,0.0,5.0,8.0,0.74,1.77,12.0,13.0,7.0,3.0,2.0,4.0,0.0,0.0,17.0,13.0,,,,,football-data

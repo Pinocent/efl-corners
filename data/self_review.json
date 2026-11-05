@@ -36,7 +36,8 @@
   "2026-10-20",
   "2026-10-23",
   "2026-10-26",
-  "2026-10-30"
+  "2026-10-30",
+  "2026-11-03"
  ],
  "reviews": [
   {
@@ -130,6 +131,18 @@
    "label": "Weekend \u00b7 Fri 30 Oct \u2013 Sun 1 Nov",
    "matches": 402,
    "round": "2026-10-30"
+  },
+  {
+   "changes": [],
+   "date": "2026-11-05",
+   "flags": [
+    "Corner dominance: the model's strongest predictions have been too confident over 400 predictions (calibration slope 0.61; 1.00 is right).",
+    "League 1 corners: 11.47 a match against 10.64 expected (+8%) over 134 matches."
+   ],
+   "gameweek": 20,
+   "label": "Midweek \u00b7 Tue 3 \u2013 Wed 4 Nov",
+   "matches": 418,
+   "round": "2026-11-03"
   }
  ],
  "version": ""
