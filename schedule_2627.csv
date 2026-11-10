@@ -898,9 +898,9 @@ date,time,league,home,away
 2027-01-16,15:00,League 1,Reading,Wigan
 2027-01-16,15:00,League 1,Stevenage,Bradford
 2027-01-16,15:00,League 2,Barnet,Tranmere
-2027-01-16,15:00,League 2,Bristol Rovers,Shrewsbury
+2027-01-16,12:30,League 2,Bristol Rovers,Shrewsbury
 2027-01-16,15:00,League 2,Cheltenham,Oldham
-2027-01-16,15:00,League 2,Chesterfield,Port Vale
+2027-01-16,12:30,League 2,Chesterfield,Port Vale
 2027-01-16,15:00,League 2,Crawley,Salford
 2027-01-16,15:00,League 2,Exeter,Colchester
 2027-01-16,15:00,League 2,Gillingham,Accrington
@@ -926,7 +926,7 @@ date,time,league,home,away
 2027-01-19,19:45,League 2,Crewe,Exeter
 2027-01-19,19:45,League 2,Fleetwood,Cheltenham
 2027-01-19,19:45,League 2,Grimsby,Rochdale
-2027-01-19,19:45,League 2,Newport,Rotherham
+2027-01-19,20:00,League 2,Newport,Rotherham
 2027-01-19,19:45,League 2,Oldham,Walsall
 2027-01-19,19:45,League 2,Port Vale,Gillingham
 2027-01-19,19:45,League 2,Salford,Bristol Rovers
@@ -957,14 +957,14 @@ date,time,league,home,away
 2027-01-23,12:30,League 1,Wigan,Huddersfield
 2027-01-23,15:00,League 1,Wycombe,AFC Wimbledon
 2027-01-23,15:00,League 2,Accrington,Rochdale
-2027-01-23,15:00,League 2,Colchester,Northampton
+2027-01-23,12:30,League 2,Colchester,Northampton
 2027-01-23,15:00,League 2,Crewe,Chesterfield
 2027-01-23,15:00,League 2,Fleetwood,Exeter
 2027-01-23,15:00,League 2,Grimsby,Gillingham
 2027-01-23,15:00,League 2,Newport,Cheltenham
 2027-01-23,15:00,League 2,Oldham,Barnet
 2027-01-23,15:00,League 2,Port Vale,York
-2027-01-23,15:00,League 2,Salford,Walsall
+2027-01-23,12:30,League 2,Salford,Walsall
 2027-01-23,15:00,League 2,Shrewsbury,Rotherham
 2027-01-23,15:00,League 2,Swindon,Bristol Rovers
 2027-01-23,15:00,League 2,Tranmere,Crawley
@@ -1015,9 +1015,9 @@ date,time,league,home,away
 2027-01-30,15:00,League 2,Gillingham,Shrewsbury
 2027-01-30,15:00,League 2,Northampton,Accrington
 2027-01-30,15:00,League 2,Rochdale,Port Vale
-2027-01-30,15:00,League 2,Rotherham,Swindon
+2027-01-30,12:30,League 2,Rotherham,Swindon
 2027-01-30,15:00,League 2,Walsall,Colchester
-2027-01-30,15:00,League 2,York,Grimsby
+2027-01-30,12:30,League 2,York,Grimsby
 2027-01-31,12:00,Championship,Norwich,Bristol City
 2027-02-05,20:00,Championship,Bristol City,Middlesbrough
 2027-02-06,15:00,Championship,Birmingham,Stoke
@@ -1046,14 +1046,14 @@ date,time,league,home,away
 2027-02-06,15:00,League 2,Bristol Rovers,Crawley
 2027-02-06,15:00,League 2,Cheltenham,Barnet
 2027-02-06,15:00,League 2,Chesterfield,Rotherham
-2027-02-06,15:00,League 2,Crewe,Port Vale
+2027-02-06,12:30,League 2,Crewe,Port Vale
 2027-02-06,15:00,League 2,Exeter,York
 2027-02-06,15:00,League 2,Fleetwood,Grimsby
 2027-02-06,15:00,League 2,Northampton,Gillingham
 2027-02-06,15:00,League 2,Rochdale,Colchester
 2027-02-06,15:00,League 2,Salford,Shrewsbury
 2027-02-06,15:00,League 2,Swindon,Oldham
-2027-02-06,15:00,League 2,Tranmere,Newport
+2027-02-06,12:30,League 2,Tranmere,Newport
 2027-02-07,12:00,Championship,Blackburn,Burnley
 2027-02-09,19:45,League 1,AFC Wimbledon,Burton
 2027-02-09,19:45,League 1,Blackpool,Barnsley
@@ -1076,7 +1076,7 @@ date,time,league,home,away
 2027-02-09,19:45,League 2,Port Vale,Swindon
 2027-02-09,19:45,League 2,Rotherham,Tranmere
 2027-02-09,19:45,League 2,Shrewsbury,Rochdale
-2027-02-09,19:45,League 2,Walsall,Crewe
+2027-02-09,20:00,League 2,Walsall,Crewe
 2027-02-09,19:45,League 2,York,Cheltenham
 2027-02-10,20:00,League 1,Plymouth,Leicester
 2027-02-12,20:00,Championship,Birmingham,Derby
@@ -1108,8 +1108,8 @@ date,time,league,home,away
 2027-02-13,15:00,League 2,Gillingham,Rochdale
 2027-02-13,15:00,League 2,Grimsby,Cheltenham
 2027-02-13,15:00,League 2,Newport,Northampton
-2027-02-13,15:00,League 2,Oldham,Tranmere
-2027-02-13,15:00,League 2,Port Vale,Salford
+2027-02-13,12:30,League 2,Oldham,Tranmere
+2027-02-13,12:30,League 2,Port Vale,Salford
 2027-02-13,15:00,League 2,Rotherham,Bristol Rovers
 2027-02-13,15:00,League 2,Shrewsbury,Fleetwood
 2027-02-13,15:00,League 2,Walsall,Exeter
@@ -1127,6 +1127,7 @@ date,time,league,home,away
 2027-02-17,19:45,Championship,Southampton,Norwich
 2027-02-17,19:45,Championship,Swansea,Millwall
 2027-02-17,20:00,Championship,Watford,Cardiff
+2027-02-18,20:00,League 2,Rochdale,Walsall
 2027-02-19,20:00,Championship,Middlesbrough,Birmingham
 2027-02-20,15:00,Championship,Blackburn,Portsmouth
 2027-02-20,15:00,Championship,Bolton,Norwich
@@ -1152,13 +1153,12 @@ date,time,league,home,away
 2027-02-20,15:00,League 1,Wycombe,Leyton Orient
 2027-02-20,15:00,League 2,Accrington,Barnet
 2027-02-20,15:00,League 2,Bristol Rovers,Grimsby
-2027-02-20,15:00,League 2,Cheltenham,Crawley
+2027-02-20,12:30,League 2,Cheltenham,Crawley
 2027-02-20,15:00,League 2,Chesterfield,Oldham
 2027-02-20,15:00,League 2,Crewe,Colchester
-2027-02-20,15:00,League 2,Exeter,Port Vale
+2027-02-20,12:30,League 2,Exeter,Port Vale
 2027-02-20,15:00,League 2,Fleetwood,Newport
 2027-02-20,15:00,League 2,Northampton,Shrewsbury
-2027-02-20,15:00,League 2,Rochdale,Walsall
 2027-02-20,15:00,League 2,Salford,Rotherham
 2027-02-20,15:00,League 2,Swindon,York
 2027-02-20,15:00,League 2,Tranmere,Gillingham
@@ -1187,11 +1187,11 @@ date,time,league,home,away
 2027-02-27,15:00,League 1,Plymouth,Sheffield Wed
 2027-02-27,15:00,League 1,Reading,Stockport
 2027-02-27,15:00,League 2,Accrington,Port Vale
-2027-02-27,15:00,League 2,Barnet,Walsall
+2027-02-27,12:30,League 2,Barnet,Walsall
 2027-02-27,15:00,League 2,Cheltenham,Exeter
 2027-02-27,15:00,League 2,Chesterfield,Bristol Rovers
 2027-02-27,15:00,League 2,Crawley,Rotherham
-2027-02-27,15:00,League 2,Gillingham,Colchester
+2027-02-27,12:30,League 2,Gillingham,Colchester
 2027-02-27,15:00,League 2,Grimsby,Swindon
 2027-02-27,15:00,League 2,Newport,Crewe
 2027-02-27,15:00,League 2,Northampton,Salford
