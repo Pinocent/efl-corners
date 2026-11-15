@@ -506,9 +506,7 @@ date,time,league,home,away
 2026-11-14,15:00,League 1,Bromley,Notts County
 2026-11-14,15:00,League 1,Doncaster,Leyton Orient
 2026-11-14,15:00,League 1,Leicester,Bradford
-2026-11-14,15:00,League 1,Luton,Cambridge Utd
 2026-11-14,15:00,League 1,MK Dons,Burton
-2026-11-14,15:00,League 1,Peterborough,Oxford Utd
 2026-11-14,15:00,League 1,Sheffield Wed,Plymouth
 2026-11-14,15:00,League 1,Stevenage,Mansfield
 2026-11-14,15:00,League 1,Stockport,Reading
@@ -651,6 +649,7 @@ date,time,league,home,away
 2026-12-05,15:00,Championship,Stoke,QPR
 2026-12-05,12:30,Championship,Watford,Millwall
 2026-12-05,15:00,Championship,Wolves,Southampton
+2026-12-05,19:45,League 1,Peterborough,Oxford Utd
 2026-12-06,12:00,Championship,Burnley,Preston
 2026-12-08,20:00,Championship,Birmingham,Watford
 2026-12-08,19:45,Championship,Blackburn,Norwich
@@ -1019,6 +1018,7 @@ date,time,league,home,away
 2027-01-30,15:00,League 2,Walsall,Colchester
 2027-01-30,12:30,League 2,York,Grimsby
 2027-01-31,12:00,Championship,Norwich,Bristol City
+2027-02-02,19:45,League 1,Luton,Cambridge Utd
 2027-02-05,20:00,Championship,Bristol City,Middlesbrough
 2027-02-06,15:00,Championship,Birmingham,Stoke
 2027-02-06,15:00,Championship,Cardiff,Norwich
