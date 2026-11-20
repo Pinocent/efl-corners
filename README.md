@@ -26,12 +26,22 @@ cards and referees**, runs every evening at 22:30 while the app is open (if
 the app is closed then, it runs the next time the app opens):
 
 1. `python3 collect_todo.py` lists EFL matches from the last 4 days that the
-   board has no result for, and matches in the next 6 days with no referee.
+   board has no result for, and the board's calls that need a Sky Bet price.
    If both lists are empty, the task stops without opening a website.
-2. It reads each finished match on Flashscore (goals, corners, yellow and red
-   cards, fouls, possession, crosses, referee) into `manual_results.csv`, and
-   announced referee appointments into `referees.csv`.
-3. `./sync_to_github.sh` uploads both files, plus `last_sync.txt` (when it
+2. Two Haiku subagents run at once, each in its own browser tab:
+   - one runs `flashscore_stats.js` on flashscore.co.uk. It reads every
+     match's Summary and Stats pages in hidden frames (goals, corners, yellow
+     and red cards, fouls, possession, crosses, referee) and the task saves
+     the result as `flashscore_pending.json` (local only, not uploaded);
+   - one runs `skybet_prices.js` on oddschecker and saves `skybet_prices.json`.
+3. `python3 espn_check.py` checks that `flashscore_pending.json` is an exact
+   copy (it carries a checksum), sanity-checks every row, and compares goals,
+   corners and fouls with ESPN's public match feed. Matches where they
+   disagree go to a Sonnet subagent, which reads the Flashscore page itself;
+   a row is kept only if Sonnet's reading matches the script's.
+   `python3 espn_check.py --write` then appends the agreed and confirmed rows
+   to `manual_results.csv`. Nothing is typed into the CSV by hand.
+4. `./sync_to_github.sh` uploads the files, plus `last_sync.txt` (when it
    ran), so there's always something to push, even on nights with no new data.
    The push starts the cloud update, and the online board refreshes about two
    minutes later.
@@ -45,6 +55,16 @@ nothing since ..." in its header once two days pass without a sync.
 The official results feed replaces the Flashscore corners, goals and cards
 when it publishes them, usually a day or two later. Possession, crosses and
 referees are kept.
+
+Cards are counted the way football-data counts them: a second yellow is one
+yellow and one red, and cards shown to players not on the pitch don't count.
+Checked on 26 matches from 7 and 14 November 2026, the script matched
+football-data on every goal, corner and foul. ESPN agreed on all 26 too. (On
+the 7 November Championship round, football-data's own card columns disagree
+with both Flashscore and ESPN.)
+
+Referees aren't browsed for: `tracker/efl.py` reads the EFL's appointment
+articles and football-data's fixtures file has the rest.
 
 To run it by hand: "Run now" on the task in the Claude app's Scheduled list,
 or double-click `Send Flashscore Results.command` after editing the CSVs

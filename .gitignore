@@ -4,3 +4,6 @@ __pycache__/
 corners_tracker_backup.xlsx
 *.xlsx
 .claude/
+
+# nightly Flashscore figures waiting for espn_check.py (local only)
+flashscore_pending.json
