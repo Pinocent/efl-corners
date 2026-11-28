@@ -636,7 +636,6 @@ date,time,league,home,away
 2026-12-01,19:45,League 2,Newport,Walsall
 2026-12-01,19:45,League 2,Northampton,Fleetwood
 2026-12-01,19:45,League 2,Oldham,Bristol Rovers
-2026-12-01,19:45,League 2,Tranmere,Salford
 2026-12-01,19:45,League 2,York,Shrewsbury
 2026-12-04,20:00,Championship,Sheffield Utd,West Ham
 2026-12-05,12:30,Championship,Bolton,Blackburn
@@ -650,6 +649,8 @@ date,time,league,home,away
 2026-12-05,12:30,Championship,Watford,Millwall
 2026-12-05,15:00,Championship,Wolves,Southampton
 2026-12-05,15:00,League 1,Peterborough,Oxford Utd
+2026-12-05,15:00,League 2,Tranmere,Salford
+2026-12-05,15:00,League 2,Walsall,Crawley
 2026-12-06,12:00,Championship,Burnley,Preston
 2026-12-08,20:00,Championship,Birmingham,Watford
 2026-12-08,19:45,Championship,Blackburn,Norwich
@@ -703,7 +704,6 @@ date,time,league,home,away
 2026-12-15,19:45,League 1,Doncaster,Oxford Utd
 2026-12-15,19:45,League 1,Peterborough,Notts County
 2026-12-15,19:45,League 2,Colchester,Port Vale
-2026-12-15,19:45,League 2,Walsall,Crawley
 2026-12-17,20:00,League 2,Crewe,Salford
 2026-12-18,20:00,Championship,West Brom,Sheffield Utd
 2026-12-18,19:45,League 1,Cambridge Utd,Stevenage
@@ -730,7 +730,6 @@ date,time,league,home,away
 2026-12-19,15:00,League 1,Wigan,Peterborough
 2026-12-19,15:00,League 1,Wycombe,Doncaster
 2026-12-19,15:00,League 2,Accrington,Chesterfield
-2026-12-19,12:30,League 2,Colchester,Fleetwood
 2026-12-19,15:00,League 2,Gillingham,Cheltenham
 2026-12-19,15:00,League 2,Grimsby,Barnet
 2026-12-19,15:00,League 2,Newport,Oldham
@@ -740,6 +739,7 @@ date,time,league,home,away
 2026-12-19,15:00,League 2,Swindon,Tranmere
 2026-12-19,15:00,League 2,Walsall,Shrewsbury
 2026-12-19,15:00,League 2,York,Crawley
+2026-12-20,13:00,League 2,Colchester,Fleetwood
 2026-12-26,15:00,Championship,Blackburn,Birmingham
 2026-12-26,12:30,Championship,Bolton,Burnley
 2026-12-26,15:00,Championship,Cardiff,Millwall
